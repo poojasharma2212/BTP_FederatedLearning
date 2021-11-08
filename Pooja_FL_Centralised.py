@@ -1,0 +1,159 @@
+import torch 
+import torch.nn as nn
+import torch.nn.functional as Func
+import matplotlib.pyplot as plt
+import torchvision
+import numpy as np
+from datetime import datetime
+import torchvision.datasets as datasets
+import torchvision.transforms as transforms
+import logging
+import os
+#import syft as sy
+
+#hook = sy.TorchHook(torch)
+args = {
+    'use_cuda' : True,
+    'batch_size' : 64,
+    'test_batch_size' : 1000,
+    'lr' : 0.01,
+    'log_interval' : 10,
+    'epochs' : 10,
+    'clients' : 30
+}
+
+#os.chdir("/content/drive/MyDrive/FL_ZaaPoo/data/MNIST/raw")
+
+mnist_trainset = datasets.MNIST(root='./data', train=True, download=True, transform=transforms.ToTensor())            
+mnist_testset = datasets.MNIST(root='./data', train=False, download=True, transform=transforms.ToTensor())
+mnist_trainset.data.max()
+mnist_trainset.data.shape
+mnist_trainset.targets
+k = len(set(mnist_trainset.targets.numpy()))
+print(k)
+
+
+class CNN(nn.Module):
+  def __init__(self,k):  #constructor 
+    super(CNN, self).__init__() # calling parent's class constructor
+    self.conv_layers = nn.Sequential(     # Preparing Layers for the model followed by the ReLU function as the Activation function
+        nn.Conv2d(in_channels=1, out_channels=32, kernel_size=3, stride=2),
+        nn.ReLU(),
+        nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, stride=2),
+        nn.ReLU(),
+        nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, stride=2),
+        nn.ReLU()
+    )
+
+    self.dense_layers = nn.Sequential(
+        nn.Dropout(0.2),
+        nn.Linear(128*2*2, 512),
+        nn.ReLU(),
+        nn.Dropout(0.2),
+        nn.Linear(512, k)
+    )
+
+  def forward(self, X):
+    out = self.conv_layers(X)
+    out = out.view(out.size(0), -1)
+    out = self.dense_layers(out)
+    return out
+
+model = CNN(k) 
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+print(device)
+model.to(device)
+criterion = nn.CrossEntropyLoss()
+optimizer = torch.optim.Adam(model.parameters())
+batchSize = 128
+train_loader = torch.utils.data.DataLoader(dataset = mnist_trainset,
+                                           batch_size=batchSize,
+                                           shuffle=True)
+
+test_loader = torch.utils.data.DataLoader(dataset = mnist_testset,
+                                           batch_size=batchSize,
+                                           shuffle=False)
+
+def batch_gd(model, criterion, optimizer, train_loader, test_loader, epochs):
+ # raise NotImplementedError("Subclasses should implement this!")
+  train_losses = np.zeros(epochs)
+  test_losses = np.zeros(epochs)
+
+  for it in range(epochs):
+    t0 = datetime.now()
+    train_loss = []
+    for inputs, targets in train_loader:
+      inputs, targets = inputs.to(device), targets.to(device)  #moving data to GPU
+
+      optimizer.zero_grad() # set parameter gradient to zero
+
+      outputs = model(inputs)  # forward pass
+      loss = criterion(outputs, targets)
+
+      loss.backward()  #backward and optimize
+      optimizer.step()
+
+      train_loss.append(loss.item())
+    train_loss = np.mean(train_loss)
+    
+    test_loss = []
+    for inputs, targets in test_loader:
+      inputs, targets = inputs.to(device), targets.to(device)
+      outputs = model(inputs)
+      loss = criterion(outputs, targets)
+      test_loss.append(loss.item())
+    test_loss = np.mean(test_loss)
+
+    train_losses[it] = train_loss
+    test_losses[it] = test_loss
+
+    dt = datetime.now() - t0
+
+    print(f'Epoch{it+1}/{epochs}, Train Loss: {train_loss: .4f}, \
+    Test Loss: {test_loss:.4f}, Duration: {dt}')
+
+  return train_losses, test_losses
+
+      
+
+train_losses, test_losses = batch_gd(model, criterion, optimizer, train_loader, test_loader, epochs=15)
+plt.plot(train_losses, label='train loss')
+plt.plot(test_losses, label='test loss')
+plt.legend()
+plt.show()
+
+
+n_correct = 0.
+n_total = 0.
+
+for inputs, targets in train_loader:
+  inputs, targets = inputs.to(device), targets.to(device) # moving data to GPU
+
+  outputs = model(inputs)
+
+  _, predictions = torch.max(outputs, 1) 
+
+  n_correct  = n_correct + (predictions==targets).sum().item()
+  n_total = n_total + targets.shape[0]
+
+train_acc = n_correct / n_total
+
+n_correct = 0.
+n_total = 0.
+
+for inputs, targets in test_loader:
+  inputs, targets = inputs.to(device), targets.to(device) # moving data to GPU
+
+  outputs = model(inputs)
+
+  _, predictions = torch.max(outputs, 1) 
+
+  n_correct  = n_correct + (predictions==targets).sum().item()
+  n_total = n_total + targets.shape[0]
+
+test_acc = n_correct / n_total
+
+
+print(f"Train acc: {train_acc: .4f}, Test acc: {test_acc: .4f}") 
+
+
