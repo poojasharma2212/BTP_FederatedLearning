@@ -9,7 +9,7 @@ import torchvision.datasets as datasets
 import torchvision.transforms as transforms
 import logging
 import os
-#import syft as sy
+import syft as sy
 
 #hook = sy.TorchHook(torch)
 args = {
