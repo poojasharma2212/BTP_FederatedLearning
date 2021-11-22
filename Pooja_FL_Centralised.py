@@ -28,6 +28,8 @@ clients = []
 
 for i in range(args['clients']):
     clients.append({'hook': sy.VirtualWorker(hook, id="client{}".format(i+1))})
+
+clients['P'] = {'x':'y'}
 print(clients)
     
 
