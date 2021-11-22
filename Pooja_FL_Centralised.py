@@ -80,7 +80,7 @@ class FedDataset(Dataset):#this class helps connect the random indices with the 
     
     
 def getImage(dataset,indices,batch_size):#load images using the class FedDataset
-    return Dataloader(FedDataset(dataset,indices),batch_size=batch_size,shuffle=True)
+    return dataloader(FedDataset(dataset,indices),batch_size=batch_size,shuffle=True)
 
 for inx, client in enumerate(clients):  #return actual image set for each client
     trainset_id_list = list(train_group[inx]) 
