@@ -11,6 +11,9 @@ import logging
 import os
 import syft as sy
 
+
+
+hook = sy.TorchHook(torch)
 args = {
     'use_cuda' : True,
     'batch_size' : 64,
@@ -21,7 +24,6 @@ args = {
     'clients' : 10
 }
 
-hook = sy.TorchHook(torch)
 clients = []
 
 for i in range(args.clients):
