@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as Func
 import matplotlib.pyplot as plt
-from torch.utils.data import Dataloader
+from torch.utils.data import dataloader
 from torch.utils.data.dataset import Dataset
 import torchvision
 import numpy as np
