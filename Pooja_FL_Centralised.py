@@ -217,7 +217,7 @@ def test(model, device, test_loader):
         test_loss, correct, len(test_loader.dataset),
         100. * correct / len(test_loader.dataset)))
 
-model = CNN().to(device)
+model = CNN(k).to(device)
 optimizer = optim.SGD(model.parameters(), lr=args['lr'])
 
 logging.info("Starting training !!")
