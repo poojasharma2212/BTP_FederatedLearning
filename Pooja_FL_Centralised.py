@@ -155,23 +155,11 @@ def train(args, model, device, train_loader, optimizer, epoch):
 
     # iterate over federated data
     for batch_idx, (data, target) in enumerate(train_loader):
-
-        # send the model to the remote location 
         model = model.send(data.location)
-
-        # the same torch code that we are use to
         data, target = data.to(device), target.to(device)
         optimizer.zero_grad()
         output = model(data)
-
-        # this loss is a ptr to the tensor loss 
-        # at the remote location
         loss = Func.nll_loss(output, target)
-
-        # call backward() on the loss ptr,
-        # that will send the command to call
-        # backward on the actual loss tensor
-        # present on the remote machine
         loss.backward()
 
         optimizer.step()
@@ -179,7 +167,6 @@ def train(args, model, device, train_loader, optimizer, epoch):
 
         if batch_idx % args['log_interval'] == 0:
             loss = loss.get()
-
             print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                     epoch, 
                     batch_idx * args['batch_size'], # no of images done
@@ -217,8 +204,8 @@ optimizer = optim.SGD(model.parameters(), lr=args['lr'])
 logging.info("Starting training !!")
 
 for epoch in range(1, args['epochs'] + 1):
-        train(args, model, device,train_group, optimizer, epoch)
-        test(model, device, test_group)
+        train(args, model, device,client['mnist_trainset'], optimizer, epoch)
+        test(model, device,client['mnist_testset'])
     
 # thats all we need to do XD
 # device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
