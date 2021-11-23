@@ -52,7 +52,8 @@ def mnistIID(data,nUsers):#this function randomly chooses 60k/10 (assuming 10 us
         #np.random.choice selects num_images number of random numbers from 0 to indices
         usersDict[i]=set(np.random.choice(indices,nImages,replace=False)) #set drops repeated items
         indices=list(set(indices)-usersDict[i])
-        print(usersDict[i])
+        print("i :::", end=" ")
+        print(i,usersDict[i])
         print("===========================================")
     return usersDict
 
