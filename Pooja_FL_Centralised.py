@@ -61,10 +61,10 @@ transform=transforms.Compose([transforms.ToTensor(),transforms.Normalize((0.1307
 #transform=transforms.ToTensor()
 mnist_trainset = datasets.MNIST(root='./data', train=False, download=False, transform= transform)          
 mnist_testset = datasets.MNIST(root='./data', train=False, download=False,transform= transform)
-mnist_trainset.data.max()
-mnist_trainset.data.shape
+mnist_testset.data.max()
+mnist_testset.data.shape
 mnist_trainset.targets
-k = len(set(mnist_trainset.targets.numpy()))
+k = len(set(mnist_testset.targets.numpy()))
 print(k)
 train_group=mnistIID(mnist_trainset,nUsers)
 test_group=mnistIID(mnist_testset,nUsers)
