@@ -204,8 +204,8 @@ optimizer = optim.SGD(model.parameters(), lr=args['lr'])
 logging.info("Starting training !!")
 
 for epoch in range(1, args['epochs'] + 1):
-        train(args, model, device,client['mnist_trainset'], optimizer, epoch)
-        test(model, device,client['mnist_testset'])
+        train(args, model, client,client['mnist_trainset'], optimizer, epoch)
+        test(model, client ,client['mnist_testset'])
     
 # thats all we need to do XD
 # device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
