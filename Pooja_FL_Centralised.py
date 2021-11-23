@@ -166,7 +166,7 @@ def train(args, model, device, train_loader, optimizer, epoch):
 
         # this loss is a ptr to the tensor loss 
         # at the remote location
-        loss = F.nll_loss(output, target)
+        loss = Func.nll_loss(output, target)
 
         # call backward() on the loss ptr,
         # that will send the command to call
@@ -175,15 +175,9 @@ def train(args, model, device, train_loader, optimizer, epoch):
         loss.backward()
 
         optimizer.step()
-
-        # get back the updated model
         model.get()
 
         if batch_idx % args['log_interval'] == 0:
-
-            # a thing to note is the variable loss was
-            # also created at remote worker, so we need to
-            # explicitly get it back
             loss = loss.get()
 
             print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
@@ -223,7 +217,7 @@ optimizer = optim.SGD(model.parameters(), lr=args['lr'])
 logging.info("Starting training !!")
 
 for epoch in range(1, args['epochs'] + 1):
-        train(args, model, device, train_group, optimizer, epoch)
+        train(args, model, device,train_group, optimizer, epoch)
         test(model, device, test_group)
     
 # thats all we need to do XD
