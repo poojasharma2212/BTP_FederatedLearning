@@ -96,7 +96,8 @@ for inx, client in enumerate(clients):
   # print(inx, client['mnist_trainset'].get())
   # print("===========================")
 print("============================")
-print(type(client['mnist_testset']))  
+print(type(client['mnist_testset'])) 
+print(type(client)) 
 print("============================")
 # ================================= #
 
