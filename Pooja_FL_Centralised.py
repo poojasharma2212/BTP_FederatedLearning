@@ -199,7 +199,7 @@ def test(model, device, test_loader):
             output = model(data)
 
             # add losses together
-            test_loss += F.nll_loss(output, target, reduction='sum').item() 
+            test_loss += Func.nll_loss(output, target, reduction='sum').item() 
 
             # get the index of the max probability class
             pred = output.argmax(dim=1, keepdim=True)  
