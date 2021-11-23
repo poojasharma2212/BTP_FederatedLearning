@@ -152,10 +152,9 @@ class CNN(nn.Module):
 #model = CNN(k) 
 def train(args, model, device, train_loader, optimizer, epoch):
     model.train()
-
     # iterate over federated data
-    for batch_idx, (data, target) in enumerate(train_loader):
-        model = model.send(data.location)
+    for batch_idx, (data, target) in enumerate(client['mnist_trainset']):
+        model = model.send(client['hook'])
         data, target = data.to(device), target.to(device)
         optimizer.zero_grad()
         output = model(data)
@@ -171,7 +170,7 @@ def train(args, model, device, train_loader, optimizer, epoch):
                     epoch, 
                     batch_idx * args['batch_size'], # no of images done
                     len(train_loader) * args['batch_size'], # total images left
-                    100. * batch_idx / len(train_loader), 
+                    100. * batch_idx / len(client['mnist_trainset']), 
                     loss.item()
                 )
             )
