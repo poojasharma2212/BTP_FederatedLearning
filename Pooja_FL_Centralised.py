@@ -72,25 +72,29 @@ test_group=mnistIID(mnist_testset,nUsers)
 
 class FedDataset(Dataset):#this class helps connect the random indices with the image+label container in the dataset
     def __init__(self,dataset,indx):
-        self.dataset=dataset
-        self.indx=[int(i) for i in indx]
+      self.dataset=dataset
+      self.indx=[int(i) for i in indx]
         
     def __len__(self):
-        return len(self.indx)
+      return len(self.indx)
     
     def __getitem__(self,item):
-        images,labels=self.dataset[self.indx[item]]
-        return (torch.tensor(images),torch.tensor(labels))
+      images,labels=self.dataset[self.indx[item]]
+      return (torch.tensor(images),torch.tensor(labels))
     
     
 def getImage(dataset,indices,batch_size):#load images using the class FedDataset
-    return DataLoader(FedDataset(dataset,indices),batch_size=batch_size,shuffle=True)
+  return DataLoader(FedDataset(dataset,indices),batch_size=batch_size,shuffle=True)
 
-for inx, client in enumerate(clients):  #return actual image set for each client
-    trainset_id_list = list(train_group[inx]) 
-    client['mnist_trainset'] = getImage(mnist_trainset, trainset_id_list, args['batch_size'])
-    client['mnist_testset'] = getImage(mnist_testset, list(test_group[inx]), args['batch_size'])
-  
+for inx, client in enumerate(clients):
+  trainset_id_list = list(train_group[inx]) 
+  client['mnist_trainset'] = getImage(mnist_trainset, trainset_id_list, args['batch_size'])
+  client['mnist_testset'] = getImage(mnist_testset, list(test_group[inx]), args['batch_size'])
+  print(inx, client['mnist_testset'])
+  print("---------------------------")
+  print(inx, client['mnist_trainset'])
+  print("===========================")
+    
 
 # ================================= #
 
@@ -136,8 +140,6 @@ class CNN(nn.Module):
         x = self.fc(x)
         x = Func.log_softmax(x, dim=1)
         return x
-
-
 
 
 
