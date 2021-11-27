@@ -107,7 +107,7 @@ global_test_loader = DataLoader(global_test_dataset, batch_size=args['batch_size
 
 
 class CNN(nn.Module):
-  def __init__(self,k):  #constructor 
+  def __init__(self):  #constructor 
     super(CNN, self).__init__() # calling parent's class constructor
     self.conv_layers = nn.Sequential(     # Preparing Layers for the model followed by the ReLU function as the Activation function
         nn.Conv2d(in_channels=1, out_channels=32, kernel_size=3, stride=1),
