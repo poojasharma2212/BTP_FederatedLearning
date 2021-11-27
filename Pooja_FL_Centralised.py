@@ -16,7 +16,6 @@ import os
 import syft as sy
 
 
-
 hook = sy.TorchHook(torch)
 args = {
     'use_cuda' : True,
@@ -118,7 +117,6 @@ class CNN(nn.Module):
         nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, stride=1),
         nn.ReLU()
     )
-
     # self.dense_layers = nn.Sequential(
     #     nn.Dropout(0.2),
     #     nn.Linear(128*2*2, 512),
@@ -126,20 +124,17 @@ class CNN(nn.Module):
     #     nn.Dropout(0.2),
     #     nn.Linear(512, k)
     # )
-
     self.fc = nn.Sequential(
             nn.Linear(in_features=64*12*12, out_features=128),
             nn.ReLU(),
             nn.Linear(in_features=128, out_features=10),
         )
     self.dropout = nn.Dropout2d(0.25)
-    
   # def forward(self, X):
   #   out = self.conv_layers(X)
   #   out = out.view(out.size(0), -1)
   #   out = self.dense_layers(out)
   #   return out
-
   def forward(self, x):
         x = self.conv(x)
         x = Func.max_pool2d(x,2)
@@ -150,31 +145,37 @@ class CNN(nn.Module):
 
 
 #model = CNN(k) 
-def train(args, model, device, train_loader, optimizer, epoch):
-    model.train()
+def train(args, client, device, optimizer):
+    client['model'].train()
+    client['model'] = client['model'].send(client['hook'])
+
     # iterate over federated data
-    for batch_idx, (data, target) in enumerate(client['mnist_trainset']):
-        model = model.send(client['hook'])
+    for epoch in range(args['epochs']):
+      for batch_idx, (data, target) in enumerate(client['mnist_trainset']):
+        data = data.send(client['hook'])
+        target = target.send(client['hook'])
         data, target = data.to(device), target.to(device)
-        optimizer.zero_grad()
-        output = model(data)
+        # optimizer.zero_grad()
+        output = client['model'](data)
         loss = Func.nll_loss(output, target)
         loss.backward()
-
+        #client['optimizer'].step()
         optimizer.step()
-        model.get()
-
+        client['model'].get()
+ 
         if batch_idx % args['log_interval'] == 0:
             loss = loss.get()
-            print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                    epoch, 
+            print(' Model  {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+                    epoch, client['hook'].id,
                     batch_idx * args['batch_size'], # no of images done
-                    len(train_loader) * args['batch_size'], # total images left
+                    len(client['mnist_trainset']) * args['batch_size'], # total images left
                     100. * batch_idx / len(client['mnist_trainset']), 
                     loss.item()
                 )
             )
 
+    
+    
 def test(model, device, test_loader):
     model.eval()
     test_loss = 0
@@ -202,8 +203,8 @@ optimizer = optim.SGD(model.parameters(), lr=args['lr'])
 
 logging.info("Starting training !!")
 
-for epoch in range(1, args['epochs'] + 1):
-        train(args, model, client,client['mnist_trainset'], optimizer, epoch)
+for client in clients:
+        train(args, model, client, optimizer)
         test(model, client ,client['mnist_testset'])
     
 # thats all we need to do XD
