@@ -199,12 +199,15 @@ def test(model, device, test_loader):
         100. * correct / len(test_loader.dataset)))
 
 # model = CNN(k)
-optimizer = optim.SGD(model.parameters(), lr=args['lr'])
+#optimizer = optim.SGD(model.parameters(), lr=args['lr'])
 
 logging.info("Starting training !!")
 
 for client in clients:
-        train(args, model, client, optimizer)
+        torch.manual_seed(args.torch_seed)
+        client['model'] = CNN().to(device)
+        client['optim'] = optim.SGD(client['model'].parameters(), lr=args.lr)
+        train(args, model, client, client['optim'])
         test(model, client ,client['mnist_testset'])
     
 # thats all we need to do XD
