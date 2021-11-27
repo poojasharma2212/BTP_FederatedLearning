@@ -144,7 +144,7 @@ class CNN(nn.Module):
         return x
 
 
-model = CNN(k) 
+model = CNN() 
 def train(args, client, device, optimizer):
     client['model'].train()
     client['model'] = client['model'].send(client['hook'])
