@@ -116,8 +116,8 @@ class CNN(nn.Module):
         nn.ReLU(),
         nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, stride=1),
         nn.ReLU(),
-        nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, stride=1),
-        nn.ReLU()
+        # nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, stride=1),
+        # nn.ReLU()
     )
     # self.dense_layers = nn.Sequential(
     #     nn.Dropout(0.2),
