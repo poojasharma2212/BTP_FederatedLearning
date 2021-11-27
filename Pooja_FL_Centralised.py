@@ -132,18 +132,18 @@ class CNN(nn.Module):
             nn.Linear(in_features=128, out_features=10),
         )
     self.dropout = nn.Dropout2d(0.25)
-  # def forward(self, X):
-  #   out = self.conv_layers(X)
-  #   out = out.view(out.size(0), -1)
-  #   out = self.dense_layers(out)
-  #   return out
-  def forward(self, x):
-        x = self.conv_layers(x)
-        x = Func.max_pool2d(x,2)
-        x = x.view(-1, 64*12*12)
-        x = self.fc(x)
-        x = Func.log_softmax(x, dim=1)
-        return x
+  def forward(self, X):
+    out = self.conv_layers(X)
+    out = out.view(out.size(0), -1)
+    out = self.dense_layers(out)
+    return out
+  # def forward(self, x):
+  #       x = self.conv_layers(x)
+  #       x = Func.max_pool2d(x,2)
+  #       x = x.view(-1, 64*12*12)
+  #       x = self.fc(x)
+  #       x = Func.log_softmax(x, dim=1)
+  #       return x
 
 
 model = CNN() 
