@@ -138,7 +138,7 @@ class CNN(nn.Module):
   #   out = self.dense_layers(out)
   #   return out
   def forward(self, x):
-        x = self.conv(x)
+        x = self.conv_layers(x)
         x = Func.max_pool2d(x,2)
         x = x.view(-1, 64*12*12)
         x = self.fc(x)
