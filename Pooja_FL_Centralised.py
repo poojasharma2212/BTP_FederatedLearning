@@ -204,7 +204,7 @@ def test(model, device, test_loader):
 logging.info("Starting training !!")
 
 for client in clients:
-        torch.manual_seed(args.torch_seed)
+        torch.manual_seed(0)
         client['model'] = CNN().to(device)
         client['optim'] = optim.SGD(client['model'].parameters(), lr=args.lr)
         train(args, model, client, client['optim'])
