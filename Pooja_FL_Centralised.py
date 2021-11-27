@@ -38,6 +38,8 @@ print(clients)
 use_cuda = args['use_cuda'] and torch.cuda.is_available()
 device = torch.device("cuda" if use_cuda else "cpu")
 
+kwargs = {'num_workers': 1, 'pin_memory': True} if use_cuda else {}
+
 #os.chdir("/content/drive/MyDrive/FL_ZaaPoo/data/MNIST/raw")
 
 #****************** ========== IID_Dataset ========== ******************** #
@@ -138,7 +140,7 @@ class CNN(nn.Module):
   def forward(self, x):
         x = self.conv_layers(x)
         x = Func.max_pool2d(x,2)
-        #x = x.view(-1, 64*12*12)
+        x = x.view(-1, 64*12*12)
         x = self.fc(x)
         x = Func.log_softmax(x, dim=1)
         return x
