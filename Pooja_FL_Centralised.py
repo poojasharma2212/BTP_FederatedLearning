@@ -138,7 +138,7 @@ class CNN(nn.Module):
   def forward(self, x):
         x = self.conv_layers(x)
         x = Func.max_pool2d(x,2)
-        x = x.view(-1, 64*12*12)
+        #x = x.view(-1, 64*12*12)
         x = self.fc(x)
         x = Func.log_softmax(x, dim=1)
         return x
