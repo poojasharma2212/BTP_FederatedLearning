@@ -144,7 +144,7 @@ class CNN(nn.Module):
         return x
 
 
-#model = CNN(k) 
+model = CNN(k) 
 def train(args, client, device, optimizer):
     client['model'].train()
     client['model'] = client['model'].send(client['hook'])
@@ -198,7 +198,7 @@ def test(model, device, test_loader):
         test_loss, correct, len(test_loader.dataset),
         100. * correct / len(test_loader.dataset)))
 
-model = CNN()
+# model = CNN(k)
 optimizer = optim.SGD(model.parameters(), lr=args['lr'])
 
 logging.info("Starting training !!")
