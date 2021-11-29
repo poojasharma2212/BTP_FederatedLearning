@@ -93,10 +93,10 @@ for inx, client in enumerate(clients):
   client['mnist_trainset'] = getImage(mnist_trainset, trainset_id_list, args['batch_size'])
   client['mnist_testset'] = getImage(mnist_testset, list(test_group[inx]), args['batch_size'])
 
-  # print(inx, client['mnist_testset'].get())
-  # print("---------------------------")
-  # print(inx, client['mnist_trainset'].get())
-  # print("===========================")
+  print(inx, client['mnist_testset'].get())
+  print("---------------------------")
+  print(inx, client['mnist_trainset'].get())
+  print("===========================")
 print("============================")
 print(type(client['mnist_testset'])) 
 print(type(client)) 
@@ -108,219 +108,217 @@ global_test_dataset = datasets.MNIST('./', train=False, download=True, transform
 global_test_loader = DataLoader(global_test_dataset, batch_size=args['batch_size'], shuffle=True)
 
 
-class CNN(nn.Module):
-      def __init__(self):
-        super(CNN, self).__init__()
+# class CNN(nn.Module):
+#       def __init__(self):
+#         super(CNN, self).__init__()
         
-        self.conv = nn.Sequential(
-            nn.Conv2d(in_channels = 1, out_channels = 32, kernel_size = 3, stride = 1),
-            nn.ReLU(),
-            nn.Conv2d(in_channels=32,out_channels = 64, kernel_size = 3, stride = 1),
-            nn.ReLU()
-        )
+#         self.conv = nn.Sequential(
+#             nn.Conv2d(in_channels = 1, out_channels = 32, kernel_size = 3, stride = 1),
+#             nn.ReLU(),
+#             nn.Conv2d(in_channels=32,out_channels = 64, kernel_size = 3, stride = 1),
+#             nn.ReLU()
+#         )
         
-        self.fc = nn.Sequential(
-            nn.Linear(in_features=64*12*12, out_features=128),
-            nn.ReLU(),
-            nn.Linear(in_features=128, out_features=10),
-        )
+#         self.fc = nn.Sequential(
+#             nn.Linear(in_features=64*12*12, out_features=128),
+#             nn.ReLU(),
+#             nn.Linear(in_features=128, out_features=10),
+#         )
 
-        self.dropout = nn.Dropout2d(0.25)
-
-    
-      def forward(self, x):
-        x = self.conv(x)
-        x = Func.max_pool2d(x,2)
-        x = x.view(-1, 64*12*12)
-        x = self.fc(x)
-        x = Func.log_softmax(x, dim=1)
-        return x
-  # def __init__(self):  #constructor 
-  #   super(CNN, self).__init__() # calling parent's class constructor
-  #   self.conv_layers = nn.Sequential(     # Preparing Layers for the model followed by the ReLU function as the Activation function
-  #       nn.Conv2d(in_channels=1, out_channels=32, kernel_size=3, stride=1),
-  #       nn.ReLU(),
-  #       nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, stride=1),
-  #       nn.ReLU(),
-  #       # nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, stride=1),
-  #       # nn.ReLU()
-  #   )
-  #   # self.dense_layers = nn.Sequential(
-  #   #     nn.Dropout(0.2),
-  #   #     nn.Linear(128*2*2, 512),
-  #   #     nn.ReLU(),
-  #   #     nn.Dropout(0.2),
-  #   #     nn.Linear(512, k)
-  #   # )
-  #   self.dropout = nn.Dropout2d(0.25)
-  # # def forward(self, X):
-  # #   out = self.conv_layers(X)
-  # #   out = out.view(out.size(0), -1)
-  # #   out = self.dense_layers(out)
-  # #   return out
+#         self.dropout = nn.Dropout2d(0.25)
+#       def forward(self, x):
+#         x = self.conv(x)
+#         x = Func.max_pool2d(x,2)
+#         x = x.view(-1, 64*12*12)
+#         x = self.fc(x)
+#         x = Func.log_softmax(x, dim=1)
+#         return x
+#   # def __init__(self):  #constructor 
+#   #   super(CNN, self).__init__() # calling parent's class constructor
+#   #   self.conv_layers = nn.Sequential(     # Preparing Layers for the model followed by the ReLU function as the Activation function
+#   #       nn.Conv2d(in_channels=1, out_channels=32, kernel_size=3, stride=1),
+#   #       nn.ReLU(),
+#   #       nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, stride=1),
+#   #       nn.ReLU(),
+#   #       # nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, stride=1),
+#   #       # nn.ReLU()
+#   #   )
+#   #   # self.dense_layers = nn.Sequential(
+#   #   #     nn.Dropout(0.2),
+#   #   #     nn.Linear(128*2*2, 512),
+#   #   #     nn.ReLU(),
+#   #   #     nn.Dropout(0.2),
+#   #   #     nn.Linear(512, k)
+#   #   # )
+#   #   self.dropout = nn.Dropout2d(0.25)
+#   # # def forward(self, X):
+#   # #   out = self.conv_layers(X)
+#   # #   out = out.view(out.size(0), -1)
+#   # #   out = self.dense_layers(out)
+#   # #   return out
 
 
-model = CNN() 
-def train(args, client, device, optimizer):
-    client['model'].train()
-    client['model'] = client['model'].send(client['hook'])
+# model = CNN() 
+# def train(args, client, device, optimizer):
+#     client['model'].train()
+#     client['model'] = client['model'].send(client['hook'])
 
-    # iterate over federated data
-    for epoch in range(args['epochs']):
-      for batch_idx, (data, target) in enumerate(client['mnist_trainset']):
-        data = data.send(client['hook'])
-        target = target.send(client['hook'])
-        data, target = data.to(device), target.to(device)
-        # optimizer.zero_grad()
-        output = client['model'](data)
-        loss = Func.nll_loss(output, target)
-        loss.backward()
-        #client['optimizer'].step()
-        optimizer.step()
-        client['model'].get()
+#     # iterate over federated data
+#     for epoch in range(args['epochs']):
+#       for batch_idx, (data, target) in enumerate(client['mnist_trainset']):
+#         data = data.send(client['hook'])
+#         target = target.send(client['hook'])
+#         data, target = data.to(device), target.to(device)
+#         # optimizer.zero_grad()
+#         output = client['model'](data)
+#         loss = Func.nll_loss(output, target)
+#         loss.backward()
+#         #client['optimizer'].step()
+#         optimizer.step()
+#         client['model'].get()
  
-        if batch_idx % args['log_interval'] == 0:
-            loss = loss.get()
-            print(' Model  {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                    epoch, client['hook'].id,
-                    batch_idx * args['batch_size'], # no of images done
-                    len(client['mnist_trainset']) * args['batch_size'], # total images left
-                    100. * batch_idx / len(client['mnist_trainset']), 
-                    loss.item()
-                )
-            )
+#         if batch_idx % args['log_interval'] == 0:
+#             loss = loss.get()
+#             print(' Model  {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+#                     epoch, client['hook'].id,
+#                     batch_idx * args['batch_size'], # no of images done
+#                     len(client['mnist_trainset']) * args['batch_size'], # total images left
+#                     100. * batch_idx / len(client['mnist_trainset']), 
+#                     loss.item()
+#                 )
+#             )
 
     
     
-def test(model, device, test_loader):
-    model.eval()
-    test_loss = 0
-    correct = 0
-    with torch.no_grad():
-        for data, target in test_loader:
-            data, target = data.to(device), target.to(device)
-            output = model(data)
+# def test(model, device, test_loader):
+#     model.eval()
+#     test_loss = 0
+#     correct = 0
+#     with torch.no_grad():
+#         for data, target in test_loader:
+#             data, target = data.to(device), target.to(device)
+#             output = model(data)
 
-            # add losses together
-            test_loss += Func.nll_loss(output, target, reduction='sum').item() 
+#             # add losses together
+#             test_loss += Func.nll_loss(output, target, reduction='sum').item() 
 
-            # get the index of the max probability class
-            pred = output.argmax(dim=1, keepdim=True)  
-            correct += pred.eq(target.view_as(pred)).sum().item()
+#             # get the index of the max probability class
+#             pred = output.argmax(dim=1, keepdim=True)  
+#             correct += pred.eq(target.view_as(pred)).sum().item()
 
-    test_loss /= len(test_loader.dataset)
+#     test_loss /= len(test_loader.dataset)
 
-    print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
-        test_loss, correct, len(test_loader.dataset),
-        100. * correct / len(test_loader.dataset)))
+#     print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
+#         test_loss, correct, len(test_loader.dataset),
+#         100. * correct / len(test_loader.dataset)))
 
-# model = CNN(k)
-#optimizer = optim.SGD(model.parameters(), lr=args['lr'])
+# # model = CNN(k)
+# #optimizer = optim.SGD(model.parameters(), lr=args['lr'])
 
-logging.info("Starting training !!")
+# logging.info("Starting training !!")
 
-for client in clients:
-        torch.manual_seed(0)
-        client['model'] = CNN().to(device)
-        client['optim'] = optim.SGD(client['model'].parameters(), lr=args['lr'])
-        train(args, client, device, client['optim'])
-        test(model, client ,client['mnist_testset'])
+# for client in clients:
+#         torch.manual_seed(0)
+#         client['model'] = CNN().to(device)
+#         client['optim'] = optim.SGD(client['model'].parameters(), lr=args['lr'])
+#         train(args, client, device, client['optim'])
+#         test(model, client ,client['mnist_testset'])
     
-# thats all we need to do XD
-# device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-# print(device)
-# model.to(device)
-# criterion = nn.CrossEntropyLoss()
-# optimizer = torch.optim.Adam(model.parameters())
-# batchSize = 128
-# train_loader = torch.utils.data.DataLoader(dataset = mnist_trainset,
-#                                            batch_size=batchSize,
-#                                            shuffle=True)
+# # thats all we need to do XD
+# # device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+# # print(device)
+# # model.to(device)
+# # criterion = nn.CrossEntropyLoss()
+# # optimizer = torch.optim.Adam(model.parameters())
+# # batchSize = 128
+# # train_loader = torch.utils.data.DataLoader(dataset = mnist_trainset,
+# #                                            batch_size=batchSize,
+# #                                            shuffle=True)
 
-# test_loader = torch.utils.data.DataLoader(dataset = mnist_testset,
-#                                            batch_size=batchSize,
-#                                            shuffle=False)
+# # test_loader = torch.utils.data.DataLoader(dataset = mnist_testset,
+# #                                            batch_size=batchSize,
+# #                                            shuffle=False)
 
-# def batch_gd(model, criterion, optimizer, train_loader, test_loader, epochs):
-#  # raise NotImplementedError("Subclasses should implement this!")
-#   train_losses = np.zeros(epochs)
-#   test_losses = np.zeros(epochs)
+# # def batch_gd(model, criterion, optimizer, train_loader, test_loader, epochs):
+# #  # raise NotImplementedError("Subclasses should implement this!")
+# #   train_losses = np.zeros(epochs)
+# #   test_losses = np.zeros(epochs)
 
-#   for it in range(epochs):
-#     t0 = datetime.now()
-#     train_loss = []
-#     for inputs, targets in train_loader:
-#       inputs, targets = inputs.to(device), targets.to(device)  #moving data to GPU
+# #   for it in range(epochs):
+# #     t0 = datetime.now()
+# #     train_loss = []
+# #     for inputs, targets in train_loader:
+# #       inputs, targets = inputs.to(device), targets.to(device)  #moving data to GPU
 
-#       optimizer.zero_grad() # set parameter gradient to zero
+# #       optimizer.zero_grad() # set parameter gradient to zero
 
-#       outputs = model(inputs)  # forward pass
-#       loss = criterion(outputs, targets)
+# #       outputs = model(inputs)  # forward pass
+# #       loss = criterion(outputs, targets)
 
-#       loss.backward()  #backward and optimize
-#       optimizer.step()
+# #       loss.backward()  #backward and optimize
+# #       optimizer.step()
 
-#       train_loss.append(loss.item())
-#     train_loss = np.mean(train_loss)
+# #       train_loss.append(loss.item())
+# #     train_loss = np.mean(train_loss)
     
-#     test_loss = []
-#     for inputs, targets in test_loader:
-#       inputs, targets = inputs.to(device), targets.to(device)
-#       outputs = model(inputs)
-#       loss = criterion(outputs, targets)
-#       test_loss.append(loss.item())
-#     test_loss = np.mean(test_loss)
+# #     test_loss = []
+# #     for inputs, targets in test_loader:
+# #       inputs, targets = inputs.to(device), targets.to(device)
+# #       outputs = model(inputs)
+# #       loss = criterion(outputs, targets)
+# #       test_loss.append(loss.item())
+# #     test_loss = np.mean(test_loss)
 
-#     train_losses[it] = train_loss
-#     test_losses[it] = test_loss
+# #     train_losses[it] = train_loss
+# #     test_losses[it] = test_loss
 
-#     dt = datetime.now() - t0
+# #     dt = datetime.now() - t0
 
-#     print(f'Epoch{it+1}/{epochs}, Train Loss: {train_loss: .4f}, \
-#     Test Loss: {test_loss:.4f}, Duration: {dt}')
+# #     print(f'Epoch{it+1}/{epochs}, Train Loss: {train_loss: .4f}, \
+# #     Test Loss: {test_loss:.4f}, Duration: {dt}')
 
-#   return train_losses, test_losses
+# #   return train_losses, test_losses
 
       
 
-# train_losses, test_losses = batch_gd(model, criterion, optimizer, train_loader, test_loader, epochs=15)
-# plt.plot(train_losses, label='train loss')
-# plt.plot(test_losses, label='test loss')
-# plt.legend()
-# plt.show()
+# # train_losses, test_losses = batch_gd(model, criterion, optimizer, train_loader, test_loader, epochs=15)
+# # plt.plot(train_losses, label='train loss')
+# # plt.plot(test_losses, label='test loss')
+# # plt.legend()
+# # plt.show()
 
 
-# n_correct = 0.
-# n_total = 0.
+# # n_correct = 0.
+# # n_total = 0.
 
-# for inputs, targets in train_loader:
-#   inputs, targets = inputs.to(device), targets.to(device) # moving data to GPU
+# # for inputs, targets in train_loader:
+# #   inputs, targets = inputs.to(device), targets.to(device) # moving data to GPU
 
-#   outputs = model(inputs)
+# #   outputs = model(inputs)
 
-#   _, predictions = torch.max(outputs, 1) 
+# #   _, predictions = torch.max(outputs, 1) 
 
-#   n_correct  = n_correct + (predictions==targets).sum().item()
-#   n_total = n_total + targets.shape[0]
+# #   n_correct  = n_correct + (predictions==targets).sum().item()
+# #   n_total = n_total + targets.shape[0]
 
-# train_acc = n_correct / n_total
+# # train_acc = n_correct / n_total
 
-# n_correct = 0.
-# n_total = 0.
+# # n_correct = 0.
+# # n_total = 0.
 
-# for inputs, targets in test_loader:
-#   inputs, targets = inputs.to(device), targets.to(device) # moving data to GPU
+# # for inputs, targets in test_loader:
+# #   inputs, targets = inputs.to(device), targets.to(device) # moving data to GPU
 
-#   outputs = model(inputs)
+# #   outputs = model(inputs)
 
-#   _, predictions = torch.max(outputs, 1) 
+# #   _, predictions = torch.max(outputs, 1) 
 
-#   n_correct  = n_correct + (predictions==targets).sum().item()
-#   n_total = n_total + targets.shape[0]
+# #   n_correct  = n_correct + (predictions==targets).sum().item()
+# #   n_total = n_total + targets.shape[0]
 
-# test_acc = n_correct / n_total
+# # test_acc = n_correct / n_total
 
 
-# print(f"Train acc: {train_acc: .4f}, Test acc: {test_acc: .4f}") 
+# # print(f"Train acc: {train_acc: .4f}, Test acc: {test_acc: .4f}") 
 
 
