@@ -127,30 +127,22 @@ global_test_loader = DataLoader(global_test_dataset, batch_size=args['batch_size
 class CNN(nn.Module):
       def __init__(self):
         super(CNN, self).__init__()
-        
-        self.conv = nn.Sequential(
-            nn.Conv2d(in_channels = 1, out_channels = 32, kernel_size = 3, stride = 1),
-            nn.ReLU(),
-            nn.Conv2d(in_channels=32,out_channels = 64, kernel_size = 3, stride = 1),
-            nn.ReLU()
-        )
-        
-        self.fc = nn.Sequential(
-            nn.Linear(in_features=64*12*12, out_features=128),
-            nn.ReLU(),
-            nn.Linear(in_features=128, out_features=10),
-        )
+        #self.quant = torch.quantization.QuantStub()
+        self.conv1 = nn.Conv2d(1, 5, 5, 1)
+        self.conv2 = nn.Conv2d(5, 10, 5, 1)
+        self.fc1 = nn.Linear(4*4*10, 5) #..,50
+        self.fc2 = nn.Linear(5, 10) #50,5  50 non iid 5 iid
 
-        self.dropout = nn.Dropout2d(0.25)
       def forward(self, x):
-        x = Func.relu(self.conv(x))
-        x = Func.max_pool2d(x, 2, 2)
-        x = Func.relu(self.conv(x))
-        x = Func.max_pool2d(x, 2, 2)
-        x = Func.view(-1, 4*4*10)
-        x = Func.relu(self.fc1(x))
+        #x=self.quant(x)
+        x = F.relu(self.conv1(x))
+        x = F.max_pool2d(x, 2, 2)
+        x = F.relu(self.conv2(x))
+        x = F.max_pool2d(x, 2, 2)
+        x = x.view(-1, 4*4*10)
+        x = F.relu(self.fc1(x))
         x = self.fc2(x)
-        return Func.log_softmax(x, dim=1)
+        return F.log_softmax(x, dim=1)
   # def __init__(self):  #constructor 
   #   super(CNN, self).__init__() # calling parent's class constructor
   #   self.conv_layers = nn.Sequential(     # Preparing Layers for the model followed by the ReLU function as the Activation function
