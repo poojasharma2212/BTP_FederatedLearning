@@ -28,7 +28,7 @@ import Dataset
 from Dataset import load_dataset, getImage
 from utils import averageModels
 import random
-import mat
+# import mat
 import syft as sy
 
 
