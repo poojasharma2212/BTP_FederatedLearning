@@ -41,6 +41,7 @@ args = {
     'log_interval' : 10,
     'epochs' : 10,
     'clients' : 10
+    'seed' : 0
 }
 
 clients = []
@@ -227,7 +228,7 @@ def test(model, device, test_loader):
 
 logging.info("Starting training !!")
 
-torch.manual_seed(args.torch_seed)
+torch.manual_seed(args['seed'])
 for client in clients:
         torch.manual_seed(0)
         client['model'] = CNN().to(device)
