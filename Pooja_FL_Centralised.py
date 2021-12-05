@@ -26,7 +26,7 @@ import numpy as np
 import time
 # import Dataset
 # from Dataset import load_dataset, getImage
-from utils import averageModels
+# from utils import averageModels
 import random
 # import mat
 import syft as sy
