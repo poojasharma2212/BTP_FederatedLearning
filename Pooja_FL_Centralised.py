@@ -24,8 +24,8 @@ import syft as sy
 import copy
 import numpy as np
 import time
-import Dataset
-from Dataset import load_dataset, getImage
+# import Dataset
+# from Dataset import load_dataset, getImage
 from utils import averageModels
 import random
 # import mat
