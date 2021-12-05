@@ -233,8 +233,10 @@ for client in clients:
         torch.manual_seed(0)
         client['model'] = CNN().to(device)
         client['optim'] = optim.SGD(client['model'].parameters(), lr=args['lr'])
-        train(args, client, device, client['optim'])
-        test(model, client ,client['mnist_testset'])
+        
+for client in clients:
+      train(args, client, device, client['optim'])
+      test(model, client ,client['mnist_testset'])
     
 # thats all we need to do XD
 # device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
