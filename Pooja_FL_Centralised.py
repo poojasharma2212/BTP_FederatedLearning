@@ -143,9 +143,9 @@ class CNN(nn.Module):
 
         self.dropout = nn.Dropout2d(0.25)
       def forward(self, x):
-        x = Func.relu(self.conv1(x))
+        x = Func.relu(self.conv(x))
         x = Func.max_pool2d(x, 2, 2)
-        x = Func.relu(self.conv2(x))
+        x = Func.relu(self.conv(x))
         x = Func.max_pool2d(x, 2, 2)
         x = Func.view(-1, 4*4*10)
         x = Func.relu(self.fc1(x))
