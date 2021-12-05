@@ -227,6 +227,7 @@ def test(model, device, test_loader):
 
 logging.info("Starting training !!")
 
+torch.manual_seed(args.torch_seed)
 for client in clients:
         torch.manual_seed(0)
         client['model'] = CNN().to(device)
