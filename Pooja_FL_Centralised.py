@@ -127,12 +127,14 @@ class CNN(nn.Module):
 
         self.dropout = nn.Dropout2d(0.25)
       def forward(self, x):
-        x = self.conv(x)
-        x = Func.max_pool2d(x,2)
-        x = x.view(-1, 64*12*12)
-        x = self.fc(x)
-        x = Func.log_softmax(x, dim=1)
-        return x
+        x = F.relu(self.conv1(x))
+        x = F.max_pool2d(x, 2, 2)
+        x = F.relu(self.conv2(x))
+        x = F.max_pool2d(x, 2, 2)
+        x = x.view(-1, 4*4*10)
+        x = F.relu(self.fc1(x))
+        x = self.fc2(x)
+        return F.log_softmax(x, dim=1)
   # def __init__(self):  #constructor 
   #   super(CNN, self).__init__() # calling parent's class constructor
   #   self.conv_layers = nn.Sequential(     # Preparing Layers for the model followed by the ReLU function as the Activation function
