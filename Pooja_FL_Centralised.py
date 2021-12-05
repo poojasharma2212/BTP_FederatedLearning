@@ -40,7 +40,7 @@ args = {
     'lr' : 0.01,
     'log_interval' : 10,
     'epochs' : 10,
-    'clients' : 10
+    'clients' : 10,
     'seed' : 0
 }
 
