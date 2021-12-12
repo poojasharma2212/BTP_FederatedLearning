@@ -119,6 +119,7 @@ print("============================")
 # ================================= #
 
 #=================Global Model===================#
+transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
 global_test_dataset = datasets.MNIST('./', train=False, download=True, transform=transform)
 global_test_loader = DataLoader(global_test_dataset, batch_size=args['batch_size'], shuffle=True)
 # class CNN(nn.Module):
@@ -208,7 +209,7 @@ def test(args,model, device, test_loader):
             test_loss += Func.nll_loss(output, target, reduction='sum').item() 
 
             # get the index of the max probability class
-            pred = output.argmax(dim=1, keepdim=True)  
+            pred = output.argmax(1, keepdim=True)  
             correct += pred.eq(target.view_as(pred)).sum().item()
 
     test_loss /= len(test_loader.dataset)
@@ -220,11 +221,10 @@ def test(args,model, device, test_loader):
 # model = CNN(k)
 #optimizer = optim.SGD(model.parameters(), lr=args['lr'])
 
-logging.info("Starting training !!")
+# logging.info("Starting training !!")
 
 torch.manual_seed(args['seed'])
-
-model = CNN() 
+global_model = CNN() 
 
 for client in clients:
         torch.manual_seed(args['seed'])
@@ -271,7 +271,7 @@ for fed_round in range(args['rounds']):
       return global_model
 
     # Averaging 
-    global_model = averageModels(model, active_clients)
+    global_model = averageModels(global_model, active_clients)
     
     # Testing the average model
     test(args,global_model, device, global_test_loader)
