@@ -225,7 +225,7 @@ for client in clients:
         torch.manual_seed(args['seed'])
         client['model'] = CNN().to(device)
         # print(client)
-        client['optim'] = optim.SGD(client['model'].parameters(), lr=args['lr'])
+        client['optimizer'] = optim.SGD(client['model'].parameters(), lr=args['lr'])
         
 # print(client)
 for fed_round in range(args['rounds']):
