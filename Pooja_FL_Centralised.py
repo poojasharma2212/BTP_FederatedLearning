@@ -144,7 +144,7 @@ class CNN(nn.Module):
 def train(args, client, device):
     client['model'].train()
     client['model'].send(client['hook'])
-
+    print(client)
     # iterate over federated data
     for epoch in range(1,args['epochs']+1):
       for batch_idx, (data, target) in enumerate(client['mnist_trainset']):
@@ -227,9 +227,9 @@ for fed_round in range(args['rounds']):
     # Training 
     # print(client)
     print('=============\\\\\\\=====================')
-    for clie in active_clients:
-        print(clie)
-        train(args,clie, device)
+    for client in active_clients:
+        # print(client)
+        train(args,client, device)
     
 #     # Testing 
 #     for client in active_clients:
