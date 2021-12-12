@@ -32,12 +32,12 @@ args = {
     'epochs' : 3,
     'clients' : 20,
     'seed' : 0,
-    'rounds' : 5,
+    'rounds' : 100,
     'C' : 0.9,
     'drop_rate' : 0.1,
     'images' : 10000,
-    'split_size' : int(10000/10),
-    'samples' : 1000/10000,
+    'split_size' : int(10000/20),
+    'samples' : 5000/10000,
     'use_cuda' : False,
     'save_model' : True
 }
