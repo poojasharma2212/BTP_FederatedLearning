@@ -14,16 +14,7 @@ import torchvision.transforms as transforms
 import logging
 import os
 
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
-from torchvision import datasets, transforms
-from torch.utils.data import DataLoader, Dataset
-import syft as sy
-import copy
-import numpy as np
-import time
+
 # import Dataset
 # from Dataset import load_dataset, getImage
 # from utils import averageModels
@@ -41,7 +32,11 @@ args = {
     'log_interval' : 10,
     'epochs' : 10,
     'clients' : 10,
-    'seed' : 0
+    'seed' : 0,
+    'rounds' : 2,
+    'C' : 0.9,
+    'drop_rate' : 0.1
+
 }
 
 clients = []
@@ -124,52 +119,30 @@ print("============================")
 global_test_dataset = datasets.MNIST('./', train=False, download=True, transform=transform)
 global_test_loader = DataLoader(global_test_dataset, batch_size=args['batch_size'], shuffle=True)
 
+def __init__(self):  #constructor 
+    super(CNN, self).__init__() # calling parent's class constructor
+    self.conv_layers = nn.Sequential(     # Preparing Layers for the model followed by the ReLU function as the Activation function
+        nn.Conv2d(in_channels=1, out_channels=32, kernel_size=3, stride=1),
+        nn.ReLU(),
+        nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, stride=1),
+        nn.ReLU(),
+        # nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, stride=1),
+        # nn.ReLU()
+    )
+    self.dense_layers = nn.Sequential(
+        nn.Dropout(0.2),
+        nn.Linear(128*2*2, 512),
+        nn.ReLU(),
+        nn.Dropout(0.2),
+        nn.Linear(512, k)
+    )
+    self.dropout = nn.Dropout2d(0.25)
+def forward(self, X):
+    out = self.conv_layers(X)
+    out = out.view(out.size(0), -1)
+    out = self.dense_layers(out)
+    return out
 
-class CNN(nn.Module):
-      def __init__(self):
-        super(CNN, self).__init__()
-        #self.quant = torch.quantization.QuantStub()
-        self.conv1 = nn.Conv2d(1, 5, 5, 1)
-        self.conv2 = nn.Conv2d(5, 10, 5, 1)
-        self.fc1 = nn.Linear(4*4*10, 5) #..,50
-        self.fc2 = nn.Linear(5, 10) #50,5  50 non iid 5 iid
-
-      def forward(self, x):
-        #x=self.quant(x)
-        x = F.relu(self.conv1(x))
-        x = F.max_pool2d(x, 2, 2)
-        x = F.relu(self.conv2(x))
-        x = F.max_pool2d(x, 2, 2)
-        x = x.view(-1, 4*4*10)
-        x = F.relu(self.fc1(x))
-        x = self.fc2(x)
-        return F.log_softmax(x, dim=1)
-  # def __init__(self):  #constructor 
-  #   super(CNN, self).__init__() # calling parent's class constructor
-  #   self.conv_layers = nn.Sequential(     # Preparing Layers for the model followed by the ReLU function as the Activation function
-  #       nn.Conv2d(in_channels=1, out_channels=32, kernel_size=3, stride=1),
-  #       nn.ReLU(),
-  #       nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, stride=1),
-  #       nn.ReLU(),
-  #       # nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, stride=1),
-  #       # nn.ReLU()
-  #   )
-  #   # self.dense_layers = nn.Sequential(
-  #   #     nn.Dropout(0.2),
-  #   #     nn.Linear(128*2*2, 512),
-  #   #     nn.ReLU(),
-  #   #     nn.Dropout(0.2),
-  #   #     nn.Linear(512, k)
-  #   # )
-  #   self.dropout = nn.Dropout2d(0.25)
-  # # def forward(self, X):
-  # #   out = self.conv_layers(X)
-  # #   out = out.view(out.size(0), -1)
-  # #   out = self.dense_layers(out)
-  # #   return out
-
-
-model = CNN() 
 def train(args, client, device, optimizer):
     client['model'].train()
     client['model'] = client['model'].send(client['hook'])
@@ -197,9 +170,7 @@ def train(args, client, device, optimizer):
                     100. * batch_idx / len(client['mnist_trainset']), 
                     loss.item()
                 )
-            )
-
-    
+            ) 
     
 def test(model, device, test_loader):
     model.eval()
@@ -229,110 +200,60 @@ def test(model, device, test_loader):
 logging.info("Starting training !!")
 
 torch.manual_seed(args['seed'])
+
+model = CNN() 
+
 for client in clients:
-        torch.manual_seed(0)
+        torch.manual_seed(args['seed'])
         client['model'] = CNN().to(device)
         client['optim'] = optim.SGD(client['model'].parameters(), lr=args['lr'])
         
-for client in clients:
-      train(args, client, device, client['optim'])
-      test(model, client ,client['mnist_testset'])
+for fed_round in range(args['rounds']):
     
-# thats all we need to do XD
-# device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-# print(device)
-# model.to(device)
-# criterion = nn.CrossEntropyLoss()
-# optimizer = torch.optim.Adam(model.parameters())
-# batchSize = 128
-# train_loader = torch.utils.data.DataLoader(dataset = mnist_trainset,
-#                                            batch_size=batchSize,
-#                                            shuffle=True)
+    # number of selected clients
+    m = int(max(args['C'] * args['clients'], 1)) #at least 1 client is selected for training
 
-# test_loader = torch.utils.data.DataLoader(dataset = mnist_testset,
-#                                            batch_size=batchSize,
-#                                            shuffle=False)
-
-# def batch_gd(model, criterion, optimizer, train_loader, test_loader, epochs):
-#  # raise NotImplementedError("Subclasses should implement this!")
-#   train_losses = np.zeros(epochs)
-#   test_losses = np.zeros(epochs)
-
-#   for it in range(epochs):
-#     t0 = datetime.now()
-#     train_loss = []
-#     for inputs, targets in train_loader:
-#       inputs, targets = inputs.to(device), targets.to(device)  #moving data to GPU
-
-#       optimizer.zero_grad() # set parameter gradient to zero
-
-#       outputs = model(inputs)  # forward pass
-#       loss = criterion(outputs, targets)
-
-#       loss.backward()  #backward and optimize
-#       optimizer.step()
-
-#       train_loss.append(loss.item())
-#     train_loss = np.mean(train_loss)
+    # Selected devices
+    np.random.seed(fed_round)
+    selected_clients_inds = np.random.choice(range(len(clients)), m, replace=False)#dont choose same client more than once
+    selected_clients = [clients[i] for i in selected_clients_inds]
     
-#     test_loss = []
-#     for inputs, targets in test_loader:
-#       inputs, targets = inputs.to(device), targets.to(device)
-#       outputs = model(inputs)
-#       loss = criterion(outputs, targets)
-#       test_loss.append(loss.item())
-#     test_loss = np.mean(test_loss)
+    # Active devices
+    np.random.seed(fed_round)
+    active_clients_inds = np.random.choice(selected_clients_inds, int((1-args['drop_rate']) * m), replace=False) #drop clients
+    active_clients = [clients[i] for i in active_clients_inds]
+    
+    # Training 
+    for client in active_clients:
+        train(args, device, client)
+    
+#     # Testing 
+#     for client in active_clients:
+#         test(args, client['model'], device, client['testset'], client['hook'].id)
+    
+    def averageModels(global_model, clients):
+      client_models = [clients[i]['model'] for i in range(len(clients))]
+      samples = [clients[i]['samples'] for i in range(len(clients))]
+      global_dict = global_model.state_dict()
+    
+      for k in global_dict.keys(): #key is CNN layer index and value is layer parameters
+          global_dict[k] = torch.stack([client_models[i].state_dict()[k].float() * samples[i] for i in range(len(client_models))], 0).sum(0) #take a weighted average and not average because the clients may not have the same amount of data to train upon
+            
+      global_model.load_state_dict(global_dict)
+      return global_model
 
-#     train_losses[it] = train_loss
-#     test_losses[it] = test_loss
+    # Averaging 
+    global_model = averageModels(global_model, active_clients)
+    
+    # Testing the average model
+    test(args, global_model, device, global_test_loader, 'Global')
+            
+    # Share the global model with the clients
+    for client in clients:
+        client['model'].load_state_dict(global_model.state_dict())
+        
+if (args.save_model):
+    torch.save(global_model.state_dict(), "FedAvg.pt")
 
-#     dt = datetime.now() - t0
-
-#     print(f'Epoch{it+1}/{epochs}, Train Loss: {train_loss: .4f}, \
-#     Test Loss: {test_loss:.4f}, Duration: {dt}')
-
-#   return train_losses, test_losses
-
-      
-
-# train_losses, test_losses = batch_gd(model, criterion, optimizer, train_loader, test_loader, epochs=15)
-# plt.plot(train_losses, label='train loss')
-# plt.plot(test_losses, label='test loss')
-# plt.legend()
-# plt.show()
-
-
-# n_correct = 0.
-# n_total = 0.
-
-# for inputs, targets in train_loader:
-#   inputs, targets = inputs.to(device), targets.to(device) # moving data to GPU
-
-#   outputs = model(inputs)
-
-#   _, predictions = torch.max(outputs, 1) 
-
-#   n_correct  = n_correct + (predictions==targets).sum().item()
-#   n_total = n_total + targets.shape[0]
-
-# train_acc = n_correct / n_total
-
-# n_correct = 0.
-# n_total = 0.
-
-# for inputs, targets in test_loader:
-#   inputs, targets = inputs.to(device), targets.to(device) # moving data to GPU
-
-#   outputs = model(inputs)
-
-#   _, predictions = torch.max(outputs, 1) 
-
-#   n_correct  = n_correct + (predictions==targets).sum().item()
-#   n_total = n_total + targets.shape[0]
-
-# test_acc = n_correct / n_total
-
-
-# print(f"Train acc: {train_acc: .4f}, Test acc: {test_acc: .4f}") 
 
 
