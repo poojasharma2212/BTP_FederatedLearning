@@ -29,10 +29,10 @@ args = {
     'test_batch_size' : 1000,
     'lr' : 0.01,
     'log_interval' : 10,
-    'epochs' : 10,
-    'clients' : 10,
+    'epochs' : 2,
+    'clients' : 20,
     'seed' : 0,
-    'rounds' : 2,
+    'rounds' : 50,
     'C' : 0.9,
     'drop_rate' : 0.1,
     'images' : 10000,
@@ -115,7 +115,7 @@ for inx, client in enumerate(clients):
   client['samples'] = len(trainset_id_list)/args['images']
   # print(client['mnist_trainset'])
 
-print("==================================@@@@@@@@@@@@@@@")
+print("==================================")
 for inx, client in enumerate(clients):
   client['mnist_testset'] = getImage(mnist_testset, list(test_group[inx]), args['batch_size'])
   # client['samples'] = len(trainset_id_list)/args['images']
