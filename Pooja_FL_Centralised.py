@@ -114,9 +114,9 @@ for inx, client in enumerate(clients):
   client['mnist_testset'] = getImage(mnist_testset, list(test_group[inx]), args['batch_size'])
   # client['samples'] = len(trainset_id_list)/args['images']
   print(client['mnist_testset'])
-  # print(inx, client['mnist_testset'])
-#   print("---------------------------")
-#   print(inx, client['mnist_trainset'])
+  print(inx, client['mnist_testset'])
+  print("---------------------------")
+  print(inx, client['mnist_trainset'])
 #   print("===========================")
 # print("============================")
 # print(type(client['mnist_testset'])) 
