@@ -35,7 +35,11 @@ args = {
     'rounds' : 2,
     'C' : 0.9,
     'drop_rate' : 0.1,
-    'images' : 10000
+    'images' : 10000,
+    'split_size' : int('images'/'clients'),
+    'samples' : 'split_size'/'images',
+    'use_cuda' : False,
+    'save_model' : True
 }
 
 
