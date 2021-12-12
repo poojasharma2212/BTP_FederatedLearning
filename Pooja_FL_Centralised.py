@@ -224,6 +224,7 @@ for fed_round in range(args['rounds']):
     active_clients = [clients[i] for i in active_clients_inds]
     
     # Training 
+    print(client)
     for client in active_clients:
         train(args,client, device)
     
