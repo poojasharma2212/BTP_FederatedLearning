@@ -105,9 +105,15 @@ def getImage(dataset,indices,batch_size):#load images using the class FedDataset
 for inx, client in enumerate(clients):
   trainset_id_list = list(train_group[inx]) 
   client['mnist_trainset'] = getImage(mnist_trainset, trainset_id_list, args['batch_size'])
-  client['mnist_testset'] = getImage(mnist_testset, list(test_group[inx]), args['batch_size'])
+  # client['mnist_testset'] = getImage(mnist_testset, list(test_group[inx]), args['batch_size'])
   client['samples'] = len(trainset_id_list)/args['images']
+  print(client['mnist_trainset'])
 
+print("==================================6778888888888999")
+for inx, client in enumerate(clients):
+  client['mnist_testset'] = getImage(mnist_testset, list(test_group[inx]), args['batch_size'])
+  # client['samples'] = len(trainset_id_list)/args['images']
+  print(client['mnist_testset'])
   # print(inx, client['mnist_testset'])
 #   print("---------------------------")
 #   print(inx, client['mnist_trainset'])
