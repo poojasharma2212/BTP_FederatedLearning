@@ -29,10 +29,10 @@ args = {
     'test_batch_size' : 1000,
     'lr' : 0.01,
     'log_interval' : 64,
-    'epochs' : 5,
+    'epochs' : 3,
     'clients' : 20,
     'seed' : 0,
-    'rounds' : 25,
+    'rounds' : 5,
     'C' : 0.9,
     'drop_rate' : 0.1,
     'images' : 10000,
@@ -192,7 +192,7 @@ def train(args, cli, device):
         loss = Func.nll_loss(output, target)
         loss.backward()
         cli['optimizer'].step()
-        cli['optimizer'].zero_grad()
+        # cli['optimizer'].zero_grad()
         # optimizer.step()
         
  
@@ -214,6 +214,7 @@ def train(args, cli, device):
     cli['model'].get()
     
 def test(args,model, device, test_loader):
+    print("TEST SET PRDEICTION")
     model.eval()
     test_loss = 0
     correct = 0
