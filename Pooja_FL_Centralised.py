@@ -143,7 +143,7 @@ class CNN(nn.Module):
     out = self.dense_layers(out)
     return out
 
-def train(args, client, device, optimizer):
+def train(args, client, device):
     client['model'].train()
     client['model'] = client['model'].send(client['hook'])
 
@@ -157,8 +157,8 @@ def train(args, client, device, optimizer):
         output = client['model'](data)
         loss = Func.nll_loss(output, target)
         loss.backward()
-        #client['optimizer'].step()
-        optimizer.step()
+        client['optimizer'].step()
+        # optimizer.step()
         client['model'].get()
  
         if batch_idx % args['log_interval'] == 0:
@@ -243,10 +243,10 @@ for fed_round in range(args['rounds']):
       return global_model
 
     # Averaging 
-    global_model = averageModels(global_model, active_clients)
+    global_model = averageModels(model, active_clients)
     
     # Testing the average model
-    test(args, global_model, device, global_test_loader, 'Global')
+    test(global_model, device, global_test_loader)
             
     # Share the global model with the clients
     for client in clients:
