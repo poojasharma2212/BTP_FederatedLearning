@@ -53,7 +53,7 @@ clients = []
 for i in range(args['clients']):
     clients.append({'hook': sy.VirtualWorker(hook, id="client{}".format(i+1))})
 
-print(clients)
+# print(clients)
 #os.chdir("/content/drive/MyDrive/FL_ZaaPoo/data/MNIST/raw")
 
 #****************** ========== IID_Dataset ========== ******************** #
@@ -68,18 +68,20 @@ def mnistIID(data,nUsers):#this function randomly chooses 60k/10 (assuming 10 us
         #np.random.choice selects num_images number of random numbers from 0 to indices
         usersDict[i]=set(np.random.choice(indices,nImages,replace=False)) #set drops repeated items
         indices=list(set(indices)-usersDict[i])
-        print("i :::", end=" ")
-        print(i,usersDict[i])
-        print("============5674747547568657444444444444===============================")
+        # print("i :::", end=" ")
+        # print(i,usersDict[i])
+        # print("============5674747547568657444444444444===============================")
     return usersDict
 
 transform=transforms.Compose([transforms.ToTensor(),transforms.Normalize((0.1307,),(0.3081,))])
 #transform=transforms.ToTensor()
 mnist_trainset = datasets.MNIST(root='./data', train=False, download=False, transform= transform)          
 mnist_testset = datasets.MNIST(root='./data', train=False, download=False,transform= transform)
-# print(mnist_testset.data.max())
+print(mnist_testset.data.max())
 # print(mnist_testset.data.shape)
-# print(mnist_trainset.targets)
+print(mnist_trainset.targets)
+print("==//////////////////==")
+print(mnist_trainset)
 k = len(set(mnist_testset.targets.numpy()))
 # print(k)
 train_group=mnistIID(mnist_trainset,nUsers)
@@ -113,10 +115,10 @@ print("==================================6778888888888999")
 for inx, client in enumerate(clients):
   client['mnist_testset'] = getImage(mnist_testset, list(test_group[inx]), args['batch_size'])
   # client['samples'] = len(trainset_id_list)/args['images']
-  print(client['mnist_testset'])
-  print(inx, client['mnist_testset'])
-  print("---------------------------")
-  print(inx, client['mnist_trainset'])
+  # print(client['mnist_testset'])
+  # print(inx, client['mnist_testset'])
+  # print("---------------------------")
+  # print(inx, client['mnist_trainset'])
 #   print("===========================")
 # print("============================")
 # print(type(client['mnist_testset'])) 
