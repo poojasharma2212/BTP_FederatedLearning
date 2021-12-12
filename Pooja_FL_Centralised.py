@@ -198,7 +198,7 @@ def train(args, client, device):
  
         if batch_idx % args['log_interval'] == 0:
             loss = loss.get()
-            print(loss)
+            print(loss.item())
             # print(' Model  {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
             #         epoch, client['hook'].id,
             #         batch_idx * args['batch_size'], # no of images done
