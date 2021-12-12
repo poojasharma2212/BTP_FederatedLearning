@@ -116,30 +116,49 @@ print("============================")
 #=================Global Model===================#
 global_test_dataset = datasets.MNIST('./', train=False, download=True, transform=transform)
 global_test_loader = DataLoader(global_test_dataset, batch_size=args['batch_size'], shuffle=True)
+# class CNN(nn.Module):
+#   def __init__(self):  #constructor 
+#     super(CNN, self).__init__() # calling parent's class constructor
+#     self.conv_layers = nn.Sequential(     # Preparing Layers for the model followed by the ReLU function as the Activation function
+#         nn.Conv2d(in_channels=1, out_channels=32, kernel_size=3, stride=1),
+#         nn.ReLU(),
+#         nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, stride=1),
+#         nn.ReLU(),
+#         # nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, stride=1),
+#         # nn.ReLU()
+#     )
+#     self.dense_layers = nn.Sequential(
+#         nn.Dropout(0.2),
+#         nn.Linear(128*2*2, 512),
+#         nn.ReLU(),
+#         nn.Dropout(0.2),
+#         nn.Linear(512, k)
+#     )
+#     self.dropout = nn.Dropout2d(0.25)
+#   def forward(self, X):
+#     out = self.conv_layers(X)
+#     # out = out.view(out.size(0), -1)
+#     out = self.dense_layers(out)
+#     return out
+
 class CNN(nn.Module):
-  def __init__(self):  #constructor 
-    super(CNN, self).__init__() # calling parent's class constructor
-    self.conv_layers = nn.Sequential(     # Preparing Layers for the model followed by the ReLU function as the Activation function
-        nn.Conv2d(in_channels=1, out_channels=32, kernel_size=3, stride=1),
-        nn.ReLU(),
-        nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, stride=1),
-        nn.ReLU(),
-        # nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, stride=1),
-        # nn.ReLU()
-    )
-    self.dense_layers = nn.Sequential(
-        nn.Dropout(0.2),
-        nn.Linear(128*2*2, 512),
-        nn.ReLU(),
-        nn.Dropout(0.2),
-        nn.Linear(512, k)
-    )
-    self.dropout = nn.Dropout2d(0.25)
-  def forward(self, X):
-    out = self.conv_layers(X)
-    # out = out.view(out.size(0), -1)
-    out = self.dense_layers(out)
-    return out
+    def __init__(self):
+        super(CNN, self).__init__()
+        self.conv1 = nn.Conv2d(1, 20, 5, 1)
+        self.conv2 = nn.Conv2d(20, 50, 5, 1)
+        self.fc1 = nn.Linear(4*4*50, 500)
+        self.fc2 = nn.Linear(500, 10)
+
+    def forward(self, x):
+        x = Func.relu(self.conv1(x))
+        x = Func.max_pool2d(x, 2, 2)
+        x = Func.relu(self.conv2(x))
+        x = Func.max_pool2d(x, 2, 2)
+        x = x.view(-1, 4*4*50)
+        x = Func.relu(self.fc1(x))
+        x = self.fc2(x)
+        return Func.log_softmax(x, dim=1)
+    
 
 def train(args, client, device):
     client['model'].train()
