@@ -68,22 +68,22 @@ def mnistIID(data,nUsers):#this function randomly chooses 60k/10 (assuming 10 us
         #np.random.choice selects num_images number of random numbers from 0 to indices
         usersDict[i]=set(np.random.choice(indices,nImages,replace=False)) #set drops repeated items
         indices=list(set(indices)-usersDict[i])
-        # print("i :::", end=" ")
-        # print(i,usersDict[i])
-        # print("============5674747547568657444444444444===============================")
+        print("i :::", end=" ")
+        print(i,usersDict[i])
+        print("============###############################===============================")
     return usersDict
 
 transform=transforms.Compose([transforms.ToTensor(),transforms.Normalize((0.1307,),(0.3081,))])
 #transform=transforms.ToTensor()
 mnist_trainset = datasets.MNIST(root='./data', train=True, download=False, transform= transform)          
 mnist_testset = datasets.MNIST(root='./data', train=False, download=False,transform= transform)
-print(mnist_testset.data.max())
+#print(mnist_testset.data.max())
 # print(mnist_testset.data.shape)
-print(mnist_trainset.targets)
-print("==//////////////////==")
-print(mnist_trainset)
-print("#333#############################")
-print(mnist_testset)
+#print(mnist_trainset.targets)
+#print("==//////////////////==")
+#print(mnist_trainset)
+# print("#333#############################")
+# print(mnist_testset)
 k = len(set(mnist_testset.targets.numpy()))
 # print(k)
 train_group=mnistIID(mnist_trainset,nUsers)
@@ -179,7 +179,7 @@ class CNN(nn.Module):
 def train(args, client, device):
     client['model'].train()
     client['model'].send(client['hook'])
-    print(client)
+    # print(client)
     # iterate over federated data
     for epoch in range(1,args['epochs']+1):
       for batch_idx, (data, target) in enumerate(client['mnist_trainset']):
@@ -260,7 +260,7 @@ for fed_round in range(args['rounds']):
     
     # Training 
     # print(client)
-    print('=============\\\\\\\=====================')
+    # print('=============\\\\\\\=====================')
     for client in active_clients:
         # print(client)
         train(args,client, device)
