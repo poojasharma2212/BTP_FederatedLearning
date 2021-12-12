@@ -68,9 +68,9 @@ def mnistIID(data,nUsers):#this function randomly chooses 60k/10 (assuming 10 us
         #np.random.choice selects num_images number of random numbers from 0 to indices
         usersDict[i]=set(np.random.choice(indices,nImages,replace=False)) #set drops repeated items
         indices=list(set(indices)-usersDict[i])
-        # print("i :::", end=" ")
-        # print(i,usersDict[i])
-        # print("===========================================")
+        print("i :::", end=" ")
+        print(i,usersDict[i])
+        print("============5674747547568657444444444444===============================")
     return usersDict
 
 transform=transforms.Compose([transforms.ToTensor(),transforms.Normalize((0.1307,),(0.3081,))])
@@ -107,7 +107,7 @@ for inx, client in enumerate(clients):
   client['mnist_trainset'] = getImage(mnist_trainset, trainset_id_list, args['batch_size'])
   # client['mnist_testset'] = getImage(mnist_testset, list(test_group[inx]), args['batch_size'])
   client['samples'] = len(trainset_id_list)/args['images']
-  print(client['mnist_trainset'])
+  # print(client['mnist_trainset'])
 
 print("==================================6778888888888999")
 for inx, client in enumerate(clients):
