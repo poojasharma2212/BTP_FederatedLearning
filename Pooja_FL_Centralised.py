@@ -207,7 +207,7 @@ for client in clients:
         client['model'] = CNN().to(device)
         client['optim'] = optim.SGD(client['model'].parameters(), lr=args['lr'])
         
-print(client['model'])
+print(client)
 for fed_round in range(args['rounds']):
     
     # number of selected clients
