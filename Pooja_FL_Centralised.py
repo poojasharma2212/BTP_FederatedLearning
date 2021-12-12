@@ -191,7 +191,7 @@ def train(args, cli, device):
         # optimizer.zero_grad()
         output = cli['model'](data)
         loss = Func.nll_loss(output, target)
-        loss.backward()
+        # loss.backward()
         cli['optimizer'].step()
         # optimizer.step()
         
