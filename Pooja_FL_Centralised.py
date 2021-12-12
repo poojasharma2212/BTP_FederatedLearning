@@ -29,10 +29,10 @@ args = {
     'test_batch_size' : 1000,
     'lr' : 0.01,
     'log_interval' : 64,
-    'epochs' : 3,
-    'clients' : 20,
+    'epochs' : 5,
+    'clients' : 10,
     'seed' : 0,
-    'rounds' : 100,
+    'rounds' : 25,
     'C' : 0.9,
     'drop_rate' : 0.1,
     'images' : 10000,
@@ -188,6 +188,7 @@ def train(args, cli, device):
         data = data.send(cli['hook'])
         target = target.send(cli['hook'])
         data, target = data.to(device), target.to(device)
+        cli['optimizer'].zero_grad()
         output = cli['model'](data)
         loss = Func.nll_loss(output, target)
         loss.backward()
