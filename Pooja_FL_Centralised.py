@@ -115,7 +115,7 @@ for inx, client in enumerate(clients):
   client['samples'] = len(trainset_id_list)/args['images']
   # print(client['mnist_trainset'])
 
-print("==================================6778888888888999")
+print("==================================@@@@@@@@@@@@@@@")
 for inx, client in enumerate(clients):
   client['mnist_testset'] = getImage(mnist_testset, list(test_group[inx]), args['batch_size'])
   # client['samples'] = len(trainset_id_list)/args['images']
@@ -127,7 +127,7 @@ for inx, client in enumerate(clients):
 # print("============================")
 # print(type(client['mnist_testset'])) 
 # print(type(client)) 
-print("============================")
+# print("============================")
 # ================================= #
 
 #=================Global Model===================#
