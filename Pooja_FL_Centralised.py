@@ -38,7 +38,7 @@ args = {
     'images' : 10000,
     'split_size' : int(10000/10),
     'samples' : 1000/10000,
-    'use_cuda' : True,
+    'use_cuda' : False,
     'save_model' : True
 }
 
