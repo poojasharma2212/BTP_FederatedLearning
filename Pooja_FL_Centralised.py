@@ -188,11 +188,11 @@ def train(args, cli, device):
         data = data.send(cli['hook'])
         target = target.send(cli['hook'])
         data, target = data.to(device), target.to(device)
-        # optimizer.zero_grad()
         output = cli['model'](data)
         loss = Func.nll_loss(output, target)
         # loss.backward()
         cli['optimizer'].step()
+        cli['optimizer'].zero_grad()
         # optimizer.step()
         
  
