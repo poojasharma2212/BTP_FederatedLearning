@@ -225,7 +225,7 @@ for fed_round in range(args['rounds']):
     
     # Training 
     for client in active_clients:
-        train(args, device, client)
+        train(args,client, device)
     
 #     # Testing 
 #     for client in active_clients:
