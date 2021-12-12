@@ -118,7 +118,7 @@ print("============================")
 #=================Global Model===================#
 global_test_dataset = datasets.MNIST('./', train=False, download=True, transform=transform)
 global_test_loader = DataLoader(global_test_dataset, batch_size=args['batch_size'], shuffle=True)
-class CNN(nn.module):
+class CNN(nn.Module):
   def __init__(self):  #constructor 
     super(CNN, self).__init__() # calling parent's class constructor
     self.conv_layers = nn.Sequential(     # Preparing Layers for the model followed by the ReLU function as the Activation function
