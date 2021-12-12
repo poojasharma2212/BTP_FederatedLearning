@@ -145,7 +145,7 @@ class CNN(nn.Module):
 
 def train(args, client, device):
     client['model'].train()
-    client['model'] = client['model'].send(client['hook'])
+    client['model'].send(client['hook'])
 
     # iterate over federated data
     for epoch in range(args['epochs']):
