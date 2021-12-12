@@ -279,7 +279,7 @@ for fed_round in range(args['rounds']):
     for client in clients:
         client['model'].load_state_dict(global_model.state_dict())
         
-if (args.save_model):
+if (args['save_model']):
     torch.save(global_model.state_dict(), "FedAvg.pt")
 
 
