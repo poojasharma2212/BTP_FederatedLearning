@@ -29,16 +29,16 @@ args = {
     'test_batch_size' : 1000,
     'lr' : 0.01,
     'log_interval' : 64,
-    'epochs' : 2,
+    'epochs' : 5,
     'clients' : 20,
     'seed' : 0,
-    'rounds' : 50,
+    'rounds' : 25,
     'C' : 0.9,
     'drop_rate' : 0.1,
     'images' : 10000,
     'split_size' : int(10000/10),
     'samples' : 1000/10000,
-    'use_cuda' : False,
+    'use_cuda' : True,
     'save_model' : True
 }
 
