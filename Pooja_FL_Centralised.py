@@ -225,8 +225,9 @@ for fed_round in range(args['rounds']):
     
     # Training 
     print(client)
-    print('=======================================')
+    print('=============\\\\\\\=====================')
     for client in active_clients:
+        print(client)
         train(args,client, device)
     
 #     # Testing 
