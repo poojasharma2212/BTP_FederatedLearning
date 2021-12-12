@@ -22,7 +22,7 @@ import random
 # import mat
 import syft as sy
 
-
+count = 0
 args = {
     'use_cuda' : True,
     'batch_size' : 64,
@@ -214,7 +214,9 @@ def train(args, cli, device):
                         100. * batch_idx / len(client['mnist_trainset']), loss.item())) 
     cli['model'].get()
 accu = []
-def test(args,model, device, test_loader):
+def test(args,model, device, test_loader, count):
+    print(count+1)
+    count =  count+1
     print("TEST SET PRDEICTION")
     model.eval()
     test_loss = 0
@@ -253,6 +255,17 @@ for client in clients:
         client['optimizer'] = optim.SGD(client['model'].parameters(), lr=args['lr'])
         
 # print(client)
+def averageModels(global_model, clients):
+      client_models = [clients[i]['model'] for i in range(len(clients))]
+      samples = [clients[i]['samples'] for i in range(len(clients))]
+      global_dict = global_model.state_dict()
+    
+      for k in global_dict.keys(): #key is CNN layer index and value is layer parameters
+          global_dict[k] = torch.stack([client_models[i].state_dict()[k].float() * samples[i] for i in range(len(client_models))], 0).sum(0) #take a weighted average and not average because the clients may not have the same amount of data to train upon
+            
+      global_model.load_state_dict(global_dict)
+      return global_model
+
 for fed_round in range(args['rounds']):
     
     # number of selected clients
@@ -278,23 +291,12 @@ for fed_round in range(args['rounds']):
 #     # Testing 
 #     for client in active_clients:
 #         test(args, client['model'], device, client['testset'], client['hook'].id)
-    
-    def averageModels(global_model, clients):
-      client_models = [clients[i]['model'] for i in range(len(clients))]
-      samples = [clients[i]['samples'] for i in range(len(clients))]
-      global_dict = global_model.state_dict()
-    
-      for k in global_dict.keys(): #key is CNN layer index and value is layer parameters
-          global_dict[k] = torch.stack([client_models[i].state_dict()[k].float() * samples[i] for i in range(len(client_models))], 0).sum(0) #take a weighted average and not average because the clients may not have the same amount of data to train upon
-            
-      global_model.load_state_dict(global_dict)
-      return global_model
 
     # Averaging 
     global_model = averageModels(global_model, active_clients)
     
     # Testing the average model
-    test(args,global_model, device, global_test_loader)
+    test(args,global_model, device, global_test_loader, count)
           
     for client in clients:
         client['model'].load_state_dict(global_model.state_dict())
