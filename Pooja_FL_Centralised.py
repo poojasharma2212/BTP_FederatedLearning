@@ -157,7 +157,7 @@ def train(args, client, device):
         loss.backward()
         client['optimizer'].step()
         # optimizer.step()
-        client['model'].get()
+        
  
         if batch_idx % args['log_interval'] == 0:
             loss = loss.get()
@@ -169,6 +169,7 @@ def train(args, client, device):
                     loss.item()
                 )
             ) 
+    client['model'].get()
     
 def test(model, device, test_loader):
     model.eval()
