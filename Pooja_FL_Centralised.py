@@ -191,7 +191,7 @@ def train(args, client, device):
             ) 
     client['model'].get()
     
-def test(model, device, test_loader):
+def test(args,model, device, test_loader):
     model.eval()
     test_loss = 0
     correct = 0
@@ -270,9 +270,8 @@ for fed_round in range(args['rounds']):
     global_model = averageModels(model, active_clients)
     
     # Testing the average model
-    test(global_model, device, global_test_loader)
-            
-    # Share the global model with the clients
+    test(args,global_model, device, global_test_loader)
+          
     for client in clients:
         client['model'].load_state_dict(global_model.state_dict())
         
