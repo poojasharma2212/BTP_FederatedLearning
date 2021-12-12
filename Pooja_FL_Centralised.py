@@ -118,8 +118,8 @@ print("============================")
 #=================Global Model===================#
 global_test_dataset = datasets.MNIST('./', train=False, download=True, transform=transform)
 global_test_loader = DataLoader(global_test_dataset, batch_size=args['batch_size'], shuffle=True)
-
-def __init__(self):  #constructor 
+class CNN(nn.module):
+  def __init__(self):  #constructor 
     super(CNN, self).__init__() # calling parent's class constructor
     self.conv_layers = nn.Sequential(     # Preparing Layers for the model followed by the ReLU function as the Activation function
         nn.Conv2d(in_channels=1, out_channels=32, kernel_size=3, stride=1),
@@ -137,7 +137,7 @@ def __init__(self):  #constructor
         nn.Linear(512, k)
     )
     self.dropout = nn.Dropout2d(0.25)
-def forward(self, X):
+  def forward(self, X):
     out = self.conv_layers(X)
     out = out.view(out.size(0), -1)
     out = self.dense_layers(out)
