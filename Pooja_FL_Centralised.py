@@ -88,8 +88,8 @@ k = len(set(mnist_testset.targets.numpy()))
 # print(k)
 train_group=mnistIID(mnist_trainset,nUsers)
 test_group=mnistIID(mnist_testset,nUsers)
-print(train_group[1])
-print(test_group[1])
+print(len(train_group[1]))
+print(len(test_group[1]))
 
 
 class FedDataset(Dataset):#this class helps connect the random indices with the image+label container in the dataset
