@@ -212,7 +212,7 @@ def train(args, cli, device):
                         epoch, batch_idx * args['batch_size'], len(client['mnist_trainset']) * args['batch_size'], 
                         100. * batch_idx / len(client['mnist_trainset']), loss.item())) 
     cli['model'].get()
-    
+accu = []
 def test(args,model, device, test_loader):
     print("TEST SET PRDEICTION")
     model.eval()
@@ -235,6 +235,7 @@ def test(args,model, device, test_loader):
     print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
         test_loss, correct, len(test_loader.dataset),
         100. * correct / len(test_loader.dataset)))
+    accu.append(100. * correct / len(test_loader.dataset))
 
 # model = CNN(k)
 #optimizer = optim.SGD(model.parameters(), lr=args['lr'])
@@ -299,6 +300,10 @@ for fed_round in range(args['rounds']):
         
 if (args['save_model']):
     torch.save(global_model.state_dict(), "FedAvg.pt")
+
+
+print("============ Accuracy ===========")
+print(accu)
 
 
 
