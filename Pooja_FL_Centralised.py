@@ -68,9 +68,9 @@ def mnistIID(data,nUsers):#this function randomly chooses 60k/10 (assuming 10 us
         #np.random.choice selects num_images number of random numbers from 0 to indices
         usersDict[i]=set(np.random.choice(indices,nImages,replace=False)) #set drops repeated items
         indices=list(set(indices)-usersDict[i])
-        print("i :::", end=" ")
-        print(i,usersDict[i])
-        print("============###############################===============================")
+        # print("i :::", end=" ")
+        # print(i,usersDict[i])
+        # print("============###############################===============================")
     return usersDict
 
 transform=transforms.Compose([transforms.ToTensor(),transforms.Normalize((0.1307,),(0.3081,))])
@@ -88,6 +88,8 @@ k = len(set(mnist_testset.targets.numpy()))
 # print(k)
 train_group=mnistIID(mnist_trainset,nUsers)
 test_group=mnistIID(mnist_testset,nUsers)
+print(train_group[0][1], train_group[0][2])
+print(test_group[0][1], test_group[0][2])
 
 
 class FedDataset(Dataset):#this class helps connect the random indices with the image+label container in the dataset
