@@ -240,7 +240,7 @@ def test(args,model, device, test_loader):
 # model = CNN(k)
 #optimizer = optim.SGD(model.parameters(), lr=args['lr'])
 
-# logging.info("Starting training !!")
+logging.info("Starting training !!")
 
 torch.manual_seed(args['seed'])
 global_model = CNN() 
