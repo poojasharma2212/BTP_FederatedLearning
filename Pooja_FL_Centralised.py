@@ -178,27 +178,27 @@ class CNN(nn.Module):
         return Func.log_softmax(x, dim=1)
     
 
-def train(args, client, device):
-    client['model'].train()
-    client['model'].send(client['hook'])
+def train(args, cli, device):
+    cli['model'].train()
+    cli['model'].send(cli['hook'])
     # print(client)
     # iterate over federated data
     for epoch in range(1,args['epochs']+1):
-      for batch_idx, (data, target) in enumerate(client['mnist_trainset']):
-        data = data.send(client['hook'])
-        target = target.send(client['hook'])
+      for batch_idx, (data, target) in enumerate(cli['mnist_trainset']):
+        data = data.send(cli['hook'])
+        target = target.send(cli['hook'])
         data, target = data.to(device), target.to(device)
         # optimizer.zero_grad()
-        output = client['model'](data)
+        output = cli['model'](data)
         loss = Func.nll_loss(output, target)
         loss.backward()
-        client['optimizer'].step()
+        cli['optimizer'].step()
         # optimizer.step()
         
  
         if batch_idx % args['log_interval'] == 0:
             loss = loss.get()
-            print(loss.item())
+            # print(loss.item())
             # print(' Model  {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
             #         epoch, client['hook'].id,
             #         batch_idx * args['batch_size'], # no of images done
@@ -207,11 +207,11 @@ def train(args, client, device):
             #         loss.item()
             #     )
             # )
-            # print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-            #             client['hook'].id,
-            #             epoch, batch_idx * args['batch_size'], len(client['mnist_trainset']) * args['batch_size'], 
-            #             100. * batch_idx / len(client['mnist_trainset']), loss)) 
-    client['model'].get()
+            print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+                        client['hook'].id,
+                        epoch, batch_idx * args['batch_size'], len(client['mnist_trainset']) * args['batch_size'], 
+                        100. * batch_idx / len(client['mnist_trainset']), loss.item())) 
+    cli['model'].get()
     
 def test(args,model, device, test_loader):
     model.eval()
