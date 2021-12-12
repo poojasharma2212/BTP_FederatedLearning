@@ -139,7 +139,7 @@ class CNN(nn.Module):
     self.dropout = nn.Dropout2d(0.25)
   def forward(self, X):
     out = self.conv_layers(X)
-    out = out.view(out.size(0), -1)
+    # out = out.view(out.size(0), -1)
     out = self.dense_layers(out)
     return out
 
