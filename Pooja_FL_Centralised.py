@@ -33,7 +33,7 @@ args = {
     'clients' : 10,
     'seed' : 0,
     'rounds' : 20,
-    'C' : 1,
+    'C' : 0.8,
     'drop_rate' : 0.1,
     'images' : 10000,
     'split_size' : int(10000/20),
