@@ -32,7 +32,7 @@ args = {
     'epochs' : 5,
     'clients' : 10,
     'seed' : 0,
-    'rounds' : 25,
+    'rounds' : 20,
     'C' : 1,
     'drop_rate' : 0.1,
     'images' : 10000,
