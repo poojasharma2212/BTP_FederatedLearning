@@ -33,7 +33,7 @@ args = {
     'clients' : 10,
     'seed' : 0,
     'rounds' : 25,
-    'C' : 0.9,
+    'C' : 1,
     'drop_rate' : 0.1,
     'images' : 10000,
     'split_size' : int(10000/20),
@@ -80,9 +80,6 @@ mnist_testset = datasets.MNIST(root='./data', train=False, download=False,transf
 #print(mnist_testset.data.max())
 # print(mnist_testset.data.shape)
 #print(mnist_trainset.targets)
-#print("==//////////////////==")
-#print(mnist_trainset)
-# print("#333#############################")
 # print(mnist_testset)
 k = len(set(mnist_testset.targets.numpy()))
 # print(k)
@@ -134,30 +131,6 @@ print("==================================")
 transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
 global_test_dataset = datasets.MNIST('./', train=False, download=True, transform=transform)
 global_test_loader = DataLoader(global_test_dataset, batch_size=args['batch_size'], shuffle=True)
-# class CNN(nn.Module):
-#   def __init__(self):  #constructor 
-#     super(CNN, self).__init__() # calling parent's class constructor
-#     self.conv_layers = nn.Sequential(     # Preparing Layers for the model followed by the ReLU function as the Activation function
-#         nn.Conv2d(in_channels=1, out_channels=32, kernel_size=3, stride=1),
-#         nn.ReLU(),
-#         nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, stride=1),
-#         nn.ReLU(),
-#         # nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, stride=1),
-#         # nn.ReLU()
-#     )
-#     self.dense_layers = nn.Sequential(
-#         nn.Dropout(0.2),
-#         nn.Linear(128*2*2, 512),
-#         nn.ReLU(),
-#         nn.Dropout(0.2),
-#         nn.Linear(512, k)
-#     )
-#     self.dropout = nn.Dropout2d(0.25)
-#   def forward(self, X):
-#     out = self.conv_layers(X)
-#     # out = out.view(out.size(0), -1)
-#     out = self.dense_layers(out)
-#     return out
 
 class CNN(nn.Module):
     def __init__(self):
@@ -200,18 +173,18 @@ def train(args, cli, device):
         if batch_idx % args['log_interval'] == 0:
             loss = loss.get()
             # print(loss.item())
-            # print(' Model  {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-            #         epoch, client['hook'].id,
-            #         batch_idx * args['batch_size'], # no of images done
-            #         len(client['mnist_trainset']) * args['batch_size'], # total images left
-            #         100. * batch_idx / len(client['mnist_trainset']), 
-            #         loss.item()
-            #     )
-            # )
-            print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                        client['hook'].id,
-                        epoch, batch_idx * args['batch_size'], len(client['mnist_trainset']) * args['batch_size'], 
-                        100. * batch_idx / len(client['mnist_trainset']), loss.item())) 
+            print(' Model  {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+                    epoch, client['hook'].id,
+                    batch_idx * args['batch_size'], # no of images done
+                    len(client['mnist_trainset']) * args['batch_size'], # total images left
+                    100. * batch_idx / len(client['mnist_trainset']), 
+                    loss.item()
+                )
+            )
+            # print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+            #             client['hook'].id,
+            #             epoch, batch_idx * args['batch_size'], len(client['mnist_trainset']) * args['batch_size'], 
+            #             100. * batch_idx / len(client['mnist_trainset']), loss.item())) 
     cli['model'].get()
 accu = []
 def test(args,model, device, test_loader, count):
@@ -235,7 +208,7 @@ def test(args,model, device, test_loader, count):
 
     test_loss /= len(test_loader.dataset)
 
-    print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
+    print('\nTest set: Average loss for {} model: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
         test_loss, correct, len(test_loader.dataset),
         100. * correct / len(test_loader.dataset)))
     accu.append(100. * correct / len(test_loader.dataset))
