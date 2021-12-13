@@ -33,8 +33,8 @@ args = {
     'clients' : 10,
     'seed' : 0,
     'rounds' : 20,
-    'C' : 0.7,
-    'drop_rate' : 0.3,
+    'C' : 0.8,
+    'drop_rate' : 0.2,
     'images' : 10000,
     'split_size' : int(10000/20),
     'samples' : 5000/10000,
@@ -260,6 +260,7 @@ for fed_round in range(args['rounds']):
     for client in active_clients:
         # print(client)
         train(args,client, device)
+        print(client)
     
 #     # Testing 
 #     for client in active_clients:
