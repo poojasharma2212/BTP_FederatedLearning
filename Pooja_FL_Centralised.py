@@ -260,7 +260,7 @@ for fed_round in range(args['rounds']):
     for client in active_clients:
         # print(client)
         train(args,client, device)
-        print(client)
+        # print(client)
     
 #     # Testing 
 #     for client in active_clients:
