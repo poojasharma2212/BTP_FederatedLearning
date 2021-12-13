@@ -33,12 +33,12 @@ args = {
     'clients' : 10,
     'seed' : 0,
     'rounds' : 30,
-    'C' : 0.8,
-    'drop_rate' : 0.2,
+    'C' : 0.9,
+    'drop_rate' : 0.3,
     'images' : 10000,
     'split_size' : int(10000/20),
     'samples' : 5000/10000,
-    'use_cuda' : True,
+    'use_cuda' : False,
     'save_model' : True
 }
 
