@@ -27,8 +27,8 @@ args = {
     'use_cuda' : True,
     'batch_size' : 64,
     'test_batch_size' : 1000,
-    'lr' : 0.001,
-    'log_interval' : 20,
+    'lr' : 0.01,
+    'log_interval' : 10,
     'epochs' : 2,
     'clients' : 10,
     'seed' : 0,
@@ -38,7 +38,7 @@ args = {
     'images' : 10000,
     'split_size' : int(10000/20),
     'samples' : 5000/10000,
-    'use_cuda' : False,
+    'use_cuda' : True,
     'save_model' : True
 }
 
