@@ -208,7 +208,7 @@ def test(args,model, device, test_loader, count):
 
     test_loss /= len(test_loader.dataset)
 
-    print('\nTest set: Average loss for {} model: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
+    print('\nTest set: Average loss for model: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
         test_loss, correct, len(test_loader.dataset),
         100. * correct / len(test_loader.dataset)))
     accu.append(100. * correct / len(test_loader.dataset))
