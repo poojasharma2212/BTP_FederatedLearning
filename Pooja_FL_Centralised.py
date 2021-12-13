@@ -34,7 +34,7 @@ args = {
     'seed' : 0,
     'rounds' : 100,
     'C' : 0.9,
-    'drop_rate' : 0.3,
+    'drop_rate' : 0.4,
     'images' : 10000,
     'split_size' : int(10000/20),
     'samples' : 5000/10000,
