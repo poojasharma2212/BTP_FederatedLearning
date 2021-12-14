@@ -58,7 +58,7 @@ for i in range(args['clients']):
 
 #****************** ========== IID_Dataset ========== ******************** #
 
-nUsers = 20
+nUsers = 30
 def mnistIID(data,nUsers):#this function randomly chooses 60k/10 (assuming 10 users) images and distributes them in iid fashion among the users.
     nImages=int(len(data)/nUsers)
     # print(num_images)
