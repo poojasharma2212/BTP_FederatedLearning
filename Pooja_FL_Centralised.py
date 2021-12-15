@@ -157,6 +157,8 @@ def train(args, cli, device):
     # print(client)
     # iterate over federated data
     for epoch in range(1,args['epochs']+1):
+        flag = 0
+        total = 0
       for batch_idx, (data, target) in enumerate(cli['mnist_trainset']):
         data = data.send(cli['hook'])
         target = target.send(cli['hook'])
@@ -171,7 +173,11 @@ def train(args, cli, device):
         
  
         if batch_idx % args['log_interval'] == 0:
-            loss = loss.get()
+            if(flag!=0):
+                flag = 0
+                total = total + loss.get()
+            # loss = loss.get()
+            flag = 1
             # print(loss.item())
             print(' Model  {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                     epoch, client['hook'].id,
@@ -185,6 +191,8 @@ def train(args, cli, device):
             #             client['hook'].id,
             #             epoch, batch_idx * args['batch_size'], len(client['mnist_trainset']) * args['batch_size'], 
             #             100. * batch_idx / len(client['mnist_trainset']), loss.item())) 
+    loss = total/12
+    print(loss)
     cli['model'].get()
 accu = []
 def test(args,model, device, test_loader, count):
