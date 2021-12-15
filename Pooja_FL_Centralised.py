@@ -181,7 +181,9 @@ def train(args, cli, device):
             #         loss.item()
             #     )
             # )
-    print(count) 
+    print("========")
+    print(count)
+    print("========") 
     cli['model'].get()
 accu = []
 def test(args,model, device, test_loader, count):
