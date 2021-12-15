@@ -169,9 +169,10 @@ def train(args, cli, device):
         cli['optimizer'].step()
         # cli['optimizer'].zero_grad()
         # optimizer.step()
+        count = count + 1
         if batch_idx % args['log_interval'] == 0:
             loss = loss.get()
-            count = count + 1
+            
             # print(loss.item())
             # print(' Model  {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
             #         epoch, client['hook'].id,
