@@ -157,6 +157,7 @@ def train(args, cli, device):
     # print(client)
     # iterate over federated data
     for epoch in range(1,args['epochs']+1):
+      count = 0
       for batch_idx, (data, target) in enumerate(cli['mnist_trainset']):
         data = data.send(cli['hook'])
         target = target.send(cli['hook'])
@@ -168,19 +169,19 @@ def train(args, cli, device):
         cli['optimizer'].step()
         # cli['optimizer'].zero_grad()
         # optimizer.step()
-        
- 
         if batch_idx % args['log_interval'] == 0:
             loss = loss.get()
+            count = count + 1
             # print(loss.item())
-            print(' Model  {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                    epoch, client['hook'].id,
-                    batch_idx * args['batch_size'], # no of images done
-                    len(client['mnist_trainset']) * args['batch_size'], # total images left
-                    100. * batch_idx / len(client['mnist_trainset']), 
-                    loss.item()
-                )
-            ) 
+            # print(' Model  {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+            #         epoch, client['hook'].id,
+            #         batch_idx * args['batch_size'], # no of images done
+            #         len(client['mnist_trainset']) * args['batch_size'], # total images left
+            #         100. * batch_idx / len(client['mnist_trainset']), 
+            #         loss.item()
+            #     )
+            # )
+    print(count) 
     cli['model'].get()
 accu = []
 def test(args,model, device, test_loader, count):
