@@ -170,10 +170,10 @@ def train(args, cli, device):
         # cli['optimizer'].zero_grad()
         # optimizer.step()
             count = count + 1
-            if ((batch_idx % args['log_interval'] == 0) and batch_idx!=0):
+            if ((batch_idx % args['log_interval'] == 0)):
                  # print(loss.item())
                 
-                # print(batch_idx,end=" ")
+                print(batch_idx,end=" ")
                 # print(args['log_interval'])
                 loss = loss.get()
                 print(' Model  {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
