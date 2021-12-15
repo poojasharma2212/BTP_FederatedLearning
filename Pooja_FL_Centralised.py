@@ -203,7 +203,7 @@ def test(args,model, device, test_loader, count):
             output = model(data)
 
             # add losses together
-            test_loss += Func.nll_loss(output, target,reduce=False reduction='mean').item() 
+            test_loss += Func.nll_loss(output, target,reduce=False, reduction='mean').item() 
             cout=cout+1
 
             # get the index of the max probability class
