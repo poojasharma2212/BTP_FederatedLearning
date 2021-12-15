@@ -28,7 +28,7 @@ args = {
     'batch_size' : 64,
     'test_batch_size' : 1000,
     'lr' : 0.001,
-    'log_interval' : 50,
+    'log_interval' : 64,
     'epochs' : 2,
     'clients' : 20,
     'seed' : 0,
@@ -173,14 +173,10 @@ def train(args, cli, device):
         
  
             if batch_idx % args['log_interval'] == 0:
-                if(flag!=0):
-                    flag = 0
-                    total = total + loss.get()
                 loss = loss.get()
-                flag = 1
             # print(loss.item())
                 print(' Model  {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                        epoch, client['hook'].id,
+                        client['hook'].id, epoch,
                         batch_idx * args['batch_size'], # no of images done
                         len(client['mnist_trainset']) * args['batch_size'], # total images left
                         100. * batch_idx / len(client['mnist_trainset']), 
@@ -188,9 +184,12 @@ def train(args, cli, device):
                  )
                 )
             # print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-            #             client['hook'].id,
+            #             client['hook'].id
             #             epoch, batch_idx * args['batch_size'], len(client['mnist_trainset']) * args['batch_size'], 
-            #             100. * batch_idx / len(client['mnist_trainset']), loss.item())) 
+        if(flag!=0):
+            flag = 0
+            total = total + loss.get()
+        flag = 1    #             100. * batch_idx / len(client['mnist_trainset']), loss.item())) 
     loss = total/12
     print(loss)
     cli['model'].get()
