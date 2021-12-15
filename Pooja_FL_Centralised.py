@@ -156,8 +156,8 @@ def train(args, cli, device):
     cli['model'].send(cli['hook'])
     # print(client)
     # iterate over federated data
+    count = 0
     for epoch in range(1,args['epochs']+1):
-        count = 0
         for batch_idx, (data, target) in enumerate(cli['mnist_trainset']):
             data = data.send(cli['hook'])
             target = target.send(cli['hook'])
