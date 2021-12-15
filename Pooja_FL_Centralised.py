@@ -180,7 +180,7 @@ def train(args, cli, device):
                         batch_idx * args['batch_size'], # no of images done
                         len(client['mnist_trainset']) * args['batch_size'], # total images left
                         100. * batch_idx / len(client['mnist_trainset']), 
-                        loss.item()
+                        loss
                  )
                 )
             # print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
