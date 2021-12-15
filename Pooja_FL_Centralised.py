@@ -190,8 +190,6 @@ def train(args, cli, device):
     cli['model'].get()
 accu = []
 def test(args,model, device, test_loader, count):
-    print(count+1)
-    count =  count+1
     print("TEST SET PRDEICTION")
     model.eval()
     test_loss = 0
@@ -212,7 +210,7 @@ def test(args,model, device, test_loader, count):
 
     # test_loss /= len(test_loader.dataset)
     test_loss = test_loss/cout
-
+    print(correct)
     print('\nTest set: Average loss for model: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
         test_loss, correct, len(test_loader.dataset),
         100. * correct / len(test_loader.dataset)))
