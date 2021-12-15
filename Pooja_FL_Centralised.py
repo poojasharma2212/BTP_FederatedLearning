@@ -172,6 +172,10 @@ def train(args, cli, device):
             count = count + 1
             if ((batch_idx % args['log_interval'] == 0) and batch_idx!=0):
                  # print(loss.item())
+                
+                # print(batch_idx,end=" ")
+                # print(args['log_interval'])
+                loss = loss.get()
                 print(' Model  {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                     epoch, client['hook'].id,
                     batch_idx * args['batch_size'], # no of images done
@@ -180,9 +184,6 @@ def train(args, cli, device):
                     loss.item()
                     )   
                 )
-                # print(batch_idx,end=" ")
-                # print(args['log_interval'])
-                loss = loss.get()
         print("========")
         # print(count)
         print("========") 
