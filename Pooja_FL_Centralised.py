@@ -171,9 +171,10 @@ def train(args, cli, device):
         # optimizer.step()
             count = count + 1
             if batch_idx % args['log_interval'] == 0:
+                print(count)
                 loss = loss.get()
         print("========")
-        print(count)
+        # print(count)
         print("========") 
     cli['model'].get()
 accu = []
