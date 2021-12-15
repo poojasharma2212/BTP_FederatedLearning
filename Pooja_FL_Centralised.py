@@ -135,17 +135,17 @@ global_test_loader = DataLoader(global_test_dataset, batch_size=args['batch_size
 class CNN(nn.Module):
     def __init__(self):
         super(CNN, self).__init__()
-        self.conv1 = nn.Conv2d(1, 20, 5, 1)
-        self.conv2 = nn.Conv2d(20, 50, 5, 1)
-        self.fc1 = nn.Linear(4*4*50, 500)
-        self.fc2 = nn.Linear(500, 10)
+        self.conv1 = nn.Conv2d(1, 5, 5, 1)
+        self.conv2 = nn.Conv2d(5, 10, 5, 1)
+        self.fc1 = nn.Linear(4*4*10, 5)
+        self.fc2 = nn.Linear(5, 10)
 
     def forward(self, x):
         x = Func.relu(self.conv1(x))
         x = Func.max_pool2d(x, 2, 2)
         x = Func.relu(self.conv2(x))
         x = Func.max_pool2d(x, 2, 2)
-        x = x.view(-1, 4*4*50)
+        x = x.view(-1, 4*4*10)
         x = Func.relu(self.fc1(x))
         x = self.fc2(x)
         return Func.log_softmax(x, dim=1)
