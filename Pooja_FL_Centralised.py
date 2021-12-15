@@ -176,7 +176,7 @@ def train(args, cli, device):
                 if(flag!=0):
                     flag = 0
                     total = total + loss.get()
-            # loss = loss.get()
+                loss = loss.get()
                 flag = 1
             # print(loss.item())
                 print(' Model  {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
