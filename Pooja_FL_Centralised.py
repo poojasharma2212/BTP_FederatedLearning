@@ -201,16 +201,16 @@ def test(args,model, device, test_loader, count):
             output = model(data)
 
             # add losses together
-            test_loss += Func.nll_loss(output, target,reduction='sum').item() 
+            test_loss = Func.nll_loss(output, target,reduction='sum').item() 
             cout=cout+1
 
             # get the index of the max probability class
             pred = output.argmax(1, keepdim=True)  
             correct += pred.eq(target.view_as(pred)).sum().item()
-
+            print(correct)
     # test_loss /= len(test_loader.dataset)
     test_loss = test_loss/cout
-    print(correct)
+    
     print('\nTest set: Average loss for model: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
         test_loss, correct, len(test_loader.dataset),
         100. * correct / len(test_loader.dataset)))
@@ -218,7 +218,6 @@ def test(args,model, device, test_loader, count):
 
 # model = CNN(k)
 #optimizer = optim.SGD(model.parameters(), lr=args['lr'])
-
 logging.info("Starting training !!")
 
 torch.manual_seed(args['seed'])
