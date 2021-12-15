@@ -30,7 +30,7 @@ args = {
     'lr' : 0.001,
     'log_interval' : 50,
     'epochs' : 2,
-    'clients' : 30,
+    'clients' : 20,
     'seed' : 0,
     'rounds' : 30,
     'C' : 0.8,
@@ -58,7 +58,7 @@ for i in range(args['clients']):
 
 #****************** ========== IID_Dataset ========== ******************** #
 
-nUsers = 30
+nUsers = 20
 def mnistIID(data,nUsers):#this function randomly chooses 60k/10 (assuming 10 users) images and distributes them in iid fashion among the users.
     nImages=int(len(data)/nUsers)
     # print(num_images)
