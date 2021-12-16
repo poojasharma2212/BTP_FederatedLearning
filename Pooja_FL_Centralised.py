@@ -21,7 +21,7 @@ args = {
     'use_cuda' : True,
     'batch_size' : 64,
     'test_batch_size' : 1000,
-    'lr' : 0.001,
+    'lr' : 0.01,
     'log_interval' : 46,
     'epochs' : 1,
     'clients' : 20,
