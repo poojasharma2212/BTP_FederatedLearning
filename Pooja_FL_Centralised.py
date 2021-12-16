@@ -32,9 +32,9 @@ args = {
     'epochs' : 5,
     'clients' : 10,
     'seed' : 0,
-    'rounds' : 30,
+    'rounds' : 10,
     'C' : 0.8,
-    'drop_rate' : 0.2,
+    'drop_rate' : 0.4,
     'images' : 10000,
     'split_size' : int(10000/10),
     'samples' : 5000/10000,
@@ -174,7 +174,7 @@ def train(args, cli, device):
             loss = loss.get()
             # print(loss.item())
             print(' Model  {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                    epoch, client['hook'].id,
+                    client['hook'].id, epoch,
                     batch_idx * args['batch_size'], # no of images done
                     len(client['mnist_trainset']) * args['batch_size'], # total images left
                     100. * batch_idx / len(client['mnist_trainset']), 
