@@ -24,11 +24,11 @@ args = {
     'lr' : 0.01,
     'log_interval' : 46,
     'epochs' : 1,
-    'clients' : 20,
+    'clients' : 10,
     'seed' : 0,
     'rounds' : 20,
     'C' : 0.8,
-    'drop_rate' : 0.2,
+    'drop_rate' : 0.4,
     'images' : 10000,
     'split_size' : int(10000/20),
     'samples' : 5000/10000,
@@ -51,7 +51,7 @@ for i in range(args['clients']):
 #os.chdir("/content/drive/MyDrive/FL_ZaaPoo/data/MNIST/raw")
 
 #****************** ========== IID_Dataset ========== ******************** #
-nUsers = 20
+nUsers = 10
 def mnistIID(data,nUsers):#this function randomly chooses 60k/10 (assuming 10 users) images and distributes them in iid fashion among the users.
     nImages=int(len(data)/nUsers)
     # print(num_images)
