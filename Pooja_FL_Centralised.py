@@ -13,13 +13,7 @@ import torchvision.datasets as datasets
 import torchvision.transforms as transforms
 import logging
 import os
-
-
-# import Dataset
-# from Dataset import load_dataset, getImage
-# from utils import averageModels
 import random
-# import mat
 import syft as sy
 
 count = 0
@@ -29,10 +23,10 @@ args = {
     'test_batch_size' : 1000,
     'lr' : 0.001,
     'log_interval' : 46,
-    'epochs' : 2,
+    'epochs' : 1,
     'clients' : 20,
     'seed' : 0,
-    'rounds' : 30,
+    'rounds' : 20,
     'C' : 0.8,
     'drop_rate' : 0.2,
     'images' : 10000,
@@ -57,7 +51,6 @@ for i in range(args['clients']):
 #os.chdir("/content/drive/MyDrive/FL_ZaaPoo/data/MNIST/raw")
 
 #****************** ========== IID_Dataset ========== ******************** #
-
 nUsers = 20
 def mnistIID(data,nUsers):#this function randomly chooses 60k/10 (assuming 10 users) images and distributes them in iid fashion among the users.
     nImages=int(len(data)/nUsers)
@@ -68,9 +61,6 @@ def mnistIID(data,nUsers):#this function randomly chooses 60k/10 (assuming 10 us
         #np.random.choice selects num_images number of random numbers from 0 to indices
         usersDict[i]=set(np.random.choice(indices,nImages,replace=False)) #set drops repeated items
         indices=list(set(indices)-usersDict[i])
-        # print("i :::", end=" ")
-        # print(i,usersDict[i])
-        # print("============###############################===============================")
     return usersDict
 
 transform=transforms.Compose([transforms.ToTensor(),transforms.Normalize((0.1307,),(0.3081,))])
@@ -112,7 +102,7 @@ for inx, client in enumerate(clients):
   client['samples'] = len(trainset_id_list)/args['images']
   # print(client['mnist_trainset'])
 
-print("==================================")
+# print("==================================")
 # for inx, client in enumerate(clients):
   # client['mnist_testset'] = getImage(mnist_testset, list(test_group[inx]), args['batch_size'])
   # client['samples'] = len(trainset_id_list)/args['images']
@@ -170,7 +160,7 @@ def train(args, cli, device):
         # cli['optimizer'].zero_grad()
         # optimizer.step()
             count = count + 1
-            if ((batch_idx % args['log_interval'] == 0)):
+            if ((batch_idx % args['log_interval'] == 0) and batch_idx!=0):
                  # print(loss.item())
                 print(batch_idx,end=" ")
                 # print(args['log_interval'])
