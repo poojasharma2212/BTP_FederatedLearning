@@ -34,9 +34,9 @@ args = {
     'seed' : 0,
     'rounds' : 30,
     'C' : 0.8,
-    'drop_rate' : 0.2,
+    'drop_rate' : 0.1,
     'images' : 10000,
-    'split_size' : int(10000/20),
+    'split_size' : int(10000/10),
     'samples' : 5000/10000,
     'use_cuda' : False,
     'save_model' : True
