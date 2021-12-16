@@ -162,7 +162,7 @@ def train(args, cli, device):
             count = count + 1
             if ((batch_idx % args['log_interval'] == 0) and batch_idx!=0):
                  # print(loss.item())
-                print(batch_idx,end=" ")
+                # print(batch_idx,end=" ")
                 # print(args['log_interval'])
                 loss = loss.get()
                 print(' Model  {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
@@ -188,14 +188,14 @@ def test(args,model, device, test_loader, count):
         for data, target in test_loader:
             data, target = data.to(device), target.to(device)
             output = model(data)
-
             # add losses together
             test_loss += Func.nll_loss(output, target,reduction='sum').item() 
             cout=cout+1
+            print(test_loss, end = " ")
             # get the index of the max probability class
             pred = output.argmax(1, keepdim=True)  
             correct += pred.eq(target.view_as(pred)).sum().item()
-            print(correct)
+            # print(correct)
     # test_loss /= len(test_loader.dataset)
     test_loss = test_loss/len(test_loader.dataset)
     print(len(test_loader.dataset))
