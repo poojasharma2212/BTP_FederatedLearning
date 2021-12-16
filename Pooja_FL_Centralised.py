@@ -13,7 +13,13 @@ import torchvision.datasets as datasets
 import torchvision.transforms as transforms
 import logging
 import os
+
+
+# import Dataset
+# from Dataset import load_dataset, getImage
+# from utils import averageModels
 import random
+# import mat
 import syft as sy
 
 count = 0
@@ -21,14 +27,14 @@ args = {
     'use_cuda' : True,
     'batch_size' : 64,
     'test_batch_size' : 1000,
-    'lr' : 0.01,
-    'log_interval' : 46,
-    'epochs' : 1,
+    'lr' : 0.001,
+    'log_interval' : 50,
+    'epochs' : 2,
     'clients' : 10,
     'seed' : 0,
-    'rounds' : 20,
+    'rounds' : 30,
     'C' : 0.8,
-    'drop_rate' : 0.4,
+    'drop_rate' : 0.2,
     'images' : 10000,
     'split_size' : int(10000/20),
     'samples' : 5000/10000,
@@ -51,6 +57,7 @@ for i in range(args['clients']):
 #os.chdir("/content/drive/MyDrive/FL_ZaaPoo/data/MNIST/raw")
 
 #****************** ========== IID_Dataset ========== ******************** #
+
 nUsers = 10
 def mnistIID(data,nUsers):#this function randomly chooses 60k/10 (assuming 10 users) images and distributes them in iid fashion among the users.
     nImages=int(len(data)/nUsers)
@@ -61,6 +68,9 @@ def mnistIID(data,nUsers):#this function randomly chooses 60k/10 (assuming 10 us
         #np.random.choice selects num_images number of random numbers from 0 to indices
         usersDict[i]=set(np.random.choice(indices,nImages,replace=False)) #set drops repeated items
         indices=list(set(indices)-usersDict[i])
+        # print("i :::", end=" ")
+        # print(i,usersDict[i])
+        # print("============###############################===============================")
     return usersDict
 
 transform=transforms.Compose([transforms.ToTensor(),transforms.Normalize((0.1307,),(0.3081,))])
@@ -102,7 +112,7 @@ for inx, client in enumerate(clients):
   client['samples'] = len(trainset_id_list)/args['images']
   # print(client['mnist_trainset'])
 
-# print("==================================")
+print("==================================")
 # for inx, client in enumerate(clients):
   # client['mnist_testset'] = getImage(mnist_testset, list(test_group[inx]), args['batch_size'])
   # client['samples'] = len(trainset_id_list)/args['images']
@@ -125,17 +135,17 @@ global_test_loader = DataLoader(global_test_dataset, batch_size=args['batch_size
 class CNN(nn.Module):
     def __init__(self):
         super(CNN, self).__init__()
-        self.conv1 = nn.Conv2d(1, 5, 5, 1)
-        self.conv2 = nn.Conv2d(5, 10, 5, 1)
-        self.fc1 = nn.Linear(4*4*10, 5)
-        self.fc2 = nn.Linear(5, 10)
+        self.conv1 = nn.Conv2d(1, 20, 5, 1)
+        self.conv2 = nn.Conv2d(20, 50, 5, 1)
+        self.fc1 = nn.Linear(4*4*50, 500)
+        self.fc2 = nn.Linear(500, 10)
 
     def forward(self, x):
         x = Func.relu(self.conv1(x))
         x = Func.max_pool2d(x, 2, 2)
         x = Func.relu(self.conv2(x))
         x = Func.max_pool2d(x, 2, 2)
-        x = x.view(-1, 4*4*10)
+        x = x.view(-1, 4*4*50)
         x = Func.relu(self.fc1(x))
         x = self.fc2(x)
         return Func.log_softmax(x, dim=1)
@@ -146,59 +156,58 @@ def train(args, cli, device):
     cli['model'].send(cli['hook'])
     # print(client)
     # iterate over federated data
-    count = 0
     for epoch in range(1,args['epochs']+1):
-        for batch_idx, (data, target) in enumerate(cli['mnist_trainset']):
-            data = data.send(cli['hook'])
-            target = target.send(cli['hook'])
-            data, target = data.to(device), target.to(device)
-        # cli['optimizer'].zero_grad()
-            output = cli['model'](data)
-            loss = Func.nll_loss(output, target)
-            loss.backward()
-            cli['optimizer'].step()
+      for batch_idx, (data, target) in enumerate(cli['mnist_trainset']):
+        data = data.send(cli['hook'])
+        target = target.send(cli['hook'])
+        data, target = data.to(device), target.to(device)
+        cli['optimizer'].zero_grad()
+        output = cli['model'](data)
+        loss = Func.nll_loss(output, target)
+        loss.backward()
+        cli['optimizer'].step()
         # cli['optimizer'].zero_grad()
         # optimizer.step()
-            count = count + 1
-            if ((batch_idx % args['log_interval'] == 0) and batch_idx!=0):
-                 # print(loss.item())
-                # print(batch_idx,end=" ")
-                # print(args['log_interval'])
-                loss = loss.get()
-                print(' Model  {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+        
+ 
+        if batch_idx % args['log_interval'] == 0:
+            loss = loss.get()
+            # print(loss.item())
+            print(' Model  {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                     epoch, client['hook'].id,
                     batch_idx * args['batch_size'], # no of images done
                     len(client['mnist_trainset']) * args['batch_size'], # total images left
                     100. * batch_idx / len(client['mnist_trainset']), 
                     loss.item()
-                    )   
                 )
-        print("========")
-        # print(count)
-        # print("========") 
+            )
+            # print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+            #             client['hook'].id,
+            #             epoch, batch_idx * args['batch_size'], len(client['mnist_trainset']) * args['batch_size'], 
+            #             100. * batch_idx / len(client['mnist_trainset']), loss.item())) 
     cli['model'].get()
 accu = []
 def test(args,model, device, test_loader, count):
+    print(count+1)
+    count =  count+1
     print("TEST SET PRDEICTION")
     model.eval()
     test_loss = 0
     correct = 0
-    cout = 0
     with torch.no_grad():
         for data, target in test_loader:
             data, target = data.to(device), target.to(device)
             output = model(data)
+
             # add losses together
-            test_loss += Func.nll_loss(output, target,reduction='sum').item() 
-            cout=cout+1
-            print(test_loss, end = " ")
+            test_loss += Func.nll_loss(output, target, reduction='sum').item() 
+
             # get the index of the max probability class
             pred = output.argmax(1, keepdim=True)  
             correct += pred.eq(target.view_as(pred)).sum().item()
-            # print(correct)
-    # test_loss /= len(test_loader.dataset)
-    test_loss = test_loss/len(test_loader.dataset)
-    print(len(test_loader.dataset))
+
+    test_loss /= len(test_loader.dataset)
+
     print('\nTest set: Average loss for model: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
         test_loss, correct, len(test_loader.dataset),
         100. * correct / len(test_loader.dataset)))
@@ -206,6 +215,7 @@ def test(args,model, device, test_loader, count):
 
 # model = CNN(k)
 #optimizer = optim.SGD(model.parameters(), lr=args['lr'])
+
 logging.info("Starting training !!")
 
 torch.manual_seed(args['seed'])
@@ -274,5 +284,3 @@ print(accu)
 
 
 
-  
-           
