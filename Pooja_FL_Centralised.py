@@ -28,7 +28,7 @@ args = {
     'batch_size' : 64,
     'test_batch_size' : 1000,
     'lr' : 0.001,
-    'log_interval' : 47,
+    'log_interval' : 46,
     'epochs' : 2,
     'clients' : 20,
     'seed' : 0,
@@ -172,7 +172,6 @@ def train(args, cli, device):
             count = count + 1
             if ((batch_idx % args['log_interval'] == 0)):
                  # print(loss.item())
-                
                 print(batch_idx,end=" ")
                 # print(args['log_interval'])
                 loss = loss.get()
@@ -186,7 +185,7 @@ def train(args, cli, device):
                 )
         print("========")
         # print(count)
-        print("========") 
+        # print("========") 
     cli['model'].get()
 accu = []
 def test(args,model, device, test_loader, count):
@@ -201,16 +200,15 @@ def test(args,model, device, test_loader, count):
             output = model(data)
 
             # add losses together
-            test_loss = Func.nll_loss(output, target,reduction='sum').item() 
+            test_loss += Func.nll_loss(output, target,reduction='sum').item() 
             cout=cout+1
-
             # get the index of the max probability class
             pred = output.argmax(1, keepdim=True)  
             correct += pred.eq(target.view_as(pred)).sum().item()
             print(correct)
     # test_loss /= len(test_loader.dataset)
-    test_loss = test_loss/cout
-    
+    test_loss = test_loss/len(test_loader.dataset)
+    print(len(test_loader.dataset))
     print('\nTest set: Average loss for model: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
         test_loss, correct, len(test_loader.dataset),
         100. * correct / len(test_loader.dataset)))
