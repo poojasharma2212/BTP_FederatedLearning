@@ -66,7 +66,7 @@ def mnistIID(data,nUsers):#this function randomly chooses 60k/10 (assuming 10 us
         
     return usersDict
 
-nUsers = 10
+nUsers = 20
 transform=transforms.Compose([transforms.ToTensor(),transforms.Normalize((0.1307,),(0.3081,))])
 #transform=transforms.ToTensor()
 mnist_trainset = datasets.MNIST(root='./data', train=True, download=True, transform= transform)          
