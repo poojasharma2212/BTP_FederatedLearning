@@ -9,8 +9,6 @@ from datetime import datetime
 import torchvision
 from torchvision import transforms,datasets
 from torch.utils.data import DataLoader, Dataset
-import torchvision.datasets as datasets
-import torchvision.transforms as transforms
 import logging
 import os
 
@@ -24,20 +22,17 @@ import syft as sy
 
 count = 0
 args = {
-    'use_cuda' : True,
     'batch_size' : 64,
     'test_batch_size' : 1000,
     'lr' : 0.01,
-    'log_interval' : 64,
-    'epochs' : 3,
+    'log_interval' : 10,
+    'epochs' : 5,
     'clients' : 10,
     'seed' : 0,
-    'rounds' : 10,
+    'rounds' : 5,
     'C' : 0.9,
-    'drop_rate' : 0.4,
-    'images' : 10000,
-    'split_size' : int(10000/10),
-    'samples' : 5000/10000,
+    'drop_rate' : 0.1,
+    'images' : 60000,
     'use_cuda' : False,
     'save_model' : True
 }
@@ -53,30 +48,29 @@ clients = []
 for i in range(args['clients']):
     clients.append({'hook': sy.VirtualWorker(hook, id="client{}".format(i+1))})
 
-# print(clients)
+# print(clients) 
 #os.chdir("/content/drive/MyDrive/FL_ZaaPoo/data/MNIST/raw")
 
 #****************** ========== IID_Dataset ========== ******************** #
 
-nUsers = 10
 def mnistIID(data,nUsers):#this function randomly chooses 60k/10 (assuming 10 users) images and distributes them in iid fashion among the users.
     nImages=int(len(data)/nUsers)
     # print(num_images)
-    usersDict,indices={},list(range(len(data))) #length of dataset is 60k
+    usersDict,indices={},[i for i in (range(len(data)))] #length of dataset is 60k
     for i in range(nUsers):
-        np.random.seed(i) #starts with the same random number to maiantain similarity across runs
-        #np.random.choice selects num_images number of random numbers from 0 to indices
+        np.random.seed(i) 
         usersDict[i]=set(np.random.choice(indices,nImages,replace=False)) #set drops repeated items
         indices=list(set(indices)-usersDict[i])
         # print("i :::", end=" ")
         # print(i,usersDict[i])
-        # print("============###############################===============================")
+        
     return usersDict
 
+nUsers = 10
 transform=transforms.Compose([transforms.ToTensor(),transforms.Normalize((0.1307,),(0.3081,))])
 #transform=transforms.ToTensor()
-mnist_trainset = datasets.MNIST(root='./data', train=True, download=False, transform= transform)          
-mnist_testset = datasets.MNIST(root='./data', train=False, download=False,transform= transform)
+mnist_trainset = datasets.MNIST(root='./data', train=True, download=True, transform= transform)          
+mnist_testset = datasets.MNIST(root='./data', train=False, download=True,transform= transform)
 #print(mnist_testset.data.max())
 # print(mnist_testset.data.shape)
 #print(mnist_trainset.targets)
@@ -99,7 +93,7 @@ class FedDataset(Dataset):#this class helps connect the random indices with the 
     
     def __getitem__(self,item):
       images,labels=self.dataset[self.indx[item]]
-      return (torch.tensor(images),torch.tensor(labels))
+      return (torch.tensor(images).clone().detach(),torch.tensor(labels).clone().detach())
     
     
 def getImage(dataset,indices,batch_size):#load images using the class FedDataset
@@ -151,21 +145,21 @@ class CNN(nn.Module):
         return Func.log_softmax(x, dim=1)
     
 
-def train(args, cli, device):
-    cli['model'].train()
-    cli['model'].send(cli['hook'])
+def train(args, client, device):
+    client['model'].train()
+    client['model'].send(client['hook'])
     # print(client)
     # iterate over federated data
     for epoch in range(1,args['epochs']+1):
-      for batch_idx, (data, target) in enumerate(cli['mnist_trainset']):
-        data = data.send(cli['hook'])
-        target = target.send(cli['hook'])
+      for batch_idx, (data, target) in enumerate(client['mnist_trainset']):
+        data = data.send(client['hook'])
+        target = target.send(client['hook'])
         data, target = data.to(device), target.to(device)
-        cli['optimizer'].zero_grad()
-        output = cli['model'](data)
+        client['optimizer'].zero_grad()
+        output = client['model'](data)
         loss = Func.nll_loss(output, target)
         loss.backward()
-        cli['optimizer'].step()
+        client['optimizer'].step()
         # cli['optimizer'].zero_grad()
         # optimizer.step()
         
