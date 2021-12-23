@@ -179,7 +179,7 @@ def train(args, client, device):
             #             client['hook'].id,
             #             epoch, batch_idx * args['batch_size'], len(client['mnist_trainset']) * args['batch_size'], 
             #             100. * batch_idx / len(client['mnist_trainset']), loss.item())) 
-    cli['model'].get()
+    client['model'].get()
 accu = []
 def test(args,model, device, test_loader, count):
     print(count+1)
