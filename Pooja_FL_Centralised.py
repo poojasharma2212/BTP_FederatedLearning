@@ -12,7 +12,6 @@ from torch.utils.data import DataLoader, Dataset
 import logging
 import os
 
-
 # import Dataset
 # from Dataset import load_dataset, getImage
 # from utils import averageModels
@@ -25,11 +24,11 @@ args = {
     'batch_size' : 64,
     'test_batch_size' : 1000,
     'lr' : 0.01,
-    'log_interval' : 40,
+    'log_interval' : 10,
     'epochs' : 2,
     'clients' : 20,
     'seed' : 0,
-    'rounds' : 1,
+    'rounds' : 50,
     'C' : 0.9,
     'drop_rate' : 0.1,
     'images' : 60000,
