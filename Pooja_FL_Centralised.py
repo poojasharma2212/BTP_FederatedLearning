@@ -23,9 +23,9 @@ count = 0
 args = {
     'batch_size' : 64,
     'test_batch_size' : 1000,
-    'lr' : 0.005,
+    'lr' : 0.001,
     'log_interval' : 10,
-    'epochs' : 4,
+    'epochs' : 3,
     'clients' : 20,
     'seed' : 0,
     'rounds' : 50,
@@ -82,7 +82,7 @@ print(len(train_group[1]))
 print(len(test_group[1]))
 
 
-class FedDataset(Dataset):#this class helps connect the random indices with the image+label container in the dataset
+class FedDataset(Dataset):
     def __init__(self,dataset,indx):
       self.dataset=dataset
       self.indx=[int(i) for i in indx]
@@ -177,7 +177,7 @@ def train(args, client, device):
             # print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
             #             client['hook'].id,
             #             epoch, batch_idx * args['batch_size'], len(client['mnist_trainset']) * args['batch_size'], 
-            #             100. * batch_idx / len(client['mnist_trainset']), loss.item())) 
+            #             100. * batch_idx / len(client['mnist_trainset']), loss.item()))
     client['model'].get()
 accu = []
 def test(args,model, device, test_loader, count):
@@ -269,7 +269,7 @@ for fed_round in range(args['rounds']):
         client['model'].load_state_dict(global_model.state_dict())
         
 if (args['save_model']):
-    torch.save(global_model.state_dict(), "FedAvg.pt")
+    torch.save(global_model.state_dict(), "FederatedLearning.pt")
 
 
 print("============ Accuracy ===========")
