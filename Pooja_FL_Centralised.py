@@ -25,7 +25,7 @@ args = {
     'test_batch_size' : 1000,
     'lr' : 0.01,
     'log_interval' : 10,
-    'epochs' :1,
+    'epochs' :6,
     'clients' : 20,
     'seed' : 0,
     'rounds' : 50,
