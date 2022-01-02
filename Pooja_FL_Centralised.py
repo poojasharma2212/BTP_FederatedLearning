@@ -62,8 +62,8 @@ def mnistIID(data,nUsers):
         usersDict[i]=set(np.random.choice(indices,nImages,replace=False)) 
         indices=list(set(indices)-usersDict[i])
         # print("i :::", end=" ")
-    print(usersDict)
-     
+    # print(usersDict)
+    print(len(usersDict))
     return usersDict
 
 #************************ ======== Non-IID Dataset ========== ******************#
