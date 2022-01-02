@@ -67,7 +67,8 @@ def mnistIID(data,nUsers):
     return usersDict
 
 #************************ ======== Non-IID Dataset ========== ******************#
-def mnistnon_IID(data, nuser, test = False):
+nuser = 20
+def mnistnon_IID(data, nuser):
     clients = 20
     images = 3000
     # if test:
@@ -83,7 +84,7 @@ def mnistnon_IID(data, nuser, test = False):
     indices = indices_label[0,:]
     for i in range(nuser):
         np.random.seed(i)
-        t = set(np.random.choice(client_index,2,replace=False))
+        t = set(np.random.choice(client_index, 2 ,replace=False))
         client_index = list(set(client_index)- t)
 
         for x in t:
