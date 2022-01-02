@@ -25,10 +25,10 @@ args = {
     'test_batch_size' : 1000,
     'lr' : 0.03,
     'log_interval' : 10,
-    'epochs' :4,
+    'epochs' :2,
     'clients' : 20,
     'seed' : 0,
-    'rounds' : 5,
+    'rounds' : 1,
     'C' : 0.9,
     'drop_rate' : 0.1,
     'images' : 60000,
@@ -62,8 +62,7 @@ def mnistIID(data,nUsers):
         usersDict[i]=set(np.random.choice(indices,nImages,replace=False)) 
         indices=list(set(indices)-usersDict[i])
         # print("i :::", end=" ")
-    
-    print(usersDict[i])
+    print(usersDict)
      
     return usersDict
 
@@ -108,11 +107,9 @@ k = len(set(mnist_testset.targets.numpy()))
 # print(k)
 if(args['datatype'] == 'iid'):
     train_group=mnistIID(mnist_trainset,nUsers)
-
     test_group=mnistIID(mnist_testset,nUsers)
     print(len(train_group[1]))
     print(len(test_group[1]))
-
 elif(args['datatype'] == 'non_iid'):
     train_group=mnistnon_IID(mnist_trainset,nUsers)
     test_group=mnistnon_IID(mnist_testset,nUsers)
