@@ -14,8 +14,7 @@ import logging
 import os
 
 # import Dataset
-# from Dataset import load_dataset, getImage
-# from utils import averageModels
+# from Dataset
 import random
 # import mat
 import syft as sy
@@ -54,17 +53,18 @@ for i in range(args['clients']):
 
 #****************** ========== IID_Dataset ========== ******************** #
 
-def mnistIID(data,nUsers):#this function randomly chooses 60k/10 (assuming 10 users) images and distributes them in iid fashion among the users.
+def mnistIID(data,nUsers):
     nImages=int(len(data)/nUsers)
     # print(num_images)
     usersDict,indices={},[i for i in (range(len(data)))] #length of dataset is 60k
     for i in range(nUsers):
         np.random.seed(i) 
-        usersDict[i]=set(np.random.choice(indices,nImages,replace=False)) #set drops repeated items
+        usersDict[i]=set(np.random.choice(indices,nImages,replace=False)) 
         indices=list(set(indices)-usersDict[i])
         # print("i :::", end=" ")
-        # print(i,usersDict[i])
-        
+    
+    print(usersDict[i])
+     
     return usersDict
 
 #************************ ======== Non-IID Dataset ========== ******************#
@@ -82,9 +82,7 @@ def mnistnon_IID(data, nuser, test = False):
     indices = np.arrange(clients*images)
 
     unsorted_label = data.train_labels.numpy()
-
     indices_unsorted = np.vstack((indices,unsorted_label))
-
     indices_label = indices_unsorted[:,indices_unsorted[1,:].argsort()]
     indices = indices_label[0,:]
 
@@ -95,7 +93,7 @@ def mnistnon_IID(data, nuser, test = False):
 
         for x in t:
             usersDict[i] = np.concatenate((usersDict[i], indices[x*images:(x+1)*images]), axis=0)
-            
+
     return usersDict
 nUsers = 20
 transform=transforms.Compose([transforms.ToTensor(),transforms.Normalize((0.1307,),(0.3081,))])
@@ -110,6 +108,7 @@ k = len(set(mnist_testset.targets.numpy()))
 # print(k)
 if(args['datatype'] == 'iid'):
     train_group=mnistIID(mnist_trainset,nUsers)
+
     test_group=mnistIID(mnist_testset,nUsers)
     print(len(train_group[1]))
     print(len(test_group[1]))
