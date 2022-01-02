@@ -63,7 +63,7 @@ def mnistIID(data,nUsers):
         indices=list(set(indices)-usersDict[i])
         # print("i :::", end=" ")
     # print(usersDict)
-    print(len(usersDict))
+    print(len(usersDict), "-----------------")
     return usersDict
 
 #************************ ======== Non-IID Dataset ========== ******************#
