@@ -28,11 +28,11 @@ args = {
     'epochs' :2,
     'clients' : 20,
     'seed' : 0,
-    'rounds' : 1,
+    'rounds' : 10,
     'C' : 0.9,
     'drop_rate' : 0.1,
     'images' : 60000,
-    'datatype': 'iid',
+    'datatype': 'non_iid',
     'use_cuda' : False,
     'save_model' : True
 }
@@ -67,24 +67,20 @@ def mnistIID(data,nUsers):
     return usersDict
 
 #************************ ======== Non-IID Dataset ========== ******************#
-
 def mnistnon_IID(data, nuser, test = False):
     clients = 20
     images = 3000
-    if test:
-        clients = 20
-        images = 1000
-    
+    # if test:
+    #     clients = 20
+    #     images = 1000
     client_index = [i for i in range(clients)]
     usersDict = {i:np.array([]) for i in range(nuser)}
 
     indices = np.arrange(clients*images)
-
     unsorted_label = data.train_labels.numpy()
     indices_unsorted = np.vstack((indices,unsorted_label))
     indices_label = indices_unsorted[:,indices_unsorted[1,:].argsort()]
     indices = indices_label[0,:]
-
     for i in range(nuser):
         np.random.seed(i)
         t = set(np.random.choice(client_index,2,replace=False))
@@ -112,7 +108,7 @@ if(args['datatype'] == 'iid'):
     print(len(test_group[1]))
 elif(args['datatype'] == 'non_iid'):
     train_group=mnistnon_IID(mnist_trainset,nUsers)
-    test_group=mnistnon_IID(mnist_testset,nUsers)
+    test_group=mnistIID(mnist_testset,nUsers)
     print(len(train_group[1]))
     print(len(test_group[1]))
 
