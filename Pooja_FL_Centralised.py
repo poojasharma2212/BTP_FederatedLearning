@@ -82,7 +82,7 @@ def mnistnon_IID(data, nuser):
     indices_unsorted = np.vstack((indices,unsorted_label))
     indices_label = indices_unsorted[:,indices_unsorted[1,:].argsort()]
     indices = indices_label[0,:]
-    for i in range(nuser/2):
+    for i in range(10):
         np.random.seed(i)
         print(client_index, "-------")
         t = set(np.random.choice(client_index, 2 ,replace=False))
