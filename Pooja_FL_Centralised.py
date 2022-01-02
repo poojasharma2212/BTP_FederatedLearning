@@ -84,6 +84,7 @@ def mnistnon_IID(data, nuser):
     indices = indices_label[0,:]
     for i in range(nuser):
         np.random.seed(i)
+        print(client_index, "-------")
         t = set(np.random.choice(client_index, 2 ,replace=False))
         client_index = list(set(client_index)- t)
 
