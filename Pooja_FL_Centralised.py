@@ -1,3 +1,4 @@
+from numpy.core.numeric import indices
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -68,14 +69,34 @@ def mnistIID(data,nUsers):#this function randomly chooses 60k/10 (assuming 10 us
 
 #************************ ======== Non-IID Dataset ========== ******************#
 
-# def mnistnon_IID(data, nuser, test = False):
-#     classes = 20
-#     images = 3000
-#     if test:
-#         classes = 20
-#         images = 1000
+def mnistnon_IID(data, nuser, test = False):
+    clients = 20
+    images = 3000
+    if test:
+        clients = 20
+        images = 1000
     
-#     return usersDict
+    client_index = [i for i in range(clients)]
+    usersDict = {i:np.array([]) for i in range(nuser)}
+
+    indices = np.arrange(clients*images)
+
+    unsorted_label = data.train_labels.numpy()
+
+    indices_unsorted = np.vstack((indices,unsorted_label))
+
+    indices_label = indices_unsorted[:,indices_unsorted[1,:].argsort()]
+    indices = indices_label[0,:]
+
+    for i in range(nuser):
+        np.random.seed(i)
+        t = set(np.random.choice(client_index,2,replace=False))
+        client_index = list(set(client_index)- t)
+
+        for x in t:
+            usersDict[i] = np.concatenate((usersDict[i], indices[x*images:(x+1)*images]), axis=0)
+            
+    return usersDict
 nUsers = 20
 transform=transforms.Compose([transforms.ToTensor(),transforms.Normalize((0.1307,),(0.3081,))])
 #transform=transforms.ToTensor()
