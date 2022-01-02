@@ -63,7 +63,7 @@ def mnistIID(data,nUsers):
         indices=list(set(indices)-usersDict[i])
         # print("i :::", end=" ")
     # print(usersDict)
-    print(len(usersDict), "-----------------")
+    #print(len(usersDict), "-----------------")
     return usersDict
 
 #************************ ======== Non-IID Dataset ========== ******************#
@@ -106,7 +106,7 @@ mnist_testset = datasets.MNIST(root='./data', train=False, download=True,transfo
 k = len(set(mnist_testset.targets.numpy()))
 # print(k)
 if(args['datatype'] == 'iid'):
-    train_group=mnistIID(mnist_trainset,nUsers)
+    train_group=mnistIID(mnist_trainset,nUsers) #dictionary containing dictionary for 20 clients 
     test_group=mnistIID(mnist_testset,nUsers)
     print(len(train_group[1]))
     print(len(test_group[1]))
@@ -115,8 +115,6 @@ elif(args['datatype'] == 'non_iid'):
     test_group=mnistnon_IID(mnist_testset,nUsers)
     print(len(train_group[1]))
     print(len(test_group[1]))
-
-
 
 
 class FedDataset(Dataset):
@@ -140,7 +138,7 @@ for inx, client in enumerate(clients):
   client['mnist_trainset'] = getImage(mnist_trainset, trainset_id_list, args['batch_size'])
   client['mnist_testset'] = getImage(mnist_testset, list(test_group[inx]), args['batch_size'])
   client['samples'] = len(trainset_id_list)/args['images']
-  # print(client['mnist_trainset'])
+  print(client['mnist_trainset'])
 
 print("==================================")
 # for inx, client in enumerate(clients):
