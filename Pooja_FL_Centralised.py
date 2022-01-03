@@ -114,8 +114,8 @@ if(args['datatype'] == 'iid'):
     print(len(train_group[1]))
     print(len(test_group[1]))
 elif(args['datatype'] == 'non_iid'):
-    train_group=mnistnon_IID(mnist_trainset,nUsers, False)
-    test_group=mnistnon_IID(mnist_testset,nUsers, True)
+    train_group=mnistnon_IID(mnist_trainset,nUsers)
+    test_group=mnistnon_IID(mnist_testset,nUsers)
     print(len(train_group[1]))
     print(len(test_group[1]))
 
