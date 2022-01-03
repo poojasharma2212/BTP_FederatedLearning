@@ -8,6 +8,7 @@ from torch.utils.data.dataset import Dataset
 import numpy as np
 from datetime import datetime
 import torchvision
+from Dataset_FL import mnistNonIID 
 from torchvision import transforms,datasets
 from torch.utils.data import DataLoader, Dataset
 import logging
@@ -95,25 +96,7 @@ nuser = 20
 #             usersDict[i] = np.concatenate((usersDict[i], indices[x*images:(x+1)*images]), axis=0)
 #             # print(usersDict)
 #     return usersDict
-def mnistnon_IID(data, nuser, test ):
-    classes, images = 200, 300
-    if test:
-        classes, images = 20, 500
-    classes_indx = [i for i in range(classes)]
-    users_dict = {i: np.array([]) for i in range(nuser)}
-    indeces = np.arange(classes*images)
-    unsorted_labels = data.train_labels.numpy()
 
-    indeces_unsortedlabels = np.vstack((indeces, unsorted_labels))
-    indeces_labels = indeces_unsortedlabels[:, indeces_unsortedlabels[1, :].argsort()]
-    indeces = indeces_labels[0, :]
-    for i in range(10):
-        np.random.seed(i)
-        temp = set(np.random.choice(classes_indx, 2, replace=False))
-        classes_indx = list(set(classes_indx) - temp)
-        for t in temp:
-            users_dict[i] = np.concatenate((users_dict[i], indeces[t*images:(t+1)*images]), axis=0)
-    return users_dict
 nUsers = 20
 transform=transforms.Compose([transforms.ToTensor(),transforms.Normalize((0.1307,),(0.3081,))])
 #transform=transforms.ToTensor()
