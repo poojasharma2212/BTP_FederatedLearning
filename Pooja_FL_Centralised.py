@@ -69,33 +69,35 @@ def mnistIID(data,nUsers):
 
 #************************ ======== Non-IID Dataset ========== ******************#
 nuser = 20
-# def mnistnon_IID(data, nuser):
-#     clients = 20
-#     images = 3000
-    
-#     client_index = [i for i in range(clients)]
-#     usersDict = {i:np.array([]) for i in range(nuser)}
-#     indices = np.arange(clients*images)
-#     print(indices)
-#     unsorted_label = data.train_labels.numpy()
-#     print(len(unsorted_label), "-----------")
-#     indices_unsorted = np.vstack((indices,unsorted_label))
-#     print("---*******")
-#     print(indices_unsorted)
-#     indices_label = indices_unsorted[:,indices_unsorted[1,:].argsort()]
-#     print(indices_label, "*********")
-#     indices = indices_label[0,:]
-#     print(indices, "0000")
-#     for i in range(nuser):
-#         np.random.seed(i)
-#         print(client_index, "-------")
-#         temp = set(np.random.choice(client_index, 2 ,replace=False))
-#         print(temp)
-#         client_index = list(set(client_index)- temp)
-#         for x in temp:
-#             usersDict[i] = np.concatenate((usersDict[i], indices[x*images:(x+1)*images]), axis=0)
-#             # print(usersDict)
-#     return usersDict
+def mnistnon_IID(data, nuser, test):
+    clients = 50
+    images = 1200
+    if test :
+        clients = 20
+        images = 500
+    client_index = [i for i in range(clients)]
+    usersDict = {i:np.array([]) for i in range(nuser)}
+    indices = np.arange(clients*images)
+    print(indices)
+    unsorted_label = data.train_labels.numpy()
+    print(len(unsorted_label), "-----------")
+    indices_unsorted = np.vstack((indices,unsorted_label))
+    print("---*******")
+    print(indices_unsorted)
+    indices_label = indices_unsorted[:,indices_unsorted[1,:].argsort()]
+    print(indices_label, "*********")
+    indices = indices_label[0,:]
+    print(indices, "0000")
+    for i in range(nuser):
+        np.random.seed(i)
+        print(client_index, "-------")
+        temp = set(np.random.choice(client_index, 2 ,replace=False))
+        print(temp)
+        client_index = list(set(client_index)- temp)
+        for x in temp:
+            usersDict[i] = np.concatenate((usersDict[i], indices[x*images:(x+1)*images]), axis=0)
+            # print(usersDict)
+    return usersDict
 
 nUsers = 20
 transform=transforms.Compose([transforms.ToTensor(),transforms.Normalize((0.1307,),(0.3081,))])
