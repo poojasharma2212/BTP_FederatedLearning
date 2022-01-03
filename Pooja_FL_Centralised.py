@@ -95,8 +95,8 @@ nuser = 20
 #             usersDict[i] = np.concatenate((usersDict[i], indices[x*images:(x+1)*images]), axis=0)
 #             # print(usersDict)
 #     return usersDict
-def mnistnon_IID(data, nuser):
-    classes, images = 200, 300
+def mnistnon_IID(data, nuser, test ):
+    classes, images = 20, 3000
     if test:
         classes, images = 20, 500
     classes_indx = [i for i in range(classes)]
@@ -132,8 +132,8 @@ if(args['datatype'] == 'iid'):
     print(len(train_group[1]))
     print(len(test_group[1]))
 elif(args['datatype'] == 'non_iid'):
-    train_group=mnistnon_IID(mnist_trainset,nUsers)
-    test_group=mnistnon_IID(mnist_testset,nUsers)
+    train_group=mnistnon_IID(mnist_trainset,nUsers, False)
+    test_group=mnistnon_IID(mnist_testset,nUsers, True)
     print(len(train_group[1]))
     print(len(test_group[1]))
 
