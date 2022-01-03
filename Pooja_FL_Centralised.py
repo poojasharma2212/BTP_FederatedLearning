@@ -70,8 +70,8 @@ def mnistIID(data,nUsers):
 #************************ ======== Non-IID Dataset ========== ******************#
 nuser = 20
 def mnistnon_IID(data, nuser, test):
-    clients = 50
-    images = 1200
+    clients = 30
+    images = 2000
     if test :
         clients = 40
         images = 250
