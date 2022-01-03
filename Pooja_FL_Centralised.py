@@ -8,7 +8,7 @@ from torch.utils.data.dataset import Dataset
 import numpy as np
 from datetime import datetime
 import torchvision
-from Dataset_FL import mnistNonIID 
+from Dataset_FL import mnistnon_IID 
 from torchvision import transforms,datasets
 from torch.utils.data import DataLoader, Dataset
 import logging
