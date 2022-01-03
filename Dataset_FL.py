@@ -13,7 +13,7 @@ def mnistIID(dataset, num_users):
     return users_dict
 
 def mnistnon_IID(dataset, num_users):
-    classes, images = 20, 3000
+    classes, images = 200, 300
     classes_indx = [i for i in range(classes)]
     users_dict = {i: np.array([]) for i in range(num_users)}
     indeces = np.arange(classes*images)
