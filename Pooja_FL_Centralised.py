@@ -68,7 +68,7 @@ def mnistIID(data,nUsers):
 
 #************************ ======== Non-IID Dataset ========== ******************#
 nuser = 20
-def mnistnon_IID(data, nuser,test):
+def mnistnon_IID(data, nuser):
     clients = 20
     images = 3000
     
@@ -85,13 +85,13 @@ def mnistnon_IID(data, nuser,test):
     print(indices_label, "*********")
     indices = indices_label[0,:]
     print(indices, "0000")
-    for i in range(11):
+    for i in range(nuser):
         np.random.seed(i)
         print(client_index, "-------")
-        t = set(np.random.choice(client_index, 2 ,replace=False))
-        print(t)
-        client_index = list(set(client_index)- t)
-        for x in t:
+        temp = set(np.random.choice(client_index, 2 ,replace=False))
+        print(temp)
+        client_index = list(set(client_index)- temp)
+        for x in temp:
             usersDict[i] = np.concatenate((usersDict[i], indices[x*images:(x+1)*images]), axis=0)
             # print(usersDict)
     return usersDict
