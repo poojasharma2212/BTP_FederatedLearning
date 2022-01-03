@@ -77,6 +77,7 @@ def mnistnon_IID(data, nuser,test):
     client_index = [i for i in range(clients)]
     usersDict = {i:np.array([]) for i in range(nuser)}
     indices = np.arange(clients*images)
+    print(indices)
     unsorted_label = data.train_labels.numpy()
     indices_unsorted = np.vstack((indices,unsorted_label))
     indices_label = indices_unsorted[:,indices_unsorted[1,:].argsort()]
@@ -89,7 +90,7 @@ def mnistnon_IID(data, nuser,test):
         client_index = list(set(client_index)- t)
         for x in t:
             usersDict[i] = np.concatenate((usersDict[i], indices[x*images:(x+1)*images]), axis=0)
-            print(usersDict)
+            # print(usersDict)
     return usersDict
 nUsers = 20
 transform=transforms.Compose([transforms.ToTensor(),transforms.Normalize((0.1307,),(0.3081,))])
