@@ -96,7 +96,7 @@ nuser = 20
 #             # print(usersDict)
 #     return usersDict
 def mnistnon_IID(data, nuser, test ):
-    classes, images = 20, 3000
+    classes, images = 200, 300
     if test:
         classes, images = 20, 500
     classes_indx = [i for i in range(classes)]
@@ -107,8 +107,7 @@ def mnistnon_IID(data, nuser, test ):
     indeces_unsortedlabels = np.vstack((indeces, unsorted_labels))
     indeces_labels = indeces_unsortedlabels[:, indeces_unsortedlabels[1, :].argsort()]
     indeces = indeces_labels[0, :]
-
-    for i in range(nuser):
+    for i in range(10):
         np.random.seed(i)
         temp = set(np.random.choice(classes_indx, 2, replace=False))
         classes_indx = list(set(classes_indx) - temp)
