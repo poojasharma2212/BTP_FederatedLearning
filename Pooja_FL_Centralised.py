@@ -71,9 +71,7 @@ nuser = 20
 def mnistnon_IID(data, nuser,test):
     clients = 20
     images = 3000
-    if test:
-         clients = 20
-         images = 3000
+    
     client_index = [i for i in range(clients)]
     usersDict = {i:np.array([]) for i in range(nuser)}
     indices = np.arange(clients*images)
@@ -91,7 +89,7 @@ def mnistnon_IID(data, nuser,test):
         np.random.seed(i)
         print(client_index, "-------")
         t = set(np.random.choice(client_index, 2 ,replace=False))
-
+        print(t)
         client_index = list(set(client_index)- t)
         for x in t:
             usersDict[i] = np.concatenate((usersDict[i], indices[x*images:(x+1)*images]), axis=0)
@@ -115,7 +113,7 @@ if(args['datatype'] == 'iid'):
     print(len(test_group[1]))
 elif(args['datatype'] == 'non_iid'):
     train_group=mnistnon_IID(mnist_trainset,nUsers,False)
-    test_group=mnistnon_IID(mnist_testset,nUsers,True)
+    test_group=mnistnon_IID(mnist_testset,nUsers,False)
     print(len(train_group[1]))
     print(len(test_group[1]))
 
