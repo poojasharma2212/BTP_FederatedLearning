@@ -85,10 +85,11 @@ def mnistnon_IID(data, nuser):
         np.random.seed(i)
         print(client_index, "-------")
         t = set(np.random.choice(client_index, 2 ,replace=False))
+
         client_index = list(set(client_index)- t)
         for x in t:
             usersDict[i] = np.concatenate((usersDict[i], indices[x*images:(x+1)*images]), axis=0)
-    print(usersDict)
+            print(usersDict)
     return usersDict
 nUsers = 20
 transform=transforms.Compose([transforms.ToTensor(),transforms.Normalize((0.1307,),(0.3081,))])
