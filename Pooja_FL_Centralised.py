@@ -70,7 +70,7 @@ def mnistIID(data,nUsers):
 nuser = 20
 def mnistnon_IID(data, nuser):
     clients = 40
-    images = int(len(data)/nuser)
+    images = int(len(data)/clients)
     client_index = [i for i in range(clients)]
     usersDict = {i:np.array([]) for i in range(nuser)}
     indices = np.arange(clients*images)
