@@ -25,7 +25,7 @@ args = {
     'test_batch_size' : 1000,
     'lr' : 0.03,
     'log_interval' : 10,
-    'epochs' :2,
+    'epochs' :5,
     'clients' : 20,
     'seed' : 0,
     'rounds' : 10,
@@ -217,8 +217,6 @@ def train(args, client, device):
     client['model'].get()
 accu = []
 def test(args,model, device, test_loader, count):
-    print(count+1)
-    count =  count+1
     print("TEST SET PRDEICTION")
     model.eval()
     test_loss = 0
