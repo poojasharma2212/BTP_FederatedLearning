@@ -86,6 +86,7 @@ def mnistnon_IID(data, nuser,test):
     indices_label = indices_unsorted[:,indices_unsorted[1,:].argsort()]
     print(indices_label, "*********")
     indices = indices_label[0,:]
+    print(indices)
     for i in range(11):
         np.random.seed(i)
         print(client_index, "-------")
