@@ -81,6 +81,8 @@ def mnistnon_IID(data, nuser,test):
     unsorted_label = data.train_labels.numpy()
     print(len(unsorted_label), "-----------")
     indices_unsorted = np.vstack((indices,unsorted_label))
+    print("---*******")
+    print(indices_unsorted)
     indices_label = indices_unsorted[:,indices_unsorted[1,:].argsort()]
     indices = indices_label[0,:]
     for i in range(11):
