@@ -69,11 +69,11 @@ def mnistIID(data,nUsers):
 #************************ ======== Non-IID Dataset ========== ******************#
 nuser = 20
 def mnistnon_IID(data, nuser):
-    clients = 40
-    images = int(len(data)/clients)
-    client_index = [i for i in range(clients)]
+    diff_class = 40
+    images = int(len(data)/diff_class)
+    diff_class_index = [i for i in range(diff_class)]
     usersDict = {i:np.array([]) for i in range(nuser)}
-    indices = np.arange(clients*images)
+    indices = np.arange(diff_class*images)
     print(indices)
     unsorted_label = data.train_labels.numpy()
     print(len(unsorted_label), "-----------")
@@ -86,10 +86,10 @@ def mnistnon_IID(data, nuser):
     print(indices, "0000")
     for i in range(nuser):
         np.random.seed(i)
-        print(client_index, "-------")
-        temp = set(np.random.choice(client_index, 2 ,replace=False))
+        print(diff_class_index, "-------")
+        temp = set(np.random.choice(diff_class_index, 2 ,replace=False))
         print(temp)
-        client_index = list(set(client_index)- temp)
+        diff_class_index = list(set(diff_class_index)- temp)
         for x in temp:
             usersDict[i] = np.concatenate((usersDict[i], indices[x*images:(x+1)*images]), axis=0)
             # print(usersDict)
@@ -113,7 +113,7 @@ if(args['datatype'] == 'iid'):
     print(len(test_group[1]))
 elif(args['datatype'] == 'non_iid'):
     train_group=mnistnon_IID(mnist_trainset,nUsers)
-    test_group=mnistnon_IID(mnist_testset,nUsers)
+    test_group=mnistIID(mnist_testset,nUsers)
     print(len(train_group[1]))
     print(len(test_group[1]))
 
