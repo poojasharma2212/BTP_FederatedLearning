@@ -23,8 +23,8 @@ count = 0
 args = {
     'batch_size' : 64,
     'test_batch_size' : 1000,
-    'lr' : 0.03,
-    'log_interval' : 45,
+    'lr' : 0.05,
+    'log_interval' : 10,
     'epochs' :4,
     'clients' : 20,
     'seed' : 0,
