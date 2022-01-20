@@ -28,7 +28,7 @@ args = {
     'epochs' :4,
     'clients' : 20,
     'seed' : 0,
-    'rounds' : 100,
+    'rounds' : 50,
     'C' : 0.9,
     'drop_rate' : 0.1,
     'images' : 60000,
@@ -113,7 +113,7 @@ if(args['datatype'] == 'iid'):
     print(len(test_group[1]))
 elif(args['datatype'] == 'non_iid'):
     train_group=mnistnon_IID(mnist_trainset,nUsers)
-    test_group=mnistnon_IID(mnist_testset,nUsers)
+    test_group=mnistIID(mnist_testset,nUsers)
     print(len(train_group[1]))
     print(len(test_group[1]))
 
