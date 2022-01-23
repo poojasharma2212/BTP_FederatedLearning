@@ -29,8 +29,8 @@ args = {
     'clients' : 20,
     'seed' : 0,
     'rounds' : 50,
-    'C' : 0.8,
-    'drop_rate' : 0.1,
+    'C' : 0.9,
+    'drop_rate' : 0.2,
     'images' : 60000,
     'datatype': 'non_iid',
     'use_cuda' : False,
@@ -69,7 +69,7 @@ def mnistIID(data,nUsers):
 #************************ ======== Non-IID Dataset ========== ******************#
 nuser = 20
 def mnistnon_IID(data, nuser):
-    diff_class = 40
+    diff_class = 50
     images = int(len(data)/diff_class)
     diff_class_index = [i for i in range(diff_class)]
     usersDict = {i:np.array([]) for i in range(nuser)}
