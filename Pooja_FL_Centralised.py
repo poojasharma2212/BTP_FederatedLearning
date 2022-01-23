@@ -28,7 +28,7 @@ args = {
     'epochs' :4,
     'clients' : 20,
     'seed' : 0,
-    'rounds' : 200,
+    'rounds' : 50,
     'C' : 0.8,
     'drop_rate' : 0.1,
     'images' : 60000,
