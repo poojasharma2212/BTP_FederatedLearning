@@ -28,7 +28,7 @@ args = {
     'epochs' :4,
     'clients' : 20,
     'seed' : 0,
-    'rounds' : 10,
+    'rounds' : 50,
     'C' : 0.9,
     'drop_rate' : 0.1,
     'images' : 60000,
@@ -115,8 +115,8 @@ if(args['datatype'] == 'iid'):
 elif(args['datatype'] == 'non_iid'):
     train_group=mnistnon_IID(mnist_trainset,nUsers)
     test_group=mnistIID(mnist_testset,nUsers)
-    print(len(train_group[1]))
-    print(len(test_group[1]))
+    #print(len(train_group[1]))
+    #print(len(test_group[1]))
 
 
 class FedDataset(Dataset):
@@ -140,7 +140,7 @@ for inx, client in enumerate(clients):
   client['mnist_trainset'] = getImage(mnist_trainset, trainset_id_list, args['batch_size'])
   client['mnist_testset'] = getImage(mnist_testset, list(test_group[inx]), args['batch_size'])
   client['samples'] = len(trainset_id_list)/args['images']
-  print(client['mnist_trainset'])
+  #print(client['mnist_trainset'])
 
 print("==================================")
 # for inx, client in enumerate(clients):
