@@ -87,7 +87,7 @@ def mnistnon_IID(data, nuser):
     for i in range(nuser):
         #np.random.seed(i)
         # print(diff_class_index, "-------")
-        print(diff_class[i])
+        #print(diff_class[i])
         temp = set(np.random.choice(diff_class_index, 2 ,replace=False))
         print(temp)
         diff_class_index = list(set(diff_class_index)- temp)
