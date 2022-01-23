@@ -74,16 +74,16 @@ def mnistnon_IID(data, nuser):
     diff_class_index = [i for i in range(diff_class)]
     usersDict = {i:np.array([]) for i in range(nuser)}
     indices = np.arange(diff_class*images)
-    #print(indices)
+    print(indices)
     unsorted_label = data.train_labels.numpy()
-    #print(len(unsorted_label), "-----------")
+    print(len(unsorted_label), "-----------")
     indices_unsorted = np.vstack((indices,unsorted_label))
-    #print("---*******")
-    #print(indices_unsorted)
+    print("---*******")
+    print(indices_unsorted)
     indices_label = indices_unsorted[:,indices_unsorted[1,:].argsort()]
-    #print(indices_label, "*********")
+    print(indices_label, "*********")
     indices = indices_label[0,:]
-    # print(indices, "0000")
+    print(indices, "0000")
     for i in range(nuser):
         np.random.seed(i)
         # print(diff_class_index, "-------")
