@@ -28,7 +28,7 @@ args = {
     'epochs' :4,
     'clients' : 20,
     'seed' : 0,
-    'rounds' : 50,
+    'rounds' : 10,
     'C' : 0.9,
     'drop_rate' : 0.1,
     'images' : 60000,
@@ -69,24 +69,24 @@ def mnistIID(data,nUsers):
 #************************ ======== Non-IID Dataset ========== ******************#
 nuser = 20
 def mnistnon_IID(data, nuser):
-    diff_class = 50
+    diff_class = 40
     images = int(len(data)/diff_class)
     diff_class_index = [i for i in range(diff_class)]
     usersDict = {i:np.array([]) for i in range(nuser)}
     indices = np.arange(diff_class*images)
-    print(indices)
+    #print(indices)
     unsorted_label = data.train_labels.numpy()
-    print(len(unsorted_label), "-----------")
+    #print(len(unsorted_label), "-----------")
     indices_unsorted = np.vstack((indices,unsorted_label))
-    print("---*******")
-    print(indices_unsorted)
+    #print("---*******")
+    #print(indices_unsorted)
     indices_label = indices_unsorted[:,indices_unsorted[1,:].argsort()]
-    print(indices_label, "*********")
+    #print(indices_label, "*********")
     indices = indices_label[0,:]
-    print(indices, "0000")
+    # print(indices, "0000")
     for i in range(nuser):
         np.random.seed(i)
-        print(diff_class_index, "-------")
+        # print(diff_class_index, "-------")
         temp = set(np.random.choice(diff_class_index, 2 ,replace=False))
         print(temp)
         diff_class_index = list(set(diff_class_index)- temp)
