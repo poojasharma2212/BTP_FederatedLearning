@@ -313,5 +313,5 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds):
     return accu
 
 
-Accuracy1 = Wrapper(64,0.04,4,20,100)
+Accuracy1 = Wrapper(64,0.04,4,20,150)
 print(Accuracy1)
