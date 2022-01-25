@@ -19,7 +19,7 @@ import random
 # import mat
 import syft as sy
 
-def Wrapper(batch_size, lr, epoch, clients, rounds):
+def Wrapper(batch_size, lr, epoch, no_of_clients, rounds):
     count = 0
     args = {
         'batch_size' : batch_size,
@@ -27,7 +27,7 @@ def Wrapper(batch_size, lr, epoch, clients, rounds):
         'lr' : lr,
         'log_interval' : 10,
         'epochs' :epoch,
-        'clients' : clients,
+        'clients' : no_of_clients,
         'seed' : 0,
         'rounds' : rounds,
         'C' : 0.9,
@@ -49,10 +49,10 @@ def Wrapper(batch_size, lr, epoch, clients, rounds):
     for i in range(args['clients']):
         clients.append({'hook': sy.VirtualWorker(hook, id="client{}".format(i+1))})
 
-# print(clients) 
-#os.chdir("/content/drive/MyDrive/FL_ZaaPoo/data/MNIST/raw")
+    # print(clients) 
+    #os.chdir("/content/drive/MyDrive/FL_ZaaPoo/data/MNIST/raw")
 
-#****************** ========== IID_Dataset ========== ******************** #
+    #****************** ========== IID_Dataset ========== ******************** #
 
     def mnistIID(data,nUsers):
         nImages=int(len(data)/nUsers)
@@ -62,12 +62,12 @@ def Wrapper(batch_size, lr, epoch, clients, rounds):
             np.random.seed(i) 
             usersDict[i]=set(np.random.choice(indices,nImages,replace=False)) 
             indices=list(set(indices)-usersDict[i])
-        # print("i :::", end=" ")
+            # print("i :::", end=" ")
         # print(usersDict)
         #print(len(usersDict), "-----------------")
         return usersDict
 
-#************************ ======== Non-IID Dataset ========== ******************#
+    #************************ ======== Non-IID Dataset ========== ******************#
     nuser = 20
     def mnistnon_IID(data, nuser):
         diff_class = 40
@@ -75,20 +75,20 @@ def Wrapper(batch_size, lr, epoch, clients, rounds):
         diff_class_index = [i for i in range(diff_class)]
         usersDict = {i:np.array([]) for i in range(nuser)}
         indices = np.arange(diff_class*images)
-    # print(indices)
+        # print(indices)
         unsorted_label = data.train_labels.numpy()
-    #print(len(unsorted_label), "-----------")
+        #print(len(unsorted_label), "-----------")
         indices_unsorted = np.vstack((indices,unsorted_label))
-    #print("---*******")
-    # print(indices_unsorted)
+        #print("---*******")
+        # print(indices_unsorted)
         indices_label = indices_unsorted[:,indices_unsorted[1,:].argsort()]
-    # print(indices_label, "*********")
+        # print(indices_label, "*********")
         indices = indices_label[0,:]
-    # print(indices, "0000")
+        # print(indices, "0000")
         for i in range(nuser):
-        #np.random.seed(i)
-        # print(diff_class_index, "-------")
-        #print(diff_class[i])
+            #np.random.seed(i)
+            # print(diff_class_index, "-------")
+            #print(diff_class[i])
             temp = set(np.random.choice(diff_class_index, 2 ,replace=False))
             print(temp)
             diff_class_index = list(set(diff_class_index)- temp)
@@ -102,12 +102,12 @@ def Wrapper(batch_size, lr, epoch, clients, rounds):
     #transform=transforms.ToTensor()
     mnist_trainset = datasets.MNIST(root='./data', train=True, download=True, transform= transform)          
     mnist_testset = datasets.MNIST(root='./data', train=False, download=True,transform= transform)
-#print(mnist_testset.data.max())
-# print(mnist_testset.data.shape)
-#print(mnist_trainset.targets)
-# print(mnist_testset)
+    #print(mnist_testset.data.max())
+    # print(mnist_testset.data.shape)
+    #print(mnist_trainset.targets)
+    # print(mnist_testset)
     k = len(set(mnist_testset.targets.numpy()))
-# print(k)
+    # print(k)
     if(args['datatype'] == 'iid'):
         train_group=mnistIID(mnist_trainset,nUsers) #dictionary containing dictionary for 20 clients 
         test_group=mnistIID(mnist_testset,nUsers)
@@ -116,23 +116,23 @@ def Wrapper(batch_size, lr, epoch, clients, rounds):
     elif(args['datatype'] == 'non_iid'):
         train_group=mnistnon_IID(mnist_trainset,nUsers)
         test_group=mnistIID(mnist_testset,nUsers)
-    #print(len(train_group[1]))
-    #print(len(test_group[1]))
+        #print(len(train_group[1]))
+        #print(len(test_group[1]))
 
 
     class FedDataset(Dataset):
         def __init__(self,dataset,indx):
             self.dataset=dataset
             self.indx=[int(i) for i in indx]
-        
+            
         def __len__(self):
             return len(self.indx)
-    
+        
         def __getitem__(self,item):
             images,labels=self.dataset[self.indx[item]]
             return (torch.tensor(images).clone().detach(),torch.tensor(labels).clone().detach())
-    
-    
+        
+        
     def getImage(dataset,indices,batch_size):#load images using the class FedDataset
         return DataLoader(FedDataset(dataset,indices),batch_size=batch_size,shuffle=True)
 
@@ -141,24 +141,24 @@ def Wrapper(batch_size, lr, epoch, clients, rounds):
         client['mnist_trainset'] = getImage(mnist_trainset, trainset_id_list, args['batch_size'])
         client['mnist_testset'] = getImage(mnist_testset, list(test_group[inx]), args['batch_size'])
         client['samples'] = len(trainset_id_list)/args['images']
-  #print(client['mnist_trainset'])
+    #print(client['mnist_trainset'])
 
     print("==================================")
-# for inx, client in enumerate(clients):
-  # client['mnist_testset'] = getImage(mnist_testset, list(test_group[inx]), args['batch_size'])
-  # client['samples'] = len(trainset_id_list)/args['images']
-  # print(client['mnist_testset'])
-  # print(inx, client['mnist_testset'])
-  # print("---------------------------")
-  # print(inx, client['mnist_trainset'])
-#   print("===========================")
-# print("============================")
-# print(type(client['mnist_testset'])) 
-# print(type(client)) 
-# print("============================")
-# ================================= #
+    # for inx, client in enumerate(clients):
+    # client['mnist_testset'] = getImage(mnist_testset, list(test_group[inx]), args['batch_size'])
+    # client['samples'] = len(trainset_id_list)/args['images']
+    # print(client['mnist_testset'])
+    # print(inx, client['mnist_testset'])
+    # print("---------------------------")
+    # print(inx, client['mnist_trainset'])
+    #   print("===========================")
+    # print("============================")
+    # print(type(client['mnist_testset'])) 
+    # print(type(client)) 
+    # print("============================")
+    # ================================= #
 
-#=================Global Model===================#
+    #=================Global Model===================#
     transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
     global_test_dataset = datasets.MNIST('./', train=False, download=True, transform=transform)
     global_test_loader = DataLoader(global_test_dataset, batch_size=args['batch_size'], shuffle=True)
@@ -188,19 +188,19 @@ def Wrapper(batch_size, lr, epoch, clients, rounds):
         # print(client)
         # iterate over federated data
         for epoch in range(1,args['epochs']+1):
-            for batch_idx, (data, target) in enumerate(client['mnist_trainset']):
-                data = data.send(client['hook'])
-                target = target.send(client['hook'])
-                data, target = data.to(device), target.to(device)
-                client['optimizer'].zero_grad()
-                output = client['model'](data)
-                loss = Func.nll_loss(output, target)
-                loss.backward()
-                client['optimizer'].step()
+          for batch_idx, (data, target) in enumerate(client['mnist_trainset']):
+            data = data.send(client['hook'])
+            target = target.send(client['hook'])
+            data, target = data.to(device), target.to(device)
+            client['optimizer'].zero_grad()
+            output = client['model'](data)
+            loss = Func.nll_loss(output, target)
+            loss.backward()
+            client['optimizer'].step()
             # cli['optimizer'].zero_grad()
             # optimizer.step()
             
-    
+            print("==========ye chalega kya========================")
             if batch_idx % args['log_interval'] == 0:
                 loss = loss.get()
                 # print(loss.item())
@@ -312,7 +312,6 @@ def Wrapper(batch_size, lr, epoch, clients, rounds):
     print(accu)
     return accu
 
+
 Accuracy1 = Wrapper(64,0.04,4,20,100)
-
-
-
+print(Accuracy1)
