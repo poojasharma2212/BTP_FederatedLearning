@@ -19,17 +19,17 @@ import random
 # import mat
 import syft as sy
 
-def Wrapper(batch_size, lr, epoch, no_of_clients, rounds):
+def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds):
     count = 0
     args = {
         'batch_size' : batch_size,
         'test_batch_size' : 1000,
         'lr' : lr,
         'log_interval' : 10,
-        'epochs' :epoch,
+        'epochs' :no_of_epoch,
         'clients' : no_of_clients,
         'seed' : 0,
-        'rounds' : rounds,
+        'rounds' : no_of_rounds,
         'C' : 0.9,
         'drop_rate' : 0.1,
         'images' : 60000,
@@ -200,7 +200,7 @@ def Wrapper(batch_size, lr, epoch, no_of_clients, rounds):
             # cli['optimizer'].zero_grad()
             # optimizer.step()
             
-            print("==========ye chalega kya========================")
+            # print("==========ye chalega kya========================")
             if batch_idx % args['log_interval'] == 0:
                 loss = loss.get()
                 # print(loss.item())
