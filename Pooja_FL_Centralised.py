@@ -90,7 +90,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds):
             # print(diff_class_index, "-------")
             #print(diff_class[i])
             temp = set(np.random.choice(diff_class_index, 2 ,replace=False))
-            print(temp)
+            # print(temp)
             diff_class_index = list(set(diff_class_index)- temp)
             for x in temp:
                 usersDict[i] = np.concatenate((usersDict[i], indices[x*images:(x+1)*images]), axis=0)
@@ -204,14 +204,14 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds):
             if batch_idx % args['log_interval'] == 0:
                 loss = loss.get()
                 # print(loss.item())
-                print(' Model  {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                        client['hook'].id, epoch,
-                        batch_idx * args['batch_size'], # no of images done
-                        len(client['mnist_trainset']) * args['batch_size'], # total images left
-                        100. * batch_idx / len(client['mnist_trainset']), 
-                        loss.item()
-                    )
-                )
+                # print(' Model  {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+                #         client['hook'].id, epoch,
+                #         batch_idx * args['batch_size'], # no of images done
+                #         len(client['mnist_trainset']) * args['batch_size'], # total images left
+                #         100. * batch_idx / len(client['mnist_trainset']), 
+                #         loss.item()
+                #     )
+                # )
                 # print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                 #             client['hook'].id,
                 #             epoch, batch_idx * args['batch_size'], len(client['mnist_trainset']) * args['batch_size'], 
@@ -326,6 +326,7 @@ for i in range(20):
 for i in range(len(sum)):
     sum[i] = sum[i]/10
 #weight = sum/10
+
 print(final_acc)
 
 print("====================final ans")
