@@ -309,9 +309,19 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds):
 
 
     print("============ Accuracy ===========")
-    print(accu)
+    # print(accu)
     return accu
 
+final_acc = []
+sum = 0
+for i in range(10):
+    accuracy1 = Wrapper(64,0.04,4,20,150)
+    print(accuracy1)
+    sum = accuracy1 + sum 
+    weight = sum/20
+    final_acc[i] = accuracy1
 
-Accuracy1 = Wrapper(64,0.04,4,20,150)
-print(Accuracy1)
+print(final_acc)
+
+print("====================final ans")
+print(weight)
