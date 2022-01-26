@@ -115,7 +115,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds):
         print(len(test_group[1]))
     elif(args['datatype'] == 'non_iid'):
         train_group=mnistnon_IID(mnist_trainset,nUsers)
-        test_group=mnistIID(mnist_testset,nUsers)
+        test_group=mnistnon_IID(mnist_testset,nUsers)
         #print(len(train_group[1]))
         #print(len(test_group[1]))
 
@@ -313,15 +313,20 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds):
     return accu
 
 final_acc = []
-sum = 0
+sum = [] 
+weight = []
 for i in range(10):
-    accuracy1 = Wrapper(64,0.04,4,20,150)
+    accuracy1 = Wrapper(64,0.04,4,20,10)
     print(accuracy1)
-    sum = accuracy1 + sum 
-    weight = sum/20
-    final_acc[i] = accuracy1
+    if(len(sum)==0):
+        sum = accuracy1
+    for j in range(len(accuracy1)):
+        sum[j] = sum[j] + accuracy1[j]
 
-print(final_acc)
+for i in range(len(sum)):
+    sum[i] = sum[i]/10
+#weight = sum/10
+#print(final_acc)
 
 print("====================final ans")
-print(weight)
+print(sum)
