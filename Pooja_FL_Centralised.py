@@ -322,12 +322,12 @@ for i in range(20):
         sum = accuracy1
     for j in range(len(accuracy1)):
         sum[j] = sum[j] + accuracy1[j]
-    final_acc[i] = accuracy1
+    # final_acc[i] = accuracy1
 for i in range(len(sum)):
     sum[i] = sum[i]/10
 #weight = sum/10
 
-print(final_acc)
+# print(final_acc)
 
 print("====================final ans")
 print(sum)
