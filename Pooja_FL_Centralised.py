@@ -56,7 +56,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,hook):
         usersDict,indices={},[i for i in (range(len(data)))] #length of dataset is 60k
         for i in range(nUsers):
             np.random.seed(i) 
-            usersDict[i]=set(np.random.choice(indices,nImages,replace=False)) 
+            usersDict[i]=set(np.random.choice(indices,nImages,replace=True)) 
             indices=list(set(indices)-usersDict[i])
             # print("i :::", end=" ")
         # print(usersDict)
@@ -85,7 +85,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,hook):
             #np.random.seed(i)
             # print(diff_class_index, "-------")
             #print(diff_class[i])
-            temp = set(np.random.choice(diff_class_index, 2 ,replace=False))
+            temp = set(np.random.choice(diff_class_index, 2 ,replace=True))
             print(temp)
             diff_class_index = list(set(diff_class_index)- temp)
             for x in temp:
@@ -316,25 +316,25 @@ weight = []
 
 hook = sy.TorchHook(torch)
 
-# for i in range(10):
-#     accuracy1 = Wrapper(64,0.02,2,20,5,hook)
-#     print(accuracy1)
-#     if(len(sum)==0):
-#         sum = accuracy1
-#     for j in range(len(accuracy1)):
-#         sum[j] = sum[j] + accuracy1[j]
-#     # final_acc[i] = accuracy1
-# for i in range(len(sum)):
-#     sum[i] = sum[i]/10
-# #weight = sum/10
+for i in range(4):
+    accuracy1 = Wrapper(64,0.02,2,20,4,hook)
+    print(accuracy1)
+    if(len(sum)==0):
+        sum = accuracy1
+    for j in range(len(accuracy1)):
+        sum[j] = sum[j] + accuracy1[j]
+    # final_acc[i] = accuracy1
+for i in range(len(sum)):
+    sum[i] = sum[i]/10
+#weight = sum/10
 
 # # print(final_acc)
 
 # print("====================final ans")
-# print(sum)
-accuracy1 = Wrapper(64,0.02,2,20,5,hook)
-print(accuracy1)
-accuracy2 = Wrapper(64,0.02,2,20,5,hook)
-print(accuracy2)
-accuracy3 = Wrapper(64,0.02,2,20,5,hook)
-print(accuracy3)
+# # print(sum)
+# accuracy1 = Wrapper(64,0.02,2,20,5,hook)
+# print(accuracy1)
+# accuracy2 = Wrapper(64,0.02,2,20,5,hook)
+# print(accuracy2)
+# accuracy3 = Wrapper(64,0.02,2,20,5,hook)
+# print(accuracy3)
