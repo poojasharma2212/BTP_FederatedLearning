@@ -1,4 +1,3 @@
-from numpy.core.numeric import indices
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -13,8 +12,6 @@ from torch.utils.data import DataLoader, Dataset
 import logging
 import os
 
-# import Dataset
-# from Dataset
 import random
 # import mat
 import syft as sy
@@ -129,7 +126,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,hook):
         
         def __getitem__(self,item):
             images,labels=self.dataset[self.indx[item]]
-            return (torch.tensor(images),torch.tensor(labels))
+            return (torch.tensor(images).clone().detach(),torch.tensor(labels).clone().detach())
         
         
     def getImage(dataset,indices,batch_size):#load images using the class FedDataset
@@ -318,7 +315,7 @@ weight = []
 hook = sy.TorchHook(torch)
 
 for i in range(10):
-    accuracy1 = Wrapper(64,0.02,2,20,10,hook)
+    accuracy1 = Wrapper(64,0.02,2,20,5,hook)
     print(accuracy1)
     if(len(sum)==0):
         sum = accuracy1
