@@ -19,7 +19,7 @@ import random
 # import mat
 import syft as sy
 
-def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds):
+def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,hook):
     count = 0
     args = {
         'batch_size' : batch_size,
@@ -43,7 +43,6 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds):
     device = torch.device("cuda" if use_cuda else "cpu")
     kwargs = {'num_workers': 1, 'pin_memory': True} if use_cuda else {}
 
-    hook = sy.TorchHook(torch)
     clients = []
 
     for i in range(args['clients']):
@@ -315,8 +314,11 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds):
 final_acc = []
 sum = [] 
 weight = []
+
+hook = sy.TorchHook(torch)
+
 for i in range(10):
-    accuracy1 = Wrapper(64,0.02,2,20,10)
+    accuracy1 = Wrapper(64,0.02,2,20,10,hook)
     print(accuracy1)
     if(len(sum)==0):
         sum = accuracy1
