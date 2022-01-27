@@ -126,7 +126,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,hook):
         
         def __getitem__(self,item):
             images,labels=self.dataset[self.indx[item]]
-            return (images.clone().detach(),labels.clone().detach())
+            return (torch.tensor(images,requires_grad=True),torch.tensor(labels,requires_grad=True))
         
         
     def getImage(dataset,indices,batch_size):#load images using the class FedDataset
