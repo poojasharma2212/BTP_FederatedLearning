@@ -38,7 +38,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,hook):
 
     use_cuda = args['use_cuda'] and torch.cuda.is_available()
     device = torch.device("cuda" if use_cuda else "cpu")
-    kwargs = {'num_workers': 1, 'pin_memory': True} if use_cuda else {}
+    #kwargs = {'num_workers': 1, 'pin_memory': True} if use_cuda else {}
 
     clients = []
 
@@ -126,8 +126,8 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,hook):
         
         def __getitem__(self,item):
             images,labels=self.dataset[self.indx[item]]
-            print(type(torch.tensor(labels)))
-            return (torch.tensor(images),torch.tensor(labels))
+        #   print(type(torch.tensor(labels)))
+            return ((images).clone().detach(),torch.tensor(labels))
         
         
     def getImage(dataset,indices,batch_size):#load images using the class FedDataset
