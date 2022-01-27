@@ -324,7 +324,7 @@ for i in range(20):
         sum[j] = sum[j] + accuracy1[j]
     # final_acc[i] = accuracy1
 for i in range(len(sum)):
-    sum[i] = sum[i]/10
+    sum[i] = sum[i]/20
 #weight = sum/10
 
 # print(final_acc)
