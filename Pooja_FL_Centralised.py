@@ -332,7 +332,7 @@ hook = sy.TorchHook(torch)
 
 # print("====================final ans")
 # # print(sum)
-accuracy1 = Wrapper(64,0.02,2,20,3,hook)
+accuracy1 = Wrapper(64,0.04,4,20,150,hook)
 print(accuracy1)
 # accuracy2 = Wrapper(64,0.02,2,20,5,hook)
 # print(accuracy2)
