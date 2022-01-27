@@ -126,7 +126,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,hook):
         
         def __getitem__(self,item):
             images,labels=self.dataset[self.indx[item]]
-            # print(type(labels))
+            print(type(torch.tensor(labels)))
             return (torch.tensor(images),torch.tensor(labels))
         
         
