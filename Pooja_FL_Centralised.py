@@ -86,7 +86,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,hook):
             # print(diff_class_index, "-------")
             #print(diff_class[i])
             temp = set(np.random.choice(diff_class_index, 2 ,replace=False))
-            # print(temp)
+            print(temp)
             diff_class_index = list(set(diff_class_index)- temp)
             for x in temp:
                 usersDict[i] = np.concatenate((usersDict[i], indices[x*images:(x+1)*images]), axis=0)
