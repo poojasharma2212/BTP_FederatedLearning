@@ -18,7 +18,7 @@ import syft as sy
 Ps=2 #signal power
 key=[]
 for i in range (60000): #generating a random password to activate training (Pilot signal)
-    temp=random.rasndint(0,1)
+    temp=random.randint(0,1)
     key.append(temp)
 
 key_n=[0]*len(key)
