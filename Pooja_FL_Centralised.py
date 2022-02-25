@@ -449,8 +449,8 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
 
             for csi_i in csi:
                 P_optimal = max(0,(1/mu_min - 1/csi_i))
-                P_wfa = math.log( 1+ P_optimal**csi_i)
-                P_total += P_wfa
+                wfa1 = math.log( 1+ P_optimal**csi_i)
+                P_total += P_optimal
             
             len_ac = len(active_clients)
             g = wfa1 - mu_min* (P_total - Ps*len_ac)
