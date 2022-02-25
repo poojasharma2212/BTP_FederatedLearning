@@ -218,7 +218,9 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
         snr_val = 10**(snr/10)
 
         absh = csi*Optimal_Power/snr_val
-        x=random.uniform(0,absh)
+        x=random.random(0,absh)
+        #std = math.sqrt(Ps/snr_val)
+        #y = random.random()
         y=math.sqrt(absh*absh-x*x)
         std=math.sqrt(Optimal_Power/snr_val*absh*absh)
 
@@ -248,7 +250,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
         client['model'].send(client['hook'])
         print("Client:",client['hook'].id)
 
-        print("CSI",abs(h)/(std*std))
+        print("CSI",csi)
         print()
 
         key_received = h*key_array+(np.random.randn(len(key_array))*std*2)
@@ -267,7 +269,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
         # print(client)
         # iterate over federated data
 
-        Xor_sum = sum(np.bitwise_xor(key_received,key))
+        Xor_sum = sum(np.bitwise_xor(key,key_received))
         error = Xor_sum/len(key)
         if(error == 0 and Optimal_Power >0):
             Client_Status = True
@@ -277,7 +279,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
                     data = data.send(client['hook'])
                     target = target.send(client['hook'])
                     data, target = data.to(device), target.to(device)
-                    client['optimizer'].zero_grad()
+                    #client['optimizer'].zero_grad()
                     output = client['model'](data)
                     loss = Func.nll_loss(output, target)
                     loss.backward()
@@ -438,7 +440,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
         snr = [] 
         csi = []
         
-        for i in range(args['clients']):
+        for i in range(args['clients']-1):
             # print("csi")
             csi.append(random.uniform(args['lowest_csi'], args['highest_csi']))
             snr.append(random.randint(args['lowest_snr'], args['highest_snr']))
@@ -489,7 +491,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
         
 
         for csi_i in csi :
-            power.append(max(0,(1/mu_min - 1/csi_i)))
+            power.append(max(0,(1/mu - 1/csi_i)))
         # fig,ax=plt.subplots()
         # line1=ax.plot(csi,power,label="channel power allocated")
         # line2=ax.plot(csi,[1/mu_min]*len(csi),label="maximum power allocated")
@@ -515,20 +517,20 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
         print() 
 
         #ClientUpdateVal(clients,key,key_array,power_client)
-        good_channel_odd,power_odd=ClientUpdateVal(client_good_channel,key,key_array,0)
+        #good_channel_odd,power_odd=ClientUpdateVal(client_good_channel,key,key_array,0)
     
         print()
 
         print("Clients having a good channel and considered for averaging")
-        for no in range (len(good_channel_odd)):
-            print(good_channel_odd[no]['hook'].id)
+        # for no in range (len(good_channel_odd)):
+        #     print(good_channel_odd[no]['hook'].id)
         # Averaging 
-        global_model = averageModels(global_model, good_channel_odd)
+        global_model = averageModels(global_model,client_good_channel)
         
         # Testing the average model
         test(args,global_model, device, global_test_loader, count)
             
-        print("Total Power =",power_odd+power_1)
+        print("Total Power =",power_1)
         print()
 
         for client in clients:
