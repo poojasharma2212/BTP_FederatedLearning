@@ -33,7 +33,7 @@ for i in range (len(key)):   #bpsk modulation
         
 key_array =np.array(key_n)
 
-#def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,hook,key,key_array,Ps):
+def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,hook,key,key_array,Ps):
     #count = 0
     args = {
         'batch_size' : 64,
