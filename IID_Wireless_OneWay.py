@@ -308,7 +308,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
         
         return Client_Status, Optimal_Power
 
-    def ClientUpdateVal(clients,key,key_array,power_client):
+    def ClientUpdateVal(clients,key,key_array,power):
         good_channel =[]
         for client in clients:
             snr=random.randint(args['lowest_snr'],args['highest_snr'])  
