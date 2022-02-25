@@ -34,7 +34,7 @@ for i in range (len(key)):   #bpsk modulation
 key_array =np.array(key_n)
 
 def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_array,Ps):
-    #count = 0
+    count = 0
     print("yes")
     args = {
         'batch_size' : 64,
@@ -456,7 +456,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
             if(g<wfa):
                 mu = mu_min
                 wfa = g
-            mu+= 0.000009
+            mu+= 0.00002
 
 
             
@@ -500,7 +500,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
         print() 
 
         #ClientUpdateVal(clients,key,key_array,power_client)
-        good_channel_odd,power_odd=ClientUpdateVal(client_good_channel,key,key_array,2)
+        good_channel_odd,power_odd=ClientUpdateVal(client_good_channel,key,key_array,0)
     
         print()
         # Averaging 
