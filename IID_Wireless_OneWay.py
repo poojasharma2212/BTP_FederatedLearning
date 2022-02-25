@@ -218,7 +218,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
         snr_val = 10**(snr/10)
 
         absh = csi*Optimal_Power/snr_val
-        x=random.random(0,absh)
+        x=random.uniform(0,absh)
         #std = math.sqrt(Ps/snr_val)
         #y = random.random()
         y=math.sqrt(absh*absh-x*x)
