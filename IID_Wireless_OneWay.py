@@ -476,10 +476,10 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
             
         # print('=============\\\\\\\=====================')
         idx = 0
-        power = 0
+        power_1 = 0
         for client in active_clients:
             print("train")
-            good_channel, power = train(args,client, device,mu,csi[idx],snr[idx],key, key_array )
+            good_channel, power_1 = train(args,client, device,mu,csi[idx],snr[idx],key, key_array )
             if(good_channel == True):
                 client_good_channel.append(client)
             idx = idx+1
@@ -529,7 +529,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
         # Testing the average model
         test(args,global_model, device, global_test_loader, count)
             
-        print("Total Power =",power_odd+power)
+        print("Total Power =",power_odd+power_1)
         print()
 
         for client in clients:
