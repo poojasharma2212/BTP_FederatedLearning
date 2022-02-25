@@ -35,6 +35,7 @@ key_array =np.array(key_n)
 
 def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_array,Ps):
     #count = 0
+    print("yes")
     args = {
         'batch_size' : 64,
         'test_batch_size' : 1000,
