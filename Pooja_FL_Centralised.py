@@ -430,6 +430,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
         csi = []
         
         for i in range(args['clients']):
+            print("csi")
             csi.append(random.uniform(args['lowest_csi'], args['highest_csi']))
             snr.append(random.randint(args['lowest_snr'], args['highest_snr']))
 
