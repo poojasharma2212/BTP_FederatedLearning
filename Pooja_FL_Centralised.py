@@ -208,7 +208,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
     def train(args, client, device,mu,csi,snr,key,key_array):
         Client_Status = False
         client['model'].train()
-        if(csi_i==0 or mu_min==0):
+        if(csi==0 or mu==0):
             Optimal_Power = 0
         else:
             Optimal_Power = max(0,(1/mu_min - 1/csi_i))
