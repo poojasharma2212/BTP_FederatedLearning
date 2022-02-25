@@ -33,17 +33,17 @@ for i in range (len(key)):   #bpsk modulation
         
 key_array =np.array(key_n)
 
-def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,hook,key,key_array,Ps):
+#def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,hook,key,key_array,Ps):
     count = 0
     args = {
-        'batch_size' : batch_size,
+        'batch_size' : 64,
         'test_batch_size' : 1000,
-        'lr' : lr,
+        'lr' : 0.01,
         'log_interval' : 10,
-        'epochs' :no_of_epoch,
-        'clients' : no_of_clients,
+        'epochs' : 3,
+        'clients' : 20,
         'seed' : 0,
-        'rounds' : no_of_rounds,
+        'rounds' : 10,
         'C' : 0.9,
         'lowest_snr' : 0,
         'highest_snr' : 38,
@@ -514,13 +514,13 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,hook,key,ke
 
     print("============ Accuracy ===========")
     # print(accu)
-    return accu
+    #return accu
 
-final_acc = []
-sum = [] 
-weight = []
+#final_acc = []
+#sum = [] 
+#weight = []
 
-hook = sy.TorchHook(torch)
+# hook = sy.TorchHook(torch)
 
 # for i in range(4):
 #     accuracy1 = Wrapper(64,0.02,2,20,4,hook)
@@ -538,7 +538,7 @@ hook = sy.TorchHook(torch)
 
 # print("====================final ans")
 # # print(sum)
-accuracy1 = Wrapper(64,0.01,3,20,10,hook,key,key_array,Ps)
+#accuracy1 = Wrapper(64,0.01,3,20,10,hook,key,key_array,Ps)
 print(accuracy1)
 # accuracy2 = Wrapper(64,0.02,2,20,5,hook)
 # print(accuracy2)
