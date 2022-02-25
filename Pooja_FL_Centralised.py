@@ -465,7 +465,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
             if(g<wfa):
                 mu = mu_min
                 wfa = g
-            mu_min+= 0.00002
+            mu_min+= 0.000009
 
 
             
@@ -474,7 +474,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
 
         for client in active_clients:
             print("train")
-            good_channel = train(args,client, device,mu_min, snr[idx],csi[idx],key, key_array )
+            good_channel = train(args,client, device,mu,csi[idx],snr[idx],key, key_array )
             if(good_channel == True):
                 client_good_channel.append(client)
             idx = idx+1
@@ -482,7 +482,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
             # print(client)
         
         power = [] 
-        csi.sort()
+        
 
         for csi_i in csi :
             power.append(max(0,(1/mu_min - 1/csi_i)))
@@ -499,6 +499,8 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
     #         test(args, client['model'], device, client['testset'], client['hook'].id)
 
         print()
+        csi.sort()
+
         print("Clients with good channel are considered")
         for no in range (len(client_good_channel)):
             print(client_good_channel[no]['hook'].id)
@@ -509,7 +511,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
         print() 
 
         #ClientUpdateVal(clients,key,key_array,power_client)
-        good_channel_odd,power_odd=ClientUpdateVal(client_good_channel,key,key_array,0)
+        #good_channel_odd,power_odd=ClientUpdateVal(client_good_channel,key,key_array,0)
     
         print()
         # Averaging 
