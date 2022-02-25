@@ -1,3 +1,4 @@
+from curses import def_shell_mode
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -449,7 +450,10 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
 
             for csi_i in csi:
                 # print(csi_i)
-                P_optimal = max(0,(1/mu_min - 1/csi_i))
+                if(csi_i==0):
+                    P_optimal = 0
+                else:
+                    P_optimal = max(0,(1/mu_min - 1/csi_i))
                 wfa1 = math.log( 1+ P_optimal**csi_i)
                 P_total += P_optimal
             
