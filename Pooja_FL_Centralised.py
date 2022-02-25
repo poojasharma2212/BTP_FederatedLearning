@@ -408,7 +408,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
         return global_model
 
     for fed_round in range(args['rounds']):
-        
+        print("fed_round")
         # number of selected clients
         m = int(max(args['C'] * args['clients'], 1)) #at least 1 client is selected for training
 
