@@ -303,6 +303,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
 
     def ClientUpdateVal(clients,key,key_array,power_client):
         good_channel =[]
+        power = 0
         for client in clients:
             snr=random.randint(args['lowest_snr'],args['highest_snr'])  
             print("snr in dB = ",snr)
