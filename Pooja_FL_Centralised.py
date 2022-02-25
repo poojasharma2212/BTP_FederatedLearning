@@ -276,7 +276,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,hook,key,ke
                     # cli['optimizer'].zero_grad()
                     # optimizer.step()
                     
-                    # print("==========ye chalega kya========================")
+                    print("==========ye chalega kya========================")
                     if batch_idx % args['log_interval'] == 0:
                         loss = loss.get()
                         # print(loss.item())
@@ -350,6 +350,8 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,hook,key,ke
             else:
                 print("This is a Poor Channel")    
             print()
+
+        return good_channel, power
 
     accu = []
     def test(args,model, device, test_loader, count):
@@ -459,8 +461,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,hook,key,ke
 
         for client in active_clients:
             # print(client)
-            good_channel = train(args,client, device,key_array, key, snr[idx], csi[idx], mu_min)
-
+            good_channel = train(args,client, device,mu_min, snr[idx],csi[idx],key, key_array )
             if(good_channel == True):
                 client_good_channel.append(client)
             idx = idx+1
@@ -489,6 +490,15 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,hook,key,ke
         for no in range (len(client_good_channel)):
             print(client_good_channel[no]['hook'].id)
 
+
+        print()
+        print("Sending data back to Server")
+        print() 
+
+        #ClientUpdateVal(clients,key,key_array,power_client)
+        good_channel_odd,power_odd=ClientUpdateVal(client_good_channel,key,key_array,2)
+    
+        print()
         # Averaging 
         global_model = averageModels(global_model, client_good_channel)
         
