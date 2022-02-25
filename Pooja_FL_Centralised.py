@@ -441,7 +441,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
         mu_min = 1e-15
         mu = 0
 
-        wfa = 9223372036854775807
+        wfa = 3.402823466E+38
 
         while(mu<=1):
             wfa1 = 0
