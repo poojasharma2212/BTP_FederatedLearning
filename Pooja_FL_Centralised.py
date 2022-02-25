@@ -450,7 +450,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
 
             for csi_i in csi:
                 # print(csi_i)
-                if(csi_i==0):
+                if(csi_i==0 or mu_min==0):
                     P_optimal = 0
                 else:
                     P_optimal = max(0,(1/mu_min - 1/csi_i))
