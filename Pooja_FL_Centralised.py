@@ -68,7 +68,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
     for i in range(args['clients']):
         clients.append({'hook': sy.VirtualWorker(hook, id="client{}".format(i+1))})
 
-    print(clients) 
+    # print(clients) 
     #os.chdir("/content/drive/MyDrive/FL_ZaaPoo/data/MNIST/raw")
 
     #****************** ========== IID_Dataset ========== ******************** #
@@ -165,7 +165,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
         client['samples'] = len(trainset_id_list)/args['images']
     #print(client['mnist_trainset'])
 
-    print("================yyyyyyy==================")
+    # print("================yyyyyyy==================")
     # for inx, client in enumerate(clients):
     # client['mnist_testset'] = getImage(mnist_testset, list(test_group[inx]), args['batch_size'])
     # client['samples'] = len(trainset_id_list)/args['images']
@@ -408,7 +408,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
         return global_model
 
     for fed_round in range(args['rounds']):
-        print("fed_round")
+        # print("fed_round")
         # number of selected clients
         m = int(max(args['C'] * args['clients'], 1)) #at least 1 client is selected for training
 
@@ -430,7 +430,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
         csi = []
         
         for i in range(args['clients']):
-            print("csi")
+            # print("csi")
             csi.append(random.uniform(args['lowest_csi'], args['highest_csi']))
             snr.append(random.randint(args['lowest_snr'], args['highest_snr']))
 
@@ -442,7 +442,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
 
         wfa = 9223372036854775807
 
-        while(mu_min<=1):
+        while(mu<=1):
             wfa1 = 0
             P_total = 0
 
