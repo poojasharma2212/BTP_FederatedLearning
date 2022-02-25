@@ -45,7 +45,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
         'epochs' : 3,
         'clients' : 20,
         'seed' : 0,
-        'rounds' : 10,
+        'rounds' : 7,
         'C' : 0.9,
         'lowest_snr' : 0,
         'highest_snr' : 38,
@@ -283,7 +283,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
                     # cli['optimizer'].zero_grad()
                     # optimizer.step()
                     
-                    print("==========ye chalega kya========================")
+                    #print("==========ye chalega kya========================")
                     if batch_idx % args['log_interval'] == 0:
                         loss = loss.get()
                         # print(loss.item())
