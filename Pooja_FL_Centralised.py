@@ -436,7 +436,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
             snr.append(random.randint(args['lowest_snr'], args['highest_snr']))
 
            # snr.append(random.randint())
-        
+        print("CSI=========>>>>>>>>>>>>>",csi)
         #===============Water Filling Algorithm ==============
         mu_min = 1e-15
         mu = 0
@@ -448,7 +448,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
             P_total = 0
 
             for csi_i in csi:
-                print(csi_i)
+                # print(csi_i)
                 P_optimal = max(0,(1/mu_min - 1/csi_i))
                 wfa1 = math.log( 1+ P_optimal**csi_i)
                 P_total += P_optimal
