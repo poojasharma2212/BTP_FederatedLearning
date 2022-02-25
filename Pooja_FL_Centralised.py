@@ -463,7 +463,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
         idx = 0
 
         for client in active_clients:
-            # print(client)
+            print("train")
             good_channel = train(args,client, device,mu_min, snr[idx],csi[idx],key, key_array )
             if(good_channel == True):
                 client_good_channel.append(client)
