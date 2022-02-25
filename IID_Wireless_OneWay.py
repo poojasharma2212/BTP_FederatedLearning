@@ -279,7 +279,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
                     data = data.send(client['hook'])
                     target = target.send(client['hook'])
                     data, target = data.to(device), target.to(device)
-                    #client['optimizer'].zero_grad()
+                    client['optimizer'].zero_grad()
                     output = client['model'](data)
                     loss = Func.nll_loss(output, target)
                     loss.backward()
