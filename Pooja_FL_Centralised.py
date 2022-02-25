@@ -34,7 +34,7 @@ for i in range (len(key)):   #bpsk modulation
 key_array =np.array(key_n)
 
 #def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,hook,key,key_array,Ps):
-    count = 0
+    #count = 0
     args = {
         'batch_size' : 64,
         'test_batch_size' : 1000,
@@ -539,7 +539,7 @@ key_array =np.array(key_n)
 # print("====================final ans")
 # # print(sum)
 #accuracy1 = Wrapper(64,0.01,3,20,10,hook,key,key_array,Ps)
-print(accuracy1)
+#print(accuracy1)
 # accuracy2 = Wrapper(64,0.02,2,20,5,hook)
 # print(accuracy2)
 # accuracy3 = Wrapper(64,0.02,2,20,5,hook)
