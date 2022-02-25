@@ -471,6 +471,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
             if(g<wfa):
                 mu = mu_min
                 wfa = g
+            print("mu ki value", mu)
             mu_min+= 0.00004
 
 
