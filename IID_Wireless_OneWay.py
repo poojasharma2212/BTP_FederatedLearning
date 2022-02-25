@@ -45,7 +45,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
         'epochs' : 3,
         'clients' : 20,
         'seed' : 0,
-        'rounds' : 7,
+        'rounds' : 20,
         'C' : 0.9,
         'lowest_snr' : 0,
         'highest_snr' : 38,
@@ -480,7 +480,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
         power_1 = 0
         for client in active_clients:
             print("train")
-            good_channel, power_1 = train(args,client, device,mu,csi[idx],snr[idx],key, key_array )
+            good_channel = train(args,client, device,mu,csi[idx],snr[idx],key, key_array )
             if(good_channel == True):
                 client_good_channel.append(client)
             idx = idx+1
@@ -489,7 +489,6 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
         
         power = [] 
         
-
         for csi_i in csi :
             power.append(max(0,(1/mu - 1/csi_i)))
         # fig,ax=plt.subplots()
@@ -511,11 +510,6 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
         for no in range (len(client_good_channel)):
             print(client_good_channel[no]['hook'].id)
 
-
-        print()
-        print("Sending data back to Server")
-        print() 
-
         #ClientUpdateVal(clients,key,key_array,power_client)
         #good_channel_odd,power_odd=ClientUpdateVal(client_good_channel,key,key_array,0)
     
@@ -530,9 +524,6 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
         # Testing the average model
         test(args,global_model, device, global_test_loader, count)
             
-        print("Total Power =",power_1)
-        print()
-
         for client in clients:
             client['model'].load_state_dict(global_model.state_dict())
             
