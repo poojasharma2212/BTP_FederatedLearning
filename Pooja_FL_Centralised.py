@@ -165,7 +165,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
         client['samples'] = len(trainset_id_list)/args['images']
     #print(client['mnist_trainset'])
 
-    print("==================================")
+    print("================yyyyyyy==================")
     # for inx, client in enumerate(clients):
     # client['mnist_testset'] = getImage(mnist_testset, list(test_group[inx]), args['batch_size'])
     # client['samples'] = len(trainset_id_list)/args['images']
