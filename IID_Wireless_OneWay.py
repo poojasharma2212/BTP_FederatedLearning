@@ -467,18 +467,18 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
                 P_total += P_optimal
             
             len_ac = len(active_clients)
-            g = wfa1 - mu_min* (P_total - Ps*len_ac)
+            g = wfa1 - mu_min* (P_total - Ps*(len_ac-1))
             if(g<wfa):
                 mu = mu_min
                 wfa = g
-            mu_min+= 0.000009
+            mu_min+= 0.00004
 
 
             
         # print('=============\\\\\\\=====================')
         idx = 0
         power_1 = 0
-        for client in clients:
+        for client in active_clients:
             print("train")
             good_channel, power_1 = train(args,client, device,mu,csi[idx],snr[idx],key, key_array )
             if(good_channel == True):
