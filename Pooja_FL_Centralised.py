@@ -128,11 +128,13 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
     k = len(set(mnist_testset.targets.numpy()))
     # print(k)
     if(args['datatype'] == 'iid'):
+        print("iid")
         train_group=mnistIID(mnist_trainset,nUsers) #dictionary containing dictionary for 20 clients 
         test_group=mnistIID(mnist_testset,nUsers)
         print(len(train_group[1]))
         print(len(test_group[1]))
     elif(args['datatype'] == 'non_iid'):
+        print("non_iid")
         train_group=mnistnon_IID(mnist_trainset,nUsers)
         test_group=mnistnon_IID(mnist_testset,nUsers)
         print(len(train_group[1]))
