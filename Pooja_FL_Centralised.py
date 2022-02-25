@@ -211,7 +211,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
         if(csi==0 or mu==0):
             Optimal_Power = 0
         else:
-            Optimal_Power = max(0,(1/mu_min - 1/csi_i))
+            Optimal_Power = max(0,(1/mu- 1/csi))
         # Optimal_Power = max(0,(1/mu - 1/csi))   
         print("Optimal power allocated is: ", Optimal_Power)
 
