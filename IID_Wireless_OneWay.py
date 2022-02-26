@@ -1,4 +1,3 @@
-from curses import def_shell_mode
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -247,8 +246,8 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
 
         #     client['model'].conv2.weight.data = y_out
 
-        # client['model'].send(client['hook'])
-        # print("Client:",client['hook'].id)
+        client['model'].send(client['hook'])
+        print("Client:",client['hook'].id)
 
         # print("CSI",csi)
         # print()
@@ -305,8 +304,8 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
                                     client['hook'].id,
                                     epoch, batch_idx * args['batch_size'], len(client['mnist_trainset']) * args['batch_size'], 
                                     100. * batch_idx / len(client['mnist_trainset']), loss.item()))
-        else:
-            print("Channel is not taken for fedavg in this round")
+        #else:
+        #    print("Channel is not taken for fedavg in this round")
         client['model'].get()
         
         #return Client_Status, Optimal_Power
