@@ -529,6 +529,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
     #     # for no in range (len(good_channel_odd)):
     #     #     print(good_channel_odd[no]['hook'].id)
         # Averaging 
+        print("jufhush")
         global_model = averageModels(global_model,active_clients)
         
         # Testing the average model
