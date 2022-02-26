@@ -14,8 +14,8 @@ import os
 import random
 import math
 import syft as sy
-import funtions
-import utils
+from funtions import mnistIID, mnistnon_IID, FedDataset, getImage
+from utils import averageModels
 
 Ps = 2  # signal power
 key = []
