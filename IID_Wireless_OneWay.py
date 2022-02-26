@@ -390,7 +390,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
         print('\nTest set: Average loss for model: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
             test_loss, correct, len(test_loader.dataset),
             100. * correct / len(test_loader.dataset)))
-        accu.append(100. * correct / len(test_loader.dataset))
+        accu.append(1)   #100. * correct / len(test_loader.dataset)
 
     # model = CNN(k)
     #optimizer = optim.SGD(model.parameters(), lr=args['lr'])
