@@ -1,4 +1,10 @@
+import torch
+import numpy as np
+from torch.utils.data.dataset import Dataset
+from torch.utils.data import DataLoader, Dataset
+
 #****************** ========== IID_Dataset ========== ******************** #
+
 
 def mnistIID(data, nUsers):
     nImages = int(len(data)/nUsers)
