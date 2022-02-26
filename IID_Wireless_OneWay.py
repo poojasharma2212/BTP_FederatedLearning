@@ -35,6 +35,8 @@ for i in range(len(key)):  # bpsk modulation
 
 key_array = np.array(key_n)
 
+accu = []
+
 
 def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_array, Ps):
     count = 0
@@ -312,8 +314,6 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
 
     #     return good_channel, power
 
-    accu = []
-
     def test(args, model, device, test_loader, count):
         # print("TEST SET PRDEICTION")
         model.eval()
@@ -337,6 +337,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         print('\nTest set: Average loss for model: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
             test_loss, correct, len(test_loader.dataset),
             100. * correct / len(test_loader.dataset)))
+
         accu.append(100. * correct / len(test_loader.dataset))
 
         print('=====accu======', accu)
