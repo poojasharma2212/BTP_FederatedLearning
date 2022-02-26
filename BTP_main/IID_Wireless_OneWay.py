@@ -9,7 +9,7 @@ from datetime import datetime
 import torchvision
 from torchvision import transforms, datasets
 from torch.utils.data import DataLoader, Dataset
-import logging
+import loggingb
 import os
 import random
 import math
@@ -17,7 +17,7 @@ import syft as sy
 from functions import mnistIID, mnistnon_IID, FedDataset, getImage
 from utils import averageModels
 
-Ps = 5  # signal power
+Ps = 2  # signal power
 key = []
 for i in range(60000):  # generating a random password to activate training (Pilot signal)
     temp = random.randint(0, 1)
@@ -363,7 +363,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
 
         accu.append(100. * correct / len(test_loader.dataset))
 
-        print('=====accu======', accu)
+        #print('=====accu======', accu)
     # model = CNN(k)
     # optimizer = optim.SGD(model.parameters(), lr=args['lr'])
 
