@@ -17,7 +17,7 @@ import syft as sy
 from functions import mnistIID, mnistnon_IID, FedDataset, getImage
 from utils import averageModels
 
-Ps = 2  # signal power
+Ps = 5  # signal power
 key = []
 for i in range(60000):  # generating a random password to activate training (Pilot signal)
     temp = random.randint(0, 1)
@@ -44,7 +44,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
     args = {
         'batch_size': 64,
         'test_batch_size': 1000,
-        'lr': 0.01,
+        'lr': 0.001,
         'log_interval': 10,
         'epochs': 3,
         'clients': 20,
@@ -175,7 +175,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         print("Client:", client['hook'].id)
         print("CSI", abs(h)/(std*std))
 
-        key_received = h*key_array+(np.random.randn(len(key_array))*std*2)
+        key_received = h*key_array+(np.random.randn(len(key_array))*std*Ps)
         # print(key_array_received)
         key_received = (key_received/(h)).real
 
