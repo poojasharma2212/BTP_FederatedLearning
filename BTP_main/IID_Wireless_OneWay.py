@@ -83,10 +83,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         root='./data', train=True, download=True, transform=transform)
     mnist_testset = datasets.MNIST(
         root='./data', train=False, download=True, transform=transform)
-    # print(mnist_testset.data.max())
-    # print(mnist_testset.data.shape)
-    # print(mnist_trainset.targets)
-    # print(mnist_testset)
+
     k = len(set(mnist_testset.targets.numpy()))
     # print(k)
     if(args['datatype'] == 'iid'):
@@ -110,22 +107,6 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         client['mnist_testset'] = getImage(
             mnist_testset, list(test_group[inx]), args['batch_size'])
         client['samples'] = len(trainset_id_list)/args['images']
-    # print(client['mnist_trainset'])
-
-    # print("================yyyyyyy==================")
-    # for inx, client in enumerate(clients):
-    # client['mnist_testset'] = getImage(mnist_testset, list(test_group[inx]), args['batch_size'])
-    # client['samples'] = len(trainset_id_list)/args['images']
-    # print(client['mnist_testset'])
-    # print(inx, client['mnist_testset'])
-    # print("---------------------------")
-    # print(inx, client['mnist_trainset'])
-    #   print("===========================")
-    # print("============================")
-    # print(type(client['mnist_testset']))
-    # print(type(client))
-    # print("============================")
-    # ================================= #
 
     #=================Global Model===================#
     transform = transforms.Compose(
