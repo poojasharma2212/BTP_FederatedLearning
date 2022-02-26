@@ -14,7 +14,7 @@ def mnistIID(data, nUsers):
     for i in range(nUsers):
         np.random.seed(i)
         usersDict[i] = set(np.random.choice(
-            indices, nImages, replace=True))
+            indices, nImages, replace=False))
         indices = list(set(indices)-usersDict[i])
         # print("i :::", end=" ")
         # print(usersDict)
