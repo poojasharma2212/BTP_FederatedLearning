@@ -14,7 +14,7 @@ import os
 import random
 import math
 import syft as sy
-from funtions import mnistIID, mnistnon_IID, FedDataset, getImage
+from functions import mnistIID, mnistnon_IID, FedDataset, getImage
 from utils import averageModels
 
 Ps = 2  # signal power
