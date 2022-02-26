@@ -35,6 +35,7 @@ for i in range (len(key)):   #bpsk modulation
 key_array =np.array(key_n)
 
 def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_array,Ps):
+    accu = []
     count = 0
     print("yes")
     args = {
@@ -275,7 +276,6 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
         #if(error == 0 and Optimal_Power >0):
         if(error==0):
             Client_Status = True
-
             for epoch in range(1,args['epochs']+1):
                 for batch_idx, (data, target) in enumerate(client['mnist_trainset']):
                     data = data.send(client['hook'])
@@ -367,7 +367,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds,key,key_arr
 
     #     return good_channel, power
 
-    accu = []
+    # accu = []
     def test(args,model, device, test_loader, count):
         # print("TEST SET PRDEICTION")
         model.eval()
