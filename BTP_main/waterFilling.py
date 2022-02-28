@@ -436,7 +436,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
                 pn = max(1/mu-1/j, 0)
                 g1 += math.log(1+pn*j)
                 pn1 += pn
-            g = g1-mu*(pn1-Ps*(int(args.clients)-1))
+            g = g1-mu*(pn1-Ps*(int(args['clients'])-1))
             if(g < gsmall1):
                 smallmu1 = mu
                 gsmall1 = g
