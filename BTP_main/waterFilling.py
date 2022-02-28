@@ -151,24 +151,25 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         absOfH = csi*Optimal_Power/snr_val
         x = random.uniform(0, absOfH)
         y = math.sqrt(absOfH*absOfH-x*x)
-        std = math.sqrt(Ps/snr_val)
+        #std = math.sqrt(Ps/snr_val)
+        std = math.sqrt(absOfH*absOfH - x*x)
         h = complex(x, y)
 
         if(Optimal_Power != 0):
             data = client['model'].conv1.weight
-            data = data*math.sqrt(Ps)
+            data = data*math.sqrt(Optimal_Power)
             noise = torch.randn(data.size())
             y_out = h*data + noise*std
-            y_out = y_out/(math.sqrt(Ps)*(h))
+            y_out = y_out/(math.sqrt(Optimal_Power)*(h))
             y_out = y_out.real
 
             client['model'].conv1.weight.data = y_out
 
             y_out = client['model'].conv2.weight
-            y_out = y_out*math.sqrt(Ps)
+            y_out = y_out*math.sqrt(Optimal_Power)
             noise = torch.randn(y_out.size())
             y_out = h*y_out + noise*std
-            y_out = y_out/(math.sqrt(Ps)*(h))
+            y_out = y_out/(math.sqrt(Optimal_Power)*(h))
             y_out = y_out.real
 
             client['model'].conv2.weight.data = y_out
@@ -413,14 +414,14 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         for ii in range(int(args['clients']-1)):
             csi.append(random.uniform(args['lowest_csi', args['highest_csi']]))
 
-        # Selected devices
-        if(fed_round == 0):
-            snr, cluster_head = get_cluster()
-            temp = copy.deepcopy(cluster_head)
-            temp1 = copy.deepcopy(snr)
-        else:
-            cluster_head = copy.deepcopy(temp)
-            snr = copy.deepcopy(temp1)
+        # # Selected devices
+        # if(fed_round == 0):
+        #     snr, cluster_head = get_cluster()
+        #     temp = copy.deepcopy(cluster_head)
+        #     temp1 = copy.deepcopy(snr)
+        # else:
+        #     cluster_head = copy.deepcopy(temp)
+        #     snr = copy.deepcopy(temp1)
         # np.random.seed(fed_round)
         smallmu1 = 0
         gsmall = 3.402823466E+38
@@ -439,16 +440,16 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
                 smallmu1 = mu
                 gsmall1 = g
             mu += 0.00002
-        # dont choose same client more than once
-        selected_clients_inds = np.random.choice(
-            range(len(clients)), m, replace=False)
-        selected_clients = [clients[i] for i in selected_clients_inds]
+        # # dont choose same client more than once
+        # selected_clients_inds = np.random.choice(
+        #     range(len(clients)), m, replace=False)
+        # selected_clients = [clients[i] for i in selected_clients_inds]
 
-        # Active devices
-        np.random.seed(fed_round)
-        active_clients_inds = np.random.choice(selected_clients_inds, int(
-            (1-args['drop_rate']) * m), replace=False)  # drop clients
-        active_clients = [clients[i] for i in active_clients_inds]
+        # # Active devices
+        # np.random.seed(fed_round)
+        # active_clients_inds = np.random.choice(selected_clients_inds, int(
+        #     (1-args['drop_rate']) * m), replace=False)  # drop clients
+        # active_clients = [clients[i] for i in active_clients_inds]
 
         # Training
         # print(client)
@@ -493,7 +494,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         # print('=============\\\\\\\=====================')
         idx = 0
         power_1 = 0
-        for client in active_clients:
+        for client in clients:
             print("train")
             good_channel = train(args, client, device)
             if(good_channel == True):
@@ -502,11 +503,30 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
 
             # print(client)'
         print()
+        for csx in csi:
+            power_1.append(max((1/smallmu1-1/csx), 0))
+
+        plt.bar([str(i) for i in range(1, len(power_1)+1)], power_1,)
+        csi.sort()
+        po = []
+        for jj in csi:
+            po.append(max(1/smallmu1-1/jj, 0))
+        fig, ax = plt.subplots()
+        line1 = ax.plot(csi, po, label="channel power allocated")
+        line2 = ax.plot(csi, [1/smallmu1]*len(csi),
+                        label="maximum power allocated")
+        ax.set_title("csi vs power allocated")
+        ax.set_xlabel("csi (channel gain to noise ratio)")
+        ax.set_ylabel("power allocated")
+        ax.legend()
+
+        print("reached this step")
+
         print("Clients with good channel are considered for averaging")
         for no in range(len(client_good_channel)):
             print(client_good_channel[no]['hook'].id)
         print()
-        print("reached this step")
+
         global_model = averageModels(global_model, client_good_channel)
 
         # Testing the average model
