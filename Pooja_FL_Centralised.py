@@ -83,7 +83,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         for i in range(nUsers):
             np.random.seed(i)
             usersDict[i] = set(np.random.choice(
-                indices, nImages, replace=True))
+                indices, nImages, replace=False))
             indices = list(set(indices)-usersDict[i])
             # print("i :::", end=" ")
         # print(usersDict)
@@ -502,7 +502,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
             if(g < wfa):
                 mu = mu_min
                 wfa = g
-            mu_min += 0.00002
+            mu += 0.00002
 
         # print('=============\\\\\\\=====================')
         idx = 0
