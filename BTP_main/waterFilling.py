@@ -134,7 +134,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
             x = self.fc2(x)
             return Func.log_softmax(x, dim=1)
 
-    def train(args, client, device, csi, snr, mu):
+    def train(args, client, device, csi, snr, mu, key, key_array):
         cStatus = False
         client['model'].train()
         # snr = random.randint(0, 40)
@@ -190,57 +190,6 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
 
         key_received = key_received.tolist()
         key_received = [int(item) for item in key_received]
-
-        # absh = csi*Optimal_Power/snr_val
-        # x=random.uniform(0,absh)
-        # #std = math.sqrt(Ps/snr_val)
-        # #y = random.random()
-        # y=math.sqrt(absh*absh-x*x)
-        # std=math.sqrt(Optimal_Power/snr_val*absh*absh)
-
-        # h = complex(x,y)
-        # print("snr in dB",snr )
-
-        # if(Optimal_Power!= 0):
-
-        #     data= client['model'].conv1.weight
-        #     data = data*math.sqrt(Optimal_Power)
-        #     noise = torch.randn(data.size())
-        #     y_out = h*data + noise*std
-        #     y_out = y_out/(math.sqrt(Optimal_Power)*(h))
-        #     y_out = y_out.real
-
-        #     client['model'].conv1.weight.data = y_out
-
-        #     data= client['model'].conv2.weight
-        #     data = data*math.sqrt(Optimal_Power)
-        #     noise = torch.randn(data.size())
-        #     y_out = h*data + noise*std
-        #     y_out = y_out/(math.sqrt(Optimal_Power)*(h))
-        #     y_out = y_out.real
-
-        #     client['model'].conv2.weight.data = y_out
-
-        # client['model'].send(client['hook'])
-        # print("Client:", client['hook'].id)
-
-        # print("CSI",csi)
-        # print()
-
-        # key_received = h*key_array+(np.random.randn(len(key_array))*std*2)
-        # #print(key_array_received)
-        # key_received=(key_received/(h)).real
-
-        # for n in range (len(key_received)):
-        #     if(key_received[n]>=0):
-        #         key_received[n]=0
-        #     else:
-        #         key_received[n]=1
-
-        # key_received=key_received.tolist()
-        # key_received = [int(item) for item in key_received]
-
-        # # print(client)
         # # iterate over federated data
 
         Xor_sum = sum(np.bitwise_xor(key, key_received))
@@ -498,7 +447,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         for client in clients:
             print("train")
             good_channel = train(args, client, device,
-                                 csi[idx], snr[idx], smallmu1)
+                                 csi[idx], snr[idx], smallmu1, key, key_array)
             if(good_channel == True):
                 client_good_channel.append(client)
             idx = idx+1
