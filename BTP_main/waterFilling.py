@@ -443,7 +443,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
 
         # print('=============\\\\\\\=====================')
         idx = 0
-        power_1 = 0
+        power_1 = []
         for client in clients:
             print("train")
             good_channel = train(args, client, device,
