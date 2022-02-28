@@ -412,7 +412,8 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         snr = []
         csi = []
         for ii in range(int(args['clients']-1)):
-            csi.append(random.uniform(args['lowest_csi', args['highest_csi']]))
+            csi.append(random.uniform(args['lowest_csi'], args['highest_csi']))
+            snr.append(random.random(args['lowest_snr'], args['highest_snr']))
 
         # # Selected devices
         # if(fed_round == 0):
@@ -496,10 +497,11 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         power_1 = 0
         for client in clients:
             print("train")
-            good_channel = train(args, client, device)
+            good_channel = train(args, client, device,
+                                 csi[idx], snr[idx], smallmu1)
             if(good_channel == True):
                 client_good_channel.append(client)
-            # idx = idx+1
+            idx = idx+1
 
             # print(client)'
         print()
