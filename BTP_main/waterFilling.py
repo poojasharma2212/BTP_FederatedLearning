@@ -303,7 +303,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
             client['model'].conv2.weight.data = y_out
 
             print()
-            return cStatus
+        return cStatus
 
     # def ClientUpdateVal(clients,key,key_array,power):
     #     good_channel =[]
@@ -425,7 +425,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         #     snr = copy.deepcopy(temp1)
         # np.random.seed(fed_round)
         smallmu1 = 0
-        gsmall = 3.402823466E+38
+        gsmall1 = 3.402823466E+38
 
         mu = 1e-15
         while(mu <= 1):
