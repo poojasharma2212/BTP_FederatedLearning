@@ -413,7 +413,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         csi = []
         for ii in range(int(args['clients']-1)):
             csi.append(random.uniform(args['lowest_csi'], args['highest_csi']))
-            snr.append(random.random(args['lowest_snr'], args['highest_snr']))
+            snr.append(random.randint(args['lowest_snr'], args['highest_snr']))
 
         # # Selected devices
         # if(fed_round == 0):
