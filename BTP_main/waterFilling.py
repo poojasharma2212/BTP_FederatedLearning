@@ -360,7 +360,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         # at least 1 client is selected for training
         snr = []
         csi = []
-        for ii in range(int(args['clients']-1)):
+        for ii in range(int(args['clients'])):
             csi.append(random.uniform(args['lowest_csi'], args['highest_csi']))
             snr.append(random.randint(args['lowest_snr'], args['highest_snr']))
 
