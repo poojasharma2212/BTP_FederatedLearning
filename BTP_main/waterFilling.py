@@ -196,7 +196,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         error = Xor_sum/len(key)
         # error = 0
         # if(error == 0 and Optimal_Power >0):
-        if(error == 0):
+        if(round(error) == 0 and Optimal_Power > 0):
             cStatus = True     # Client status
             for epoch in range(1, args['epochs']+1):
                 for batch_idx, (data, target) in enumerate(client['mnist_trainset']):
@@ -364,15 +364,6 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
             csi.append(random.uniform(args['lowest_csi'], args['highest_csi']))
             snr.append(random.randint(args['lowest_snr'], args['highest_snr']))
 
-        # # Selected devices
-        # if(fed_round == 0):
-        #     snr, cluster_head = get_cluster()
-        #     temp = copy.deepcopy(cluster_head)
-        #     temp1 = copy.deepcopy(snr)
-        # else:
-        #     cluster_head = copy.deepcopy(temp)
-        #     snr = copy.deepcopy(temp1)
-        # np.random.seed(fed_round)
         smallmu1 = 0
         gsmall1 = 3.402823466E+38
 
@@ -495,58 +486,6 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
     print("============ Accuracy ===========")
     # print(accu)
     return accu
-
-    #     print("Sending data back to Server")
-    #     print()
-    #     power = []
-
-    #     for csi_i in csi :
-    #         power.append(max(0,(1/mu - 1/csi_i)))
-    #     # fig,ax=plt.subplots()
-    #     # line1=ax.plot(csi,power,label="channel power allocated")
-    #     # line2=ax.plot(csi,[1/mu_min]*len(csi),label="maximum power allocated")
-    #     # ax.set_title("csi vs power allocated")
-    #     # ax.set_xlabel("csi (channel gain to noise ratio)")
-    #     # ax.set_ylabel("power allocated")
-    #     # ax.legend()
-    #     # plt.show()
-    # #     # Testing
-    # #     for client in active_clients:
-    # #         test(args, client['model'], device, client['testset'], client['hook'].id)
-
-    #     print()
-    #     csi.sort()
-
-    #     #ClientUpdateVal(clients,key,key_array,power_client)
-    #     #good_channel_odd,power_odd=ClientUpdateVal(client_good_channel,key,key_array,0)
-
-    #     print()
-
-    #     print("Clients having a good channel and considered for averaging")
-    #     # for no in range (len(good_channel_odd)):
-    #     #     print(good_channel_odd[no]['hook'].id)
-    # Averaging
-
-
-# final_acc = []
-# sum = []
-# weight = []
-
-# hook = sy.TorchHook(torch)
-
-# for i in range(4):
-#     accuracy1 = Wrapper(64,0.02,2,20,4,hook)
-#     print(accuracy1)
-#     if(len(sum)==0):
-#         sum = accuracy1
-#     for j in range(len(accuracy1)):
-#         sum[j] = sum[j] + accuracy1[j]
-#     # final_acc[i] = accuracy1
-# for i in range(len(sum)):
-#     sum[i] = sum[i]/10
-# weight = sum/10
-
-# # print(final_acc)
 
 
 # print("====================final ans")
