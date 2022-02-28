@@ -297,7 +297,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
 
             y_out = client['model'].conv2.weight
             y_out = y_out*math.sqrt(Optimal_Power)
-            y_out = h*y_out + (torch.randn(data.size())*std)
+            y_out = h*y_out + (torch.randn(y_out.size())*std)
             y_out = y_out/(math.sqrt(Optimal_Power)*(h))
             y_out = y_out.real
             client['model'].conv2.weight.data = y_out
