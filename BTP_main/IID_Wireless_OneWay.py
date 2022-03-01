@@ -137,7 +137,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
     def train(args, client, device):
         cStatus = False
         client['model'].train()
-        snr = random.randint(0, 40)
+        snr = random.randint(5, 10)
         print("SNR==", snr)
 
         # if(csi==0 or mu==0):
