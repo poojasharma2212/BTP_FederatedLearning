@@ -150,7 +150,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         cStatus = False
         client['model'].train()
         # snr = random.randint(0, 40)
-        print(client['hook'].id)
+        print("client_ID", client['hook'].id)
         snr = snr_dict[client['hook'].id]
         print("SNR==", snr)
 
