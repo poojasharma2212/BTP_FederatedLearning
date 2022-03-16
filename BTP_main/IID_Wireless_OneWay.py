@@ -139,12 +139,13 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
     y_dict = {}
 
     for c in range(args['clients']):
+        dict_key = "client" + c
         x_val = random.random()
         y_val = random.random()
         snr_val = random.randint(0, 40)
-        snr_dict[c] = snr_val
-        x_dict[c] = x_val
-        y_dict[c] = y_val
+        snr_dict[dict_key] = snr_val
+        x_dict[dict_key] = x_val
+        y_dict[dict_key] = y_val
 
     def train(args, client, device):
         cStatus = False
