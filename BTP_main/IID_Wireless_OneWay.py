@@ -139,7 +139,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
     y_dict = {}
 
     for c in range(args['clients']):
-        dict_key = "client" + c
+        dict_key = "client" + str(c)
         x_val = random.random()
         y_val = random.random()
         snr_val = random.randint(0, 40)
