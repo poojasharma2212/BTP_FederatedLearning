@@ -17,7 +17,7 @@ import syft as sy
 from functions import mnistIID, mnistnon_IID, FedDataset, getImage
 from utils import averageModels
 
-Ps = 2  # signal power
+Ps = 100  # signal power
 key = []
 for i in range(60000):  # generating a random password to activate training (Pilot signal)
     temp = random.randint(0, 1)
@@ -44,7 +44,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
     args = {
         'batch_size': 64,
         'test_batch_size': 1000,
-        'lr': 0.03,
+        'lr': 0.001,
         'log_interval': 10,
         'epochs': 3,
         'clients': 20,
@@ -52,7 +52,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         'rounds': 100,
         'C': 0.9,
         'lowest_snr': 0,
-        'highest_snr': 38,
+        'highest_snr': 40,
         'lowest_csi': 0,
         'highest_csi': 1,
         'drop_rate': 0.1,
@@ -134,10 +134,23 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
             x = self.fc2(x)
             return Func.log_softmax(x, dim=1)
 
+    snr_dict = {}
+    x_dict = {}
+    y_dict = {}
+
+    for c in range(args['clients']):
+        x_val = random.random()
+        y_val = random.random()
+        snr_val = random.randint(0, 40)
+        snr_dict[c] = snr_val
+        x_dict[c] = x_val
+        y_dict[c] = y_val
+
     def train(args, client, device):
         cStatus = False
         client['model'].train()
-        snr = random.randint(5, 10)
+        # snr = random.randint(0, 40)
+        snr = snr_dict[client['hook'].id]
         print("SNR==", snr)
 
         # if(csi==0 or mu==0):
@@ -149,24 +162,26 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
 
         snr_val = 10**(snr/10)
         std = math.sqrt(Ps/snr_val)
-        x = random.random()
-        y = random.random()
+        # x = random.random()
+        # y = random.random()
+        x = x_dict[client['hook'].id]
+        y = y_dict[client['hook'].id]
         h = complex(x, y)
 
         data = client['model'].conv1.weight
-        data = data*math.sqrt(Ps)
+        data = data*math.sqrt(Ps)/(h)
         noise = torch.randn(data.size())
         y_out = h*data + noise*std
-        y_out = y_out/(math.sqrt(Ps)*(h))
+        y_out = y_out/(math.sqrt(Ps))
         y_out = y_out.real
 
         client['model'].conv1.weight.data = y_out
 
         y_out = client['model'].conv2.weight
-        y_out = y_out*math.sqrt(Ps)
+        y_out = y_out*math.sqrt(Ps)/(h)
         noise = torch.randn(y_out.size())
         y_out = h*y_out + noise*std
-        y_out = y_out/(math.sqrt(Ps)*(h))
+        y_out = y_out/(math.sqrt(Ps))
         y_out = y_out.real
 
         client['model'].conv2.weight.data = y_out
