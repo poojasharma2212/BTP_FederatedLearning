@@ -41,13 +41,14 @@ accu = []
 def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_array, Ps):
     count = 0
     print("yes")
+
     args = {
         'batch_size': 64,
         'test_batch_size': 1000,
         'lr': 0.01,
         'log_interval': 10,
         'epochs': 3,
-        'clients': 20,
+        'clients': 50,
         'seed': 0,
         'rounds': 20,
         'C': 0.9,
@@ -142,7 +143,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         dict_key = "client" + str(c)
         x_val = random.random()
         y_val = random.random()
-        snr_value = random.randint(0, 5)
+        snr_value = random.randint(5, 10)
         snr_dict[dict_key] = snr_value
         x_dict[dict_key] = x_val
         y_dict[dict_key] = y_val
