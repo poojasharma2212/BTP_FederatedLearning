@@ -352,35 +352,38 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
     # print(client)
     accu = []
     rc = 1
+    csi = []
+    snr = []
+
+    for ii in range(int(args['clients'])):
+        csi.append(random.uniform(args['lowest_csi'], args['highest_csi']))
+        snr.append(random.randint(args['lowest_snr'], args['highest_snr']))
+
+    smallmu1 = 0
+    gsmall1 = 3.402823466E+38
+
+    mu = 1e-15
+    while(mu <= 1):
+        g1 = 0
+        pn1 = 0
+
+        for j in csi:
+            pn = max(1/mu-1/j, 0)
+            g1 += math.log(1+pn*j)
+            pn1 += pn
+        g = g1-mu*(pn1-Ps*(int(args['clients'])-1))
+        if(g < gsmall1):
+            smallmu1 = mu
+            gsmall1 = g
+        mu += 0.00002
+
     for fed_round in range(args['rounds']):
         # print("fed_round")
         # number of selected clients
         client_good_channel = []
 
-        # at least 1 client is selected for training
-        snr = []
-        csi = []
-        for ii in range(int(args['clients'])):
-            csi.append(random.uniform(args['lowest_csi'], args['highest_csi']))
-            snr.append(random.randint(args['lowest_snr'], args['highest_snr']))
+        # at least 1 client is selected for train
 
-        smallmu1 = 0
-        gsmall1 = 3.402823466E+38
-
-        mu = 1e-15
-        while(mu <= 1):
-            g1 = 0
-            pn1 = 0
-
-            for j in csi:
-                pn = max(1/mu-1/j, 0)
-                g1 += math.log(1+pn*j)
-                pn1 += pn
-            g = g1-mu*(pn1-Ps*(int(args['clients'])-1))
-            if(g < gsmall1):
-                smallmu1 = mu
-                gsmall1 = g
-            mu += 0.00002
         # # dont choose same client more than once
         # selected_clients_inds = np.random.choice(
         #     range(len(clients)), m, replace=False)
@@ -433,12 +436,15 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         #     mu_min+= 0.00004
 
         # print('=============\\\\\\\=====================')
+
         idx = 0
         power_1 = []
+
         for client in clients:
             print("train")
             good_channel = train(args, client, device,
-                                 csi[idx], snr[idx], smallmu1, key, key_array)
+                                 csi[idx], snr[idx], smallmu1, key, key_array, count)
+
             if(good_channel == True):
                 client_good_channel.append(client)
             idx = idx+1
