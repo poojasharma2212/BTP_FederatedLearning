@@ -48,7 +48,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         'lr': 0.01,
         'log_interval': 4,
         'epochs': 3,
-        'clients': 50,
+        'clients': 20,
         'seed': 0,
         'rounds': 20,
         'C': 0.9,
@@ -298,6 +298,26 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
                             100. * batch_idx / len(client['mnist_trainset']), loss.item()))
         else:
             print("Channel is not taken for fedavg in this round")
+
+            # noise
+        data = client['model'].conv1.weight
+        data = data*math.sqrt(Ps)/(h)
+        noise = torch.randn(data.size())
+        y_out = h*data + noise*std
+        y_out = y_out/(math.sqrt(Ps))
+        y_out = y_out.real
+
+        client['model'].conv1.weight.data = y_out
+
+        y_out = client['model'].conv2.weight
+        y_out = y_out*math.sqrt(Ps)/(h)
+        noise = torch.randn(y_out.size())
+        y_out = h*y_out + noise*std
+        y_out = y_out/(math.sqrt(Ps))
+        y_out = y_out.real
+
+        client['model'].conv2.weight.data = y_out
+
         client['model'].get()
 
         return cStatus
