@@ -107,6 +107,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         client['mnist_testset'] = getImage(
             mnist_testset, list(test_group[inx]), args['batch_size'])
         client['samples'] = len(trainset_id_list)/args['images']
+        client['flag'] = True
 
     #=================Global Model===================#
     transform = transforms.Compose(
@@ -134,18 +135,20 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
             x = self.fc2(x)
             return Func.log_softmax(x, dim=1)
 
-    def train(args, client, device, csi, snr, mu, key, key_array):
+    def train(args, client, device, csi, snr, mu, key, key_array, flag):
         cStatus = False
         client['model'].train()
         # snr = random.randint(0, 40)
         print("SNR==", snr)
 
-        if(csi == 0 or mu == 0):
-            Optimal_Power = 0
-        else:
-            Optimal_Power = max(0, (1/mu - 1/csi))
-        # Optimal_Power = max(0,(1/mu - 1/csi))
-        print("Optimal power allocated is: ", Optimal_Power)
+        if(client['flag'] == True):
+            if(csi == 0 or mu == 0):
+                Optimal_Power = 0
+            else:
+                Optimal_Power = max(0, (1/mu - 1/csi))
+            # Optimal_Power = max(0,(1/mu - 1/csi))
+            print("Optimal power allocated is: ", Optimal_Power)
+            client['flag'] = False
 
         snr_val = 10**(snr/10)
         absOfH = csi*Optimal_Power/snr_val
@@ -153,6 +156,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         y = math.sqrt(absOfH*absOfH-x*x)
         #std = math.sqrt(Ps/snr_val)
         std = math.sqrt(absOfH*absOfH - x*x)
+
         h = complex(x, y)
 
         if(Optimal_Power != 0):
@@ -383,17 +387,18 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         client_good_channel = []
 
         # at least 1 client is selected for train
+        m = int(max(args['C'] * args['clients'], 1))
 
         # # dont choose same client more than once
-        # selected_clients_inds = np.random.choice(
-        #     range(len(clients)), m, replace=False)
-        # selected_clients = [clients[i] for i in selected_clients_inds]
+        selected_clients_inds = np.random.choice(
+            range(len(clients)), m, replace=False)
+        selected_clients = [clients[i] for i in selected_clients_inds]
 
-        # # Active devices
-        # np.random.seed(fed_round)
-        # active_clients_inds = np.random.choice(selected_clients_inds, int(
-        #     (1-args['drop_rate']) * m), replace=False)  # drop clients
-        # active_clients = [clients[i] for i in active_clients_inds]
+        # Active devices
+        np.random.seed(fed_round)
+        active_clients_inds = np.random.choice(selected_clients_inds, int(
+            (1-args['drop_rate']) * m), replace=False)  # drop clients
+        active_clients = [clients[i] for i in active_clients_inds]
 
         # Training
         # print(client)
