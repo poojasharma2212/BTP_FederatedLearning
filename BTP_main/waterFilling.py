@@ -49,7 +49,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         'epochs': 3,
         'clients': 20,
         'seed': 0,
-        'rounds': 10,
+        'rounds': 5,
         'C': 0.9,
         'lowest_snr': 0,
         'highest_snr': 38,
@@ -149,7 +149,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
             client['Optimal_Power'] = Optimal_Power
             # Optimal_Power = max(0,(1/mu - 1/csi))
             client['flag'] = False
-        
+
         Optimal_Power = client['Optimal_Power']
         print("Optimal power allocated is: ", Optimal_Power)
 
@@ -355,7 +355,6 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
             client['model'].parameters(), lr=args['lr'])
 
     # print(client)
-    accu = []
     rc = 1
     csi = []
     snr = []
@@ -446,7 +445,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         idx = 0
         power_1 = []
 
-        for client in clients:
+        for client in active_clients:
             print("train")
             good_channel = train(args, client, device,
                                  csi[idx], snr[idx], smallmu1, key, key_array, count)
@@ -502,6 +501,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
 
 # print("====================final ans")
 # # print(sum)
+
 accuracy1 = Wrapper(64, 0.01, 3, 20, 10, key, key_array, Ps)
 print(accuracy1)
 # accuracy2 = Wrapper(64,0.02,2,20,5,hook)
