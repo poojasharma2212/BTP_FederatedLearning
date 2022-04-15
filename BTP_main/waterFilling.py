@@ -148,18 +148,18 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
                 Optimal_Power = max(0, (1/mu - 1/csi))
             client['Optimal_Power'] = Optimal_Power
             # Optimal_Power = max(0,(1/mu - 1/csi))
-            print("Optimal power allocated is: ", Optimal_Power)
-            snr_val = 10**(snr/10)
-            absOfH = csi*Optimal_Power/snr_val
-
             client['flag'] = False
+        
+        Optimal_Power = client['Optimal_Power']
+        print("Optimal power allocated is: ", Optimal_Power)
 
+        snr_val = 10**(snr/10)
+        absOfH = csi*Optimal_Power/snr_val
         x = random.uniform(0, absOfH)
         y = math.sqrt(absOfH*absOfH-x*x)
         #std = math.sqrt(Ps/snr_val)
         std = math.sqrt(absOfH*absOfH - x*x)
         h = complex(x, y)
-        Optimal_Power = client['Optimal_Power']
         if(Optimal_Power != 0):
             data = client['model'].conv1.weight
             data = data*math.sqrt(Optimal_Power)
