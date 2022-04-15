@@ -143,7 +143,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         dict_key = "client" + str(c)
         x_val = random.random()
         y_val = random.random()
-        snr_value = random.randint(5, 10)
+        snr_value = random.randint(5, 20)
         snr_dict[dict_key] = snr_value
         x_dict[dict_key] = x_val
         y_dict[dict_key] = y_val
@@ -155,13 +155,6 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         print("client_ID", client['hook'].id)
         snr = snr_dict[client['hook'].id]
         print("SNR==", snr)
-
-        # if(csi==0 or mu==0):
-        # Optimal_Power = 0
-        # else:
-        # Optimal_Power = max(0,(1/mu- 1/csi))
-        # Optimal_Power = max(0,(1/mu - 1/csi))
-        # print("Optimal power allocated is: ", Optimal_Power)
 
         snr_val = 10**(snr/10)
         std = math.sqrt(Ps/snr_val)
@@ -205,16 +198,6 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
 
         key_received = key_received.tolist()
         key_received = [int(item) for item in key_received]
-
-        # absh = csi*Optimal_Power/snr_val
-        # x=random.uniform(0,absh)
-        # #std = math.sqrt(Ps/snr_val)
-        # #y = random.random()
-        # y=math.sqrt(absh*absh-x*x)
-        # std=math.sqrt(Optimal_Power/snr_val*absh*absh)
-
-        # h = complex(x,y)
-        # print("snr in dB",snr )
 
         # if(Optimal_Power!= 0):
 
@@ -275,8 +258,6 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
                     loss.backward()
                     # print(loss.grad)
                     client['optimizer'].step()
-                    # cli['optimizer'].zero_grad()
-                    # optimizer.step()
 
                     # print("==========ye chalega kya========================")
                     if batch_idx % args['log_interval'] == 0:
