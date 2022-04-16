@@ -44,7 +44,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
     args = {
         'batch_size': 64,
         'test_batch_size': 1000,
-        'lr': 0.008,
+        'lr': 0.005,
         'log_interval': 10,
         'epochs': 2,
         'clients': 20,
@@ -135,7 +135,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
             x = self.fc2(x)
             return Func.log_softmax(x, dim=1)
 
-    def train(args, client, device, csi, snr, mu, key, key_array, flag):
+    def train(args, client, device, csi, snr, mu, key, key_array):
         cStatus = False
         client['model'].train()
         # snr = random.randint(0, 40)
@@ -338,10 +338,6 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
 
         accu.append(100. * correct / len(test_loader.dataset))
 
-        #print('=====accu======', accu)
-    # model = CNN(k)
-    # optimizer = optim.SGD(model.parameters(), lr=args['lr'])
-
     logging.info("Starting training !!")
 
     torch.manual_seed(args['seed'])
@@ -355,6 +351,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
             client['model'].parameters(), lr=args['lr'])
 
     # print(client)
+
     rc = 1
     csi = []
     snr = []
@@ -448,7 +445,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         for client in active_clients:
             print("train")
             good_channel = train(args, client, device,
-                                 csi[idx], snr[idx], smallmu1, key, key_array, count)
+                                 csi[idx], snr[idx], smallmu1, key, key_array)
 
             if(good_channel == True):
                 client_good_channel.append(client)
