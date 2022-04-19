@@ -259,59 +259,6 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
             print()
         return cStatus
 
-    # def ClientUpdateVal(clients,key,key_array,power):
-    #     good_channel =[]
-    #     for client in clients:
-    #         snr=random.randint(args['lowest_snr'],args['highest_snr'])
-    #         print("snr in dB = ",snr)
-    #         print("Client:",client['hook'].id)
-    #         snr_value=10**(snr/10)
-    #         std=math.sqrt(Ps/snr_value) #channel noise
-    #         x=random.random()
-    #         y=random.random()
-    #         h=complex(x,y)
-
-    #         data=client['model'].conv1.weight
-    #         data=data*math.sqrt(Ps)
-
-    #         power += torch.norm(abs(data*data)).item()
-    #         noise = (torch.randn(data.size())*std)
-    #         y_out = h*data + noise
-    #         y_out = y_out/(math.sqrt(Ps)*(h))
-    #         y_out= y_out.real
-    #         client['model'].conv1.weight.data=y_out
-
-    #         data=client['model'].conv2.weight
-    #         data=data*math.sqrt(Ps)
-    #         noise1 = (torch.randn(data.size())*std)
-    #         y_out = h*data + noise1
-    #         y_out = y_out/(math.sqrt(Ps)*(h))
-    #         y_out= y_out.real
-    #         client['model'].conv2.weight.data=y_out
-
-    #         key_received=h*key_array+(np.random.randn(len(key_array))*std*2)
-    #         key_received=(key_received/(h)).real
-
-    #         for n in range (len(key_received)):
-    #             if(key_received[n]>=0):
-    #                 key_received[n]=0
-    #             else:
-    #                 key_received[n]=1
-
-    #         key_received=key_received.tolist()
-    #         key_received = [int(item) for item in key_received]
-
-    #         Xor_sum = sum(np.bitwise_xor(key_received,key))
-    #         error = Xor_sum/len(key)
-    #         if(error == 0):
-    #             print("This is a Good Channel")
-    #             good_channel.append(client)
-    #         else:
-    #             print("This is a Poor Channel")
-    #         print()
-
-    #     return good_channel, power
-
     def test(args, model, device, test_loader, count):
         # print("TEST SET PRDEICTION")
         model.eval()
