@@ -37,10 +37,11 @@ key_array = np.array(key_n)
 
 accu = []
 
-csi = []
-snr = []
 
-args = {
+def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_array, Ps):
+    count = 0
+    print("yes")
+    args = {
         'batch_size': 64,
         'test_batch_size': 1000,
         'lr': 0.005,
@@ -60,32 +61,6 @@ args = {
         'use_cuda': False,
         'save_model': True
     }
-
-for ii in range(int(args['clients'])):
-    csi.append(random.uniform(args['lowest_csi'], args['highest_csi']))
-    snr.append(random.randint(args['lowest_snr'], args['highest_snr']))
-
-smallmu1 = 0
-gsmall1 = 3.402823466E+38
-
-mu = 1e-15
-while(mu <= 1):
-    g1 = 0
-    pn1 = 0
-
-    for j in csi:
-        pn = max(1/mu-1/j, 0)
-        g1 += math.log(1+pn*j)
-        pn1 += pn
-    g = g1-mu*(pn1-Ps*(int(args['clients'])-1))
-    if(g < gsmall1):
-        smallmu1 = mu
-        gsmall1 = g
-    mu += 0.00002
-
-def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_array, Ps):
-    count = 0
-    print("yes")
 
     use_cuda = args['use_cuda'] and torch.cuda.is_available()
     device = torch.device("cuda" if use_cuda else "cpu")
@@ -174,6 +149,8 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
             # Optimal_Power = max(0,(1/mu - 1/csi))
             client['flag'] = False
 
+        print("Client:", client['hook'].id)
+        print()
         Optimal_Power = client['Optimal_Power']
         print("Optimal power allocated is: ", Optimal_Power)
         print("SNR==", snr)
@@ -340,6 +317,34 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
 
         idx = 0
         power_1 = []
+
+        if(fed_round == 0):
+            csi = []
+            snr = []
+
+            for ii in range(int(args['clients'])):
+                csi.append(random.uniform(
+                    args['lowest_csi'], args['highest_csi']))
+                snr.append(random.randint(
+                    args['lowest_snr'], args['highest_snr']))
+
+        smallmu1 = 0
+        gsmall1 = 3.402823466E+38
+
+        mu = 1e-15
+        while(mu <= 1):
+            g1 = 0
+            pn1 = 0
+
+            for j in csi:
+                pn = max(1/mu-1/j, 0)
+                g1 += math.log(1+pn*j)
+                pn1 += pn
+            g = g1-mu*(pn1-Ps*(int(args['clients'])-1))
+            if(g < gsmall1):
+                smallmu1 = mu
+                gsmall1 = g
+            mu += 0.00002
 
         for client in active_clients:
             print("train")
