@@ -37,11 +37,10 @@ key_array = np.array(key_n)
 
 accu = []
 
+csi = []
+snr = []
 
-def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_array, Ps):
-    count = 0
-    print("yes")
-    args = {
+args = {
         'batch_size': 64,
         'test_batch_size': 1000,
         'lr': 0.005,
@@ -61,6 +60,32 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         'use_cuda': False,
         'save_model': True
     }
+
+for ii in range(int(args['clients'])):
+    csi.append(random.uniform(args['lowest_csi'], args['highest_csi']))
+    snr.append(random.randint(args['lowest_snr'], args['highest_snr']))
+
+smallmu1 = 0
+gsmall1 = 3.402823466E+38
+
+mu = 1e-15
+while(mu <= 1):
+    g1 = 0
+    pn1 = 0
+
+    for j in csi:
+        pn = max(1/mu-1/j, 0)
+        g1 += math.log(1+pn*j)
+        pn1 += pn
+    g = g1-mu*(pn1-Ps*(int(args['clients'])-1))
+    if(g < gsmall1):
+        smallmu1 = mu
+        gsmall1 = g
+    mu += 0.00002
+
+def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_array, Ps):
+    count = 0
+    print("yes")
 
     use_cuda = args['use_cuda'] and torch.cuda.is_available()
     device = torch.device("cuda" if use_cuda else "cpu")
@@ -134,30 +159,6 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
             x = Func.relu(self.fc1(x))
             x = self.fc2(x)
             return Func.log_softmax(x, dim=1)
-    csi = []
-    snr = []
-
-    for ii in range(int(args['clients'])):
-        csi.append(random.uniform(args['lowest_csi'], args['highest_csi']))
-        snr.append(random.randint(args['lowest_snr'], args['highest_snr']))
-
-    smallmu1 = 0
-    gsmall1 = 3.402823466E+38
-
-    mu = 1e-15
-    while(mu <= 1):
-        g1 = 0
-        pn1 = 0
-
-        for j in csi:
-            pn = max(1/mu-1/j, 0)
-            g1 += math.log(1+pn*j)
-            pn1 += pn
-        g = g1-mu*(pn1-Ps*(int(args['clients'])-1))
-        if(g < gsmall1):
-            smallmu1 = mu
-            gsmall1 = g
-        mu += 0.00002
 
     def train(args, client, device, csi, snr, mu, key, key_array):
         cStatus = False
@@ -337,48 +338,6 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
             (1-args['drop_rate']) * m), replace=False)  # drop clients
         active_clients = [clients[i] for i in active_clients_inds]
 
-        # Training
-        # print(client)
-
-        # snr = []
-        # csi = []
-
-        # for i in range(args['clients']-1):
-        #     # print("csi")
-        #     csi.append(random.uniform(args['lowest_csi'], args['highest_csi']))
-        #     snr.append(random.randint(args['lowest_snr'], args['highest_snr']))
-
-        #    # snr.append(random.randint())
-        # print("CSI=========>>>>>>>>>>>>>",csi)
-        # #===============Water Filling Algorithm ==============
-        # mu_min = 1e-15
-        # mu = 0
-
-        # wfa = 3.402823466E+38
-
-        # while(mu_min<=1):
-        #     wfa1 = 0
-        #     P_total = 0
-
-        #     for csi_i in csi:
-        #         # print(csi_i)
-        #         if(csi_i==0 or mu_min==0):
-        #             P_optimal = 0
-        #         else:
-        #             P_optimal = max(0,(1/mu_min - 1/csi_i))
-        #         wfa1 = math.log( 1+ P_optimal**csi_i)
-        #         P_total += P_optimal
-
-        #     len_ac = len(active_clients)
-        #     g = wfa1 - mu_min* (P_total - Ps*(len_ac-1))
-        #     if(g<wfa):
-        #         mu = mu_min
-        #         wfa = g
-        #     print("mu ki value", mu)
-        #     mu_min+= 0.00004
-
-        # print('=============\\\\\\\=====================')
-
         idx = 0
         power_1 = []
 
@@ -393,22 +352,22 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
 
             # print(client)'
         print()
-        for csx in csi:
-            power_1.append(max((1/smallmu1-1/csx), 0))
+        # for csx in csi:
+        #     power_1.append(max((1/smallmu1-1/csx), 0))
 
-        plt.bar([str(i) for i in range(1, len(power_1)+1)], power_1,)
-        csi.sort()
-        po = []
-        for jj in csi:
-            po.append(max(1/smallmu1-1/jj, 0))
-        fig, ax = plt.subplots()
-        line1 = ax.plot(csi, po, label="channel power allocated")
-        line2 = ax.plot(csi, [1/smallmu1]*len(csi),
-                        label="maximum power allocated")
-        ax.set_title("csi vs power allocated")
-        ax.set_xlabel("csi (channel gain to noise ratio)")
-        ax.set_ylabel("power allocated")
-        ax.legend()
+        # plt.bar([str(i) for i in range(1, len(power_1)+1)], power_1,)
+        # csi.sort()
+        # po = []
+        # for jj in csi:
+        #     po.append(max(1/smallmu1-1/jj, 0))
+        # fig, ax = plt.subplots()
+        # line1 = ax.plot(csi, po, label="channel power allocated")
+        # line2 = ax.plot(csi, [1/smallmu1]*len(csi),
+        #                 label="maximum power allocated")
+        # ax.set_title("csi vs power allocated")
+        # ax.set_xlabel("csi (channel gain to noise ratio)")
+        # ax.set_ylabel("power allocated")
+        # ax.legend()
 
         print("reached this step")
 
