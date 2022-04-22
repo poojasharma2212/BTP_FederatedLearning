@@ -40,6 +40,7 @@ accu = []
 
 def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_array, Ps):
     count = 0
+    pz = 0
     print("yes")
     args = {
         'batch_size': 64,
@@ -318,7 +319,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         idx = 0
         power_1 = []
 
-        if(fed_round == 0):
+        if(pz == 0):
             csi = []
             snr = []
 
@@ -327,7 +328,6 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
                     args['lowest_csi'], args['highest_csi']))
                 snr.append(random.randint(
                     args['lowest_snr'], args['highest_snr']))
-        
 
             smallmu1 = 0
             gsmall1 = 3.402823466E+38
@@ -345,8 +345,9 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
                 if(g < gsmall1):
                     smallmu1 = mu
                     gsmall1 = g
-                mu += 0.00002       
-                 
+                mu += 0.00002
+            pz = 10
+
         print(fed_round)
         for client in active_clients:
             print("train")
