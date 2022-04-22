@@ -318,7 +318,9 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
 
         idx = 0
         power_1 = []
-
+        print("**********************")
+        print(pz)
+        print("**********************")
         if(pz == 0):
             csi = []
             snr = []
