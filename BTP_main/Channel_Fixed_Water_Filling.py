@@ -74,7 +74,6 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         clients.append({'hook': sy.VirtualWorker(
             hook, id="client{}".format(i+1))})
 
-    # print(clients)
     # os.chdir("/content/drive/MyDrive/FL_ZaaPoo/data/MNIST/raw")
     nUsers = 20
     transform = transforms.Compose(
