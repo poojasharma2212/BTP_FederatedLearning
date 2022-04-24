@@ -50,7 +50,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         'epochs': 2,
         'clients': 20,
         'seed': 0,
-        'rounds': 150,
+        'rounds': 100,
         'C': 0.9,
         'lowest_snr': 5,
         'highest_snr': 10,
