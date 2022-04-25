@@ -45,7 +45,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
     args = {
         'batch_size': 64,
         'test_batch_size': 1000,
-        'lr': 0.01,
+        'lr': 0.004,
         'log_interval': 10,
         'epochs': 2,
         'clients': 20,
