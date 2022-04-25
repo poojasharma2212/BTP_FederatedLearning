@@ -158,7 +158,10 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         x = random.uniform(0, absOfH)
         y = math.sqrt(absOfH*absOfH-x*x)
         #std = math.sqrt(Ps/snr_val)
-        std = math.sqrt(absOfH*absOfH - x*x)
+        #std = math.sqrt(absOfH*absOfH - x*x)
+
+        std = math.sqrt(Optimal_Power/snr_val*absOfH*absOfH)
+
         h = complex(x, y)
         if(Optimal_Power != 0):
             data = client['model'].conv1.weight
@@ -221,14 +224,6 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
                     if batch_idx % args['log_interval'] == 0:
                         loss = loss.get()
                         # print(loss.item())
-                        # print(' Model  {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                        #         client['hook'].id, epoch,
-                        #         batch_idx * args['batch_size'], # no of images done
-                        #         len(client['mnist_trainset']) * args['batch_size'], # total images left
-                        #         100. * batch_idx / len(client['mnist_trainset']),
-                        #         loss.item()
-                        #     )
-                        # )
                         print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                             client['hook'].id,
                             epoch, batch_idx *
