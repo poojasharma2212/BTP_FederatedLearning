@@ -42,7 +42,7 @@ class Arguments():
         self.rounds = 200
         self.epochs = 5
         self.local_batches = 64
-        self.lr = 0.0001
+        self.lr = 0.01
         self.C = 0.9  # fraction of clients used in the round
         # fraction of devices in the selected set to be dropped for various reasons
         self.drop_rate = 0.1
