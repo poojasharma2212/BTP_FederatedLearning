@@ -143,7 +143,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         dict_key = "client" + str(c)
         x_val = random.random()
         y_val = random.random()
-        snr_value = random.randint(0, 38)
+        snr_value = random.randint(0,38)
         snr_dict[dict_key] = snr_value
         x_dict[dict_key] = x_val
         y_dict[dict_key] = y_val
@@ -471,7 +471,6 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
             if(good_channel == True):
                 client_good_channel.append(client)
             # idx = idx+1
-
             # print(client)'
         print()
         print("Clients with good channel are considered for averaging")
