@@ -174,7 +174,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
                 y_cord = random.randint(0, 19)
                 x_cord = random.randint(0, 20-1)
 
-                data[y_cord][x_cord] = 255
+                data[y_cord][x_cord] = 1
 
             no_of_pixel = random.randint(50, 700)
             for i in range(no_of_pixel):
