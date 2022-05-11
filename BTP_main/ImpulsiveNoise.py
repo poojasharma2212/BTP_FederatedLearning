@@ -140,12 +140,12 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
             x = self.fc2(x)
             return Func.log_softmax(x, dim=1)
 
-    def getNoise():
-        output = np.zeros([5, 5], np.uint8)
+    def getNoise(data):
+        output = np.zeros(data.shape(), np.uint8)
         prob = 0.02
         thres = 1 - prob
-        for i in range(5):
-            for j in range(5):
+        for i in range(data.shape[0]):
+            for j in range(data.shape[1]):
                 rdn = random.random()
                 if rdn < prob:
                     output[i][j] = 0
