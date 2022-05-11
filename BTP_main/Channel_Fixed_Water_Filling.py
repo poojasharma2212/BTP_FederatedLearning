@@ -202,7 +202,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
             y_out = h*data + noise
             y_out = y_out/(math.sqrt(Optimal_Power)*(h))
             y_out = y_out.real
-
+            print()
             client['model'].conv1.weight.data = y_out
 
             y_out = client['model'].conv2.weight
