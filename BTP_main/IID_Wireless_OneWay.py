@@ -52,8 +52,8 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         'seed': 0,
         'rounds': 100,
         'C': 0.9,
-        'lowest_snr': 0,
-        'highest_snr': 10,
+        'lowest_snr': 10,
+        'highest_snr': 20,
         'lowest_csi': 0,
         'highest_csi': 1,
         'drop_rate': 0.1,
@@ -143,7 +143,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         dict_key = "client" + str(c)
         x_val = random.random()
         y_val = random.random()
-        snr_value = random.randint(0, 10)
+        snr_value = random.randint(args['lowest_snr'], args['highest_snr'])
         snr_dict[dict_key] = snr_value
         x_dict[dict_key] = x_val
         y_dict[dict_key] = y_val
@@ -205,7 +205,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         # if(error == 0 and Optimal_Power >0):
         print("The error we get ")
         print(error)
-        if(error <= 0.1):
+        if(round(error) == 0):
             cStatus = True     # Client status
             for epoch in range(1, args['epochs']+1):
                 for batch_idx, (data, target) in enumerate(client['mnist_trainset']):
