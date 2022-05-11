@@ -1,3 +1,6 @@
+from utils import averageModels
+from functions import mnistIID, mnistnon_IID, FedDataset, getImage
+import syft as sy
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -13,9 +16,10 @@ import logging
 import os
 import random
 import math
-import syft as sy
-from functions import mnistIID, mnistnon_IID, FedDataset, getImage
-from utils import averageModels
+import cv2
+import numpy as np
+import random
+import
 
 Ps = 2  # signal power
 key = []
@@ -166,30 +170,34 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         std = math.sqrt(Optimal_Power/snr_val*absOfH*absOfH)
         h = complex(x, y)
 
-        def add_noise(img):
-            row = 28
-            col = 28
-            no_of_pixel = random.randint(50, 700)
-            for i in range(no_of_pixel):
-                y_cord = random.randint(0, 19)
-                x_cord = random.randint(0, 20-1)
+        # def add_noise(img):
+        #     row = 28
+        #     col = 28
+        #     no_of_pixel = random.randint(50, 700)
+        #     for i in range(no_of_pixel):
+        #         y_cord = random.randint(0, 19)
+        #         x_cord = random.randint(0, 20-1)
 
-                data[y_cord][x_cord] = 1
+        #         data[y_cord][x_cord] = 1
 
-            no_of_pixel = random.randint(50, 700)
-            for i in range(no_of_pixel):
-                y_cord = random.randint(0, 20-1)
-                x_cord = random.randint(0, 20-1)
+        #     no_of_pixel = random.randint(50, 700)
+        #     for i in range(no_of_pixel):
+        #         y_cord = random.randint(0, 20-1)
+        #         x_cord = random.randint(0, 20-1)
 
-                data[y_cord][x_cord] = 0
-            return data
+        #         data[y_cord][x_cord] = 0
+        #     return data
 
         if(Optimal_Power != 0):
             data = client['model'].conv1.weight
             data = data*math.sqrt(Optimal_Power)
 
-            #noise = torch.randn(data.size())
-            noise = add_noise(data)
+            add_noise = torch.randn(data.size())
+
+            impulse_noise = random.uniform_noise.copy()
+            ret, impulse_noise = cv2.threshold(
+                random.uniform, 250, 255, cv2.THRESH_BINARY)
+            noise = add_noise + torch.tensor(impulse_noise)
             y_out = h*data + noise*std
             y_out = y_out/(math.sqrt(Optimal_Power)*(h))
             y_out = y_out.real
@@ -200,7 +208,10 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
             y_out = y_out*math.sqrt(Optimal_Power)
 
             #noise = torch.randn(y_out.size())
-            noise = add_noise(data)
+            impulse_noise = random.uniform_noise.copy()
+            ret, impulse_noise = cv2.threshold(
+                random.uniform, 250, 255, cv2.THRESH_BINARY)
+            noise = torch.randn(data.size()) + torch.tensor(impulse_noise)
             y_out = h*y_out + noise*std
             y_out = y_out/(math.sqrt(Optimal_Power)*(h))
             y_out = y_out.real
@@ -264,8 +275,8 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         if(Optimal_Power != 0):
             y_out = client['model'].conv1.weight
             y_out = y_out*math.sqrt(Optimal_Power)
-            #noise = torch.randn(y_out.size())
-            noise = add_noise(data)
+            noise = torch.randn(y_out.size())
+            #noise = add_noise(data)
             y_out = h*y_out+(noise*std)
             y_out = y_out/(math.sqrt(Optimal_Power)*(h))
             y_out = y_out.real
@@ -273,8 +284,13 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
 
             y_out = client['model'].conv2.weight
             y_out = y_out*math.sqrt(Optimal_Power)
-            #noise = torch.randn(y_out.size())
-            noise = add_noise(data)
+            noise = torch.randn(y_out.size())
+            impulse_noise = random.uniform_noise.copy()
+            ret, impulse_noise = cv2.threshold(
+                random.uniform, 250, 255, cv2.THRESH_BINARY)
+            noise = noise + torch.tensor(impulse_noise)
+
+            #noise = add_noise(data)
             y_out = h*y_out + (noise*std)
             y_out = y_out/(math.sqrt(Optimal_Power)*(h))
             y_out = y_out.real
