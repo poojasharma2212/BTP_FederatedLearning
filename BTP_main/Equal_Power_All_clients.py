@@ -164,8 +164,8 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         y = y_dict[client['hook'].id]
         x = random.random()
         y = random.random()
-        h = complex(x, y)
-
+        #h = complex(x, y)
+        h = 1
         data = client['model'].conv1.weight
         data = data*math.sqrt(Ps)/(h)
         noise = torch.randn(data.size())
