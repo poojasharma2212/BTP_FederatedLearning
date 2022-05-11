@@ -140,6 +140,18 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
             x = self.fc2(x)
             return Func.log_softmax(x, dim=1)
 
+    def getNoise():
+        output = np.zeros([28, 28], np.uint8)
+        prob = 0.02
+        thres = 1 - prob
+        for i in range(28):
+            for j in range(28):
+                rdn = random.random()
+                if rdn < prob:
+                    output[i][j] = 0
+                elif rdn > thres:
+                    output[i][j] = 255
+
     def train(args, client, device, csi, snr, mu, key, key_array):
         cStatus = False
         client['model'].train()
@@ -196,9 +208,9 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
             add_noise = torch.randn(data.size())*std
 
             # impulse_noise = random_noise.copy()
-            impulse_noise = cv2.threshold(
-                random.uniform, 250, 255, cv2.THRESH_BINARY)
-            noise = add_noise + torch.tensor(impulse_noise)
+            # ret, impulse_noise = cv2.threshold(
+            #     random.uniform, 250, 255, cv2.THRESH_BINARY)
+            noise = add_noise + torch.tensor(getNoise())
             y_out = h*data + noise
             y_out = y_out/(math.sqrt(Optimal_Power)*(h))
             y_out = y_out.real
@@ -210,9 +222,9 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
 
             #noise = torch.randn(y_out.size())
             # impulse_noise = random_noise.copy()
-            ret, impulse_noise = cv2.threshold(
-                random_noise, 250, 255, cv2.THRESH_BINARY)
-            noise = torch.randn(y_out.size())*std + torch.tensor(impulse_noise)
+            # ret, impulse_noise = cv2.threshold(
+            #     random_noise, 250, 255, cv2.THRESH_BINARY)
+            noise = torch.randn(y_out.size())*std + torch.tensor(getNoise())
             y_out = h*y_out + noise*std
             y_out = y_out/(math.sqrt(Optimal_Power)*(h))
             y_out = y_out.real
@@ -280,9 +292,9 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
             #noise = add_noise(data)
 
             # impulse_noise = random_noise.copy()
-            ret, impulse_noise = cv2.threshold(
-                random_noise, 250, 255, cv2.THRESH_BINARY)
-            noise = noise + torch.tensor(impulse_noise)
+            # ret, impulse_noise = cv2.threshold(
+            #     random_noise, 250, 255, cv2.THRESH_BINARY)
+            noise = noise + torch.tensor(getNoise())
 
             y_out = h*y_out+(noise)
             y_out = y_out/(math.sqrt(Optimal_Power)*(h))
@@ -293,9 +305,9 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
             y_out = y_out*math.sqrt(Optimal_Power)
             noise = torch.randn(y_out.size())*std
             # impulse_noise = random_noise.copy()
-            ret, impulse_noise = cv2.threshold(
-                random_noise, 250, 255, cv2.THRESH_BINARY)
-            noise = noise + torch.tensor(impulse_noise)
+            # ret, impulse_noise = cv2.threshold(
+            #     random_noise, 250, 255, cv2.THRESH_BINARY)
+            noise = noise + torch.tensor(getNoise())
 
             #noise = add_noise(data)
             y_out = h*y_out + (noise)
