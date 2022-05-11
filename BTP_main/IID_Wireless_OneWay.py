@@ -143,7 +143,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         dict_key = "client" + str(c)
         x_val = random.random()
         y_val = random.random()
-        snr_value = random.randint(0, 38)
+        snr_value = random.randint(25, 30)
         snr_dict[dict_key] = snr_value
         x_dict[dict_key] = x_val
         y_dict[dict_key] = y_val
@@ -282,10 +282,10 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
 
         client['model'].get()
         # noise
-        data = client['model'].conv1.weight
-        data = data*math.sqrt(Ps)/h
-        noise = torch.randn(data.size())
-        y_out = h*data + noise*std
+        y_out = client['model'].conv1.weight
+        y_out = y_out*math.sqrt(Ps)/h
+        noise = torch.randn(y_out.size())
+        y_out = h*y_out + noise*std
         y_out = y_out/(math.sqrt(Ps))
         y_out = y_out.real
 
