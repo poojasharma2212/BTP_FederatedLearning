@@ -186,9 +186,9 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         print("Client:", client['hook'].id)
         print("CSI", abs(h)/(std*std))
 
-        key_received = h*key_array+(np.random.randn(len(key_array))*std*Ps)
+        key_received = key_array+(np.random.randn(len(key_array))*std*Ps)
         # print(key_array_received)
-        key_received = (key_received/(h)).real
+        key_received = (key_received).real
 
         for n in range(len(key_received)):
             if(key_received[n] >= 0):
