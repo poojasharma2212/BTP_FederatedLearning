@@ -52,8 +52,8 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         'seed': 0,
         'rounds': 100,
         'C': 0.9,
-        'lowest_snr': 25,
-        'highest_snr': 30,
+        'lowest_snr': 0,
+        'highest_snr': 10,
         'lowest_csi': 0,
         'highest_csi': 1,
         'drop_rate': 0.1,
@@ -143,7 +143,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         dict_key = "client" + str(c)
         x_val = random.random()
         y_val = random.random()
-        snr_value = random.randint(25, 30)
+        snr_value = random.randint(0, 10)
         snr_dict[dict_key] = snr_value
         x_dict[dict_key] = x_val
         y_dict[dict_key] = y_val
