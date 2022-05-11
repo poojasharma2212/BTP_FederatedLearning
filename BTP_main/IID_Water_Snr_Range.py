@@ -150,7 +150,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
             client['flag'] = False
 
         print("Client:", client['hook'].id)
-        print()p
+        print()
         Optimal_Power = client['Optimal_Power']
         print("Optimal power allocated is: ", Optimal_Power)
         print("SNR==", snr)
