@@ -13,6 +13,7 @@ import logging
 import os
 import random
 import math
+from skimage.util import random_noise
 import syft as sy
 from functions import mnistIID, mnistnon_IID, FedDataset, getImage
 from utils import averageModels
@@ -52,8 +53,8 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         'seed': 0,
         'rounds': 100,
         'C': 0.9,
-        'lowest_snr': 25,
-        'highest_snr': 30,
+        'lowest_snr': 5,
+        'highest_snr': 20,
         'lowest_csi': 0,
         'highest_csi': 1,
         'drop_rate': 0.1,
@@ -143,83 +144,93 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         dict_key = "client" + str(c)
         x_val = random.random()
         y_val = random.random()
-        snr_value = random.randint(25, 30)
+        snr_value = random.randint(5, 20)
         snr_dict[dict_key] = snr_value
         x_dict[dict_key] = x_val
         y_dict[dict_key] = y_val
 
+    def add_noise(dataset):
+    noisy_data = []
+    for data in dataset:
+        img, _ = data[0], data[1]
+        noisy_data += torch.tensor(random_noise(img,
+                                    mode='gaussian', mean=0, var=0.05, clip=True))
+    return noisy_data
+
+    train_gauss = add_noise(mnist_trainset
+
     def train(args, client, device):
-        cStatus = False
+        cStatus=False
         client['model'].train()
         # snr = random.randint(0, 40)
         print("client_ID", client['hook'].id)
-        snr = snr_dict[client['hook'].id]
+        snr=snr_dict[client['hook'].id]
         print("SNR==", snr)
 
-        snr_val = 10**(snr/10)
-        std = math.sqrt(Ps/snr_val)
+        snr_val=10**(snr/10)
+        std=math.sqrt(Ps/snr_val)
         # x = random.random()
         # y = random.random()
-        x = x_dict[client['hook'].id]
-        y = y_dict[client['hook'].id]
-        h = complex(x, y)
+        x=x_dict[client['hook'].id]
+        y=y_dict[client['hook'].id]
+        h=complex(x, y)
 
-        data = client['model'].conv1.weight
-        data = data*math.sqrt(Ps)
-        noise = torch.randn(data.size())
-        y_out = data + noise*std
-        y_out = y_out/(math.sqrt(Ps))
-        #y_out = y_out.real
+        data=client['model'].conv1.weight
+        data=data*math.sqrt(Ps)
+        noise=torch.randn(data.size())
+        y_out=data + noise*std
+        y_out=y_out/(math.sqrt(Ps))
+        # y_out = y_out.real
 
-        client['model'].conv1.weight.data = y_out
+        client['model'].conv1.weight.data=y_out
 
-        y_out = client['model'].conv2.weight
-        y_out = y_out*math.sqrt(Ps)
-        noise = torch.randn(y_out.size())
-        y_out = y_out + noise*std
-        y_out = y_out/(math.sqrt(Ps))
-        #y_out = y_out.real
+        y_out=client['model'].conv2.weight
+        y_out=y_out*math.sqrt(Ps)
+        noise=torch.randn(y_out.size())
+        y_out=y_out + noise*std
+        y_out=y_out/(math.sqrt(Ps))
+        # y_out = y_out.real
 
-        client['model'].conv2.weight.data = y_out
+        client['model'].conv2.weight.data=y_out
 
         client['model'].send(client['hook'])
         print("Client:", client['hook'].id)
         print("CSI", abs(h)/(std*std))
 
-        key_received = key_array+(np.random.randn(len(key_array))*std*Ps)
+        key_received=key_array+(np.random.randn(len(key_array))*std*Ps)
         # print(key_array_received)
-        key_received = (key_received).real
+        key_received=(key_received).real
 
         for n in range(len(key_received)):
             if(key_received[n] >= 0):
-                key_received[n] = 0
+                key_received[n]=0
             else:
-                key_received[n] = 1
+                key_received[n]=1
 
-        key_received = key_received.tolist()
-        key_received = [int(item) for item in key_received]
+        key_received=key_received.tolist()
+        key_received=[int(item) for item in key_received]
 
-        Xor_sum = sum(np.bitwise_xor(key, key_received))
-        error = Xor_sum/len(key)
+        Xor_sum=sum(np.bitwise_xor(key, key_received))
+        error=Xor_sum/len(key)
         # error = 0
         # if(error == 0 and Optimal_Power >0):
         if(error == 0):
-            cStatus = True     # Client status
+            cStatus=True     # Client status
             for epoch in range(1, args['epochs']+1):
                 for batch_idx, (data, target) in enumerate(client['mnist_trainset']):
-                    data = data.send(client['hook'])
-                    target = target.send(client['hook'])
-                    data, target = data.to(device), target.to(device)
+                    data=data.send(client['hook'])
+                    target=target.send(client['hook'])
+                    data, target=data.to(device), target.to(device)
                     client['optimizer'].zero_grad()
-                    output = client['model'](data)
-                    loss = Func.nll_loss(output, target)
+                    output=client['model'](data)
+                    loss=Func.nll_loss(output, target)
                     loss.backward()
                     # print(loss.grad)
                     client['optimizer'].step()
 
                     # print("==========ye chalega kya========================")
                     if batch_idx % args['log_interval'] == 0:
-                        loss = loss.get()
+                        loss=loss.get()
 
                         print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                             client['hook'].id,
@@ -232,23 +243,23 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
 
         client['model'].get()
         # noise
-        data = client['model'].conv1.weight
-        data = data*math.sqrt(Ps)
-        noise = torch.randn(data.size())
-        y_out = data + noise*std
-        y_out = y_out/(math.sqrt(Ps))
+        data=client['model'].conv1.weight
+        data=data*math.sqrt(Ps)
+        noise=torch.randn(data.size())
+        y_out=data + noise*std
+        y_out=y_out/(math.sqrt(Ps))
        # y_out = y_out.real
 
-        client['model'].conv1.weight.data = y_out
+        client['model'].conv1.weight.data=y_out
 
-        y_out = client['model'].conv2.weight
-        y_out = y_out*math.sqrt(Ps)
-        noise = torch.randn(y_out.size())
-        y_out = y_out + noise*std
-        y_out = y_out/(math.sqrt(Ps))
-        #y_out = y_out.real
+        y_out=client['model'].conv2.weight
+        y_out=y_out*math.sqrt(Ps)
+        noise=torch.randn(y_out.size())
+        y_out=y_out + noise*std
+        y_out=y_out/(math.sqrt(Ps))
+        # y_out = y_out.real
 
-        client['model'].conv2.weight.data = y_out
+        client['model'].conv2.weight.data=y_out
 
         # client['model'].get()
 
@@ -257,19 +268,19 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
     def test(args, model, device, test_loader, count):
         # print("TEST SET PRDEICTION")
         model.eval()
-        test_loss = 0
-        correct = 0
+        test_loss=0
+        correct=0
         with torch.no_grad():
             for data, target in test_loader:
-                data, target = data.to(device), target.to(device)
-                output = model(data)
+                data, target=data.to(device), target.to(device)
+                output=model(data)
 
                 # add losses together
                 test_loss += Func.nll_loss(output,
                                            target, reduction='sum').item()
 
                 # get the index of the max probability class
-                pred = output.argmax(1, keepdim=True)
+                pred=output.argmax(1, keepdim=True)
                 correct += pred.eq(target.view_as(pred)).sum().item()
 
         test_loss /= len(test_loader.dataset)
@@ -280,20 +291,20 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
 
         accu.append(100. * correct / len(test_loader.dataset))
 
-        #print('=====accu======', accu)
+        # print('=====accu======', accu)
     # model = CNN(k)
     # optimizer = optim.SGD(model.parameters(), lr=args['lr'])
 
     logging.info("Starting training !!")
 
     torch.manual_seed(args['seed'])
-    global_model = CNN()
+    global_model=CNN()
 
     for client in clients:
         torch.manual_seed(args['seed'])
-        client['model'] = CNN().to(device)
+        client['model']=CNN().to(device)
         # print(client)
-        client['optimizer'] = optim.SGD(
+        client['optimizer']=optim.SGD(
             client['model'].parameters(), lr=args['lr'])
 
     # print(client)
@@ -301,32 +312,32 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
     for fed_round in range(args['rounds']):
         # print("fed_round")
         # number of selected clients
-        client_good_channel = []
+        client_good_channel=[]
 
         # at least 1 client is selected for training
-        m = int(max(args['C'] * args['clients'], 1))
+        m=int(max(args['C'] * args['clients'], 1))
 
         # Selected devices
         np.random.seed(fed_round)
         # dont choose same client more than once
-        selected_clients_inds = np.random.choice(
+        selected_clients_inds=np.random.choice(
             range(len(clients)), m, replace=False)
-        selected_clients = [clients[i] for i in selected_clients_inds]
+        selected_clients=[clients[i] for i in selected_clients_inds]
 
         # Active devices
         np.random.seed(fed_round)
-        active_clients_inds = np.random.choice(selected_clients_inds, int(
+        active_clients_inds=np.random.choice(selected_clients_inds, int(
             (1-args['drop_rate']) * m), replace=False)  # drop clients
-        active_clients = [clients[i] for i in active_clients_inds]
+        active_clients=[clients[i] for i in active_clients_inds]
 
         # Training
 
         # print('=============\\\\\\\=====================')
-        idx = 0
-        power_1 = 0
+        idx=0
+        power_1=0
         for client in clients:
             print("train")
-            good_channel = train(args, client, device)
+            good_channel=train(args, client, device)
             if(good_channel == True):
                 client_good_channel.append(client)
             # idx = idx+1
@@ -337,12 +348,12 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
             print(client_good_channel[no]['hook'].id)
         print()
         print("reached this step")
-        global_model = averageModels(global_model, client_good_channel)
+        global_model=averageModels(global_model, client_good_channel)
 
         # Testing the average model
         test(args, global_model, device, global_test_loader, count)
 
-        #print("Total Power =", power_1)
+        # print("Total Power =", power_1)
         print()
 
         for client in clients:
@@ -358,7 +369,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
 
 # print("====================final ans")
 # # print(sum)
-accuracy1 = Wrapper(64, 0.01, 3, 20, 10, key, key_array, Ps)
+accuracy1=Wrapper(64, 0.01, 3, 20, 10, key, key_array, Ps)
 print(accuracy1)
 # accuracy2 = Wrapper(64,0.02,2,20,5,hook)
 # print(accuracy2)
