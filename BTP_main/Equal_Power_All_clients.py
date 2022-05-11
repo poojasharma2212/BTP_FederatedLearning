@@ -179,7 +179,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         data = client['model'].conv1.weight
         data = data*math.sqrt(Ps)
         noise = torch.randint(0, 10, data.size())
-        data = data + noise*std
+        data = data + noise
         data = data/(math.sqrt(Ps))
         # data = data.real
 
@@ -188,7 +188,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         data = client['model'].conv2.weight
         data = data*math.sqrt(Ps)
         noise1 = torch.randint(0, 10, data.size())
-        data = data + noise1*std
+        data = data + noise1
         data = data/(math.sqrt(Ps))
         # data = data.real
 
@@ -247,7 +247,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         data = client['model'].conv1.weight
         data = data*math.sqrt(Ps)
         noise2 = torch.randint(0, 10, data.size())
-        data = data + noise2*std
+        data = data + noise2
         data = data/(math.sqrt(Ps))
        # data = data.real
 
@@ -256,7 +256,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         data = client['model'].conv2.weight
         data = data*math.sqrt(Ps)
         noise3 = torch.randint(0, 10, data.size())
-        data = data + noise3*std
+        data = data + noise3
         data = data/(math.sqrt(Ps))
         # data = data.real
 
