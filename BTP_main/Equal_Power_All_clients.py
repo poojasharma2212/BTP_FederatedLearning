@@ -144,7 +144,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         dict_key = "client" + str(c)
         x_val = random.random()
         y_val = random.random()
-        snr_value = random.randint(0, 10)
+        snr_value = random.randint(5, 20)
         snr_dict[dict_key] = snr_value
         x_dict[dict_key] = x_val
         y_dict[dict_key] = y_val
@@ -157,8 +157,8 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
                                                     mode='gaussian', mean=0, var=0.05, clip=True))
         return noisy_data
 
-    #client['mnist_trainset'] = add_noise(client['mnist_trainset'])
-    #client['mnist_testset'] = add_noise(client['mnist_testset'])
+    client['mnist_trainset'] = add_noise(client['mnist_trainset'])
+    client['mnist_testset'] = add_noise(client['mnist_testset'])
 
     def train(args, client, device):
         cStatus = False
@@ -178,21 +178,21 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
 
         data = client['model'].conv1.weight
         data = data*math.sqrt(Ps)
-        noise = torch.randn(data.size())
-        data = data + noise*std
-        data = data/(math.sqrt(Ps))
-        # data = data.real
+        noise = torch.randint(0, 10, data.size())
+        y_out = data + noise
+        y_out = y_out/(math.sqrt(Ps))
+        # y_out = y_out.real
 
-        client['model'].conv1.weight.data = data
+        client['model'].conv1.weight.data = y_out
 
         data = client['model'].conv2.weight
-        data = data*math.sqrt(Ps)
-        noise1 = torch.randn(data.size())
-        data = data + noise1*std
-        data = data/(math.sqrt(Ps))
-        # data = data.real
+        y_out = y_out*math.sqrt(Ps)
+        noise = torch.randn(y_out.size())
+        y_out = y_out + noise*std
+        y_out = y_out/(math.sqrt(Ps))
+        # y_out = y_out.real
 
-        client['model'].conv2.weight.data = data
+        client['model'].conv2.weight.data = y_out
 
         client['model'].send(client['hook'])
         print("Client:", client['hook'].id)
@@ -246,21 +246,21 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         # noise
         data = client['model'].conv1.weight
         data = data*math.sqrt(Ps)
-        noise2 = torch.randn(data.size())
-        data = data + noise2*std
-        data = data/(math.sqrt(Ps))
-       # data = data.real
+        noise = torch.randn(data.size())
+        y_out = data + noise*std
+        y_out = y_out/(math.sqrt(Ps))
+       # y_out = y_out.real
 
-        client['model'].conv1.weight.data = data
+        client['model'].conv1.weight.data = y_out
 
-        data = client['model'].conv2.weight
-        data = data*math.sqrt(Ps)
-        noise3 = torch.randn(data.size())
-        data = data + noise3*std
-        data = data/(math.sqrt(Ps))
-        # data = data.real
+        y_out = client['model'].conv2.weight
+        y_out = y_out*math.sqrt(Ps)
+        noise = torch.randn(y_out.size())
+        y_out = y_out + noise*std
+        y_out = y_out/(math.sqrt(Ps))
+        # y_out = y_out.real
 
-        client['model'].conv2.weight.data = data
+        client['model'].conv2.weight.data = y_out
 
         # client['model'].get()
 
