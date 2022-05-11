@@ -207,7 +207,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         # if(error == 0 and Optimal_Power >0):
         print("The error we get ")
         print(error)
-        if((error) <= 0.1):
+        if(round(error) < 0.1):
             cStatus = True     # Client status
             for epoch in range(1, args['epochs']+1):
                 for batch_idx, (data, target) in enumerate(client['mnist_trainset']):
@@ -302,7 +302,8 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
     # print(client)
 
     for fed_round in range(args['rounds']):
-        # print("fed_round")
+
+        print(fed_round)
         # number of selected clients
         client_good_channel = []
 
