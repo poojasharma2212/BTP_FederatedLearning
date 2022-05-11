@@ -50,7 +50,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         'epochs': 3,
         'clients': 20,
         'seed': 0,
-        'rounds': 10,
+        'rounds': 100,
         'C': 0.9,
         'lowest_snr': 10,
         'highest_snr': 20,
@@ -169,6 +169,8 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         data = client['model'].conv1.weight
         data = data*math.sqrt(Ps)/(h)
         noise = torch.randn(data.size())
+
+        # impulsive noise is added here
         y_out = h*data + noise*std
         y_out = y_out/(math.sqrt(Ps))
         #y_out = y_out.real
@@ -207,7 +209,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         # if(error == 0 and Optimal_Power >0):
         print("The error we get ")
         print(error)
-        if(round(error) == 0):
+        if((error) == 0):
             cStatus = True     # Client status
             for epoch in range(1, args['epochs']+1):
                 for batch_idx, (data, target) in enumerate(client['mnist_trainset']):
@@ -303,7 +305,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
 
     for fed_round in range(args['rounds']):
 
-        print("fed_round")
+        print(fed_round)
         # number of selected clients
         client_good_channel = []
 
@@ -326,7 +328,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         # print('=============\\\\\\\=====================')
         idx = 0
         power_1 = 0
-        for client in clients:
+        for client in active_clients:
             print("train")
             good_channel = train(args, client, device)
             if(good_channel == True):
