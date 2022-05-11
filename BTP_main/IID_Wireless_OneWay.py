@@ -199,52 +199,12 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         key_received = key_received.tolist()
         key_received = [int(item) for item in key_received]
 
-        # if(Optimal_Power!= 0):
-
-        #     data= client['model'].conv1.weight
-        #     data = data*math.sqrt(Optimal_Power)
-        #     noise = torch.randn(data.size())
-        #     y_out = h*data + noise*std
-        #     y_out = y_out/(math.sqrt(Optimal_Power)*(h))
-        #     y_out = y_out.real
-
-        #     client['model'].conv1.weight.data = y_out
-
-        #     data= client['model'].conv2.weight
-        #     data = data*math.sqrt(Optimal_Power)
-        #     noise = torch.randn(data.size())
-        #     y_out = h*data + noise*std
-        #     y_out = y_out/(math.sqrt(Optimal_Power)*(h))
-        #     y_out = y_out.real
-
-        #     client['model'].conv2.weight.data = y_out
-
-        # client['model'].send(client['hook'])
-        # print("Client:", client['hook'].id)
-
-        # print("CSI",csi)
-        # print()
-
-        # key_received = h*key_array+(np.random.randn(len(key_array))*std*2)
-        # #print(key_array_received)
-        # key_received=(key_received/(h)).real
-
-        # for n in range (len(key_received)):
-        #     if(key_received[n]>=0):
-        #         key_received[n]=0
-        #     else:
-        #         key_received[n]=1
-
-        # key_received=key_received.tolist()
-        # key_received = [int(item) for item in key_received]
-
-        # # print(client)
-        # # iterate over federated data
-
         Xor_sum = sum(np.bitwise_xor(key, key_received))
         error = Xor_sum/len(key)
         # error = 0
         # if(error == 0 and Optimal_Power >0):
+        print("The error we get ")
+        print(error)
         if(error == 0):
             cStatus = True     # Client status
             for epoch in range(1, args['epochs']+1):
@@ -262,15 +222,6 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
                     # print("==========ye chalega kya========================")
                     if batch_idx % args['log_interval'] == 0:
                         loss = loss.get()
-                        # print(loss.item())
-                        # print(' Model  {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                        #         client['hook'].id, epoch,
-                        #         batch_idx * args['batch_size'], # no of images done
-                        #         len(client['mnist_trainset']) * args['batch_size'], # total images left
-                        #         100. * batch_idx / len(client['mnist_trainset']),
-                        #         loss.item()
-                        #     )
-                        # )
                         print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                             client['hook'].id,
                             epoch, batch_idx *
@@ -303,59 +254,6 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         # client['model'].get()
 
         return cStatus
-
-    # def ClientUpdateVal(clients,key,key_array,power):
-    #     good_channel =[]
-    #     for client in clients:
-    #         snr=random.randint(args['lowest_snr'],args['highest_snr'])
-    #         print("snr in dB = ",snr)
-    #         print("Client:",client['hook'].id)
-    #         snr_value=10**(snr/10)
-    #         std=math.sqrt(Ps/snr_value) #channel noise
-    #         x=random.random()
-    #         y=random.random()
-    #         h=complex(x,y)
-
-    #         data=client['model'].conv1.weight
-    #         data=data*math.sqrt(Ps)
-
-    #         power += torch.norm(abs(data*data)).item()
-    #         noise = (torch.randn(data.size())*std)
-    #         y_out = h*data + noise
-    #         y_out = y_out/(math.sqrt(Ps)*(h))
-    #         y_out= y_out.real
-    #         client['model'].conv1.weight.data=y_out
-
-    #         data=client['model'].conv2.weight
-    #         data=data*math.sqrt(Ps)
-    #         noise1 = (torch.randn(data.size())*std)
-    #         y_out = h*data + noise1
-    #         y_out = y_out/(math.sqrt(Ps)*(h))
-    #         y_out= y_out.real
-    #         client['model'].conv2.weight.data=y_out
-
-    #         key_received=h*key_array+(np.random.randn(len(key_array))*std*2)
-    #         key_received=(key_received/(h)).real
-
-    #         for n in range (len(key_received)):
-    #             if(key_received[n]>=0):
-    #                 key_received[n]=0
-    #             else:
-    #                 key_received[n]=1
-
-    #         key_received=key_received.tolist()
-    #         key_received = [int(item) for item in key_received]
-
-    #         Xor_sum = sum(np.bitwise_xor(key_received,key))
-    #         error = Xor_sum/len(key)
-    #         if(error == 0):
-    #             print("This is a Good Channel")
-    #             good_channel.append(client)
-    #         else:
-    #             print("This is a Poor Channel")
-    #         print()
-
-    #     return good_channel, power
 
     def test(args, model, device, test_loader, count):
         # print("TEST SET PRDEICTION")
@@ -421,46 +319,6 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         active_clients_inds = np.random.choice(selected_clients_inds, int(
             (1-args['drop_rate']) * m), replace=False)  # drop clients
         active_clients = [clients[i] for i in active_clients_inds]
-
-        # Training
-        # print(client)
-
-        # snr = []
-        # csi = []
-
-        # for i in range(args['clients']-1):
-        #     # print("csi")
-        #     csi.append(random.uniform(args['lowest_csi'], args['highest_csi']))
-        #     snr.append(random.randint(args['lowest_snr'], args['highest_snr']))
-
-        #    # snr.append(random.randint())
-        # print("CSI=========>>>>>>>>>>>>>",csi)
-        # #===============Water Filling Algorithm ==============
-        # mu_min = 1e-15
-        # mu = 0
-
-        # wfa = 3.402823466E+38
-
-        # while(mu_min<=1):
-        #     wfa1 = 0
-        #     P_total = 0
-
-        #     for csi_i in csi:
-        #         # print(csi_i)
-        #         if(csi_i==0 or mu_min==0):
-        #             P_optimal = 0
-        #         else:
-        #             P_optimal = max(0,(1/mu_min - 1/csi_i))
-        #         wfa1 = math.log( 1+ P_optimal**csi_i)
-        #         P_total += P_optimal
-
-        #     len_ac = len(active_clients)
-        #     g = wfa1 - mu_min* (P_total - Ps*(len_ac-1))
-        #     if(g<wfa):
-        #         mu = mu_min
-        #         wfa = g
-        #     print("mu ki value", mu)
-        #     mu_min+= 0.00004
 
         # print('=============\\\\\\\=====================')
         idx = 0
