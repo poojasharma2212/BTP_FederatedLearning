@@ -151,6 +151,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
                     output[i][j] = 0
                 elif rdn > thres:
                     output[i][j] = 255
+        return output
 
     def train(args, client, device, csi, snr, mu, key, key_array):
         cStatus = False
