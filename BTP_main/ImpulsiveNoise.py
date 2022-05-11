@@ -196,7 +196,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
             add_noise = torch.randn(data.size())*std
 
             # impulse_noise = random_noise.copy()
-            ret, impulse_noise = cv2.threshold(
+            impulse_noise = cv2.threshold(
                 random.uniform, 250, 255, cv2.THRESH_BINARY)
             noise = add_noise + torch.tensor(impulse_noise)
             y_out = h*data + noise
