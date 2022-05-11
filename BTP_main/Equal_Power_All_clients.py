@@ -196,7 +196,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
 
         client['model'].send(client['hook'])
         print("Client:", client['hook'].id)
-        print("CSI", abs(h)/(std*std))
+        #print("CSI", abs(h)/(std*std))
 
         key_received = key_array+(np.random.randn(len(key_array))*std*Ps)
         # print(key_array_received)
