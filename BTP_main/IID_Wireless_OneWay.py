@@ -162,6 +162,8 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         # y = random.random()
         x = x_dict[client['hook'].id]
         y = y_dict[client['hook'].id]
+        x = random.random()
+        y = random.random()
         h = complex(x, y)
 
         data = client['model'].conv1.weight
