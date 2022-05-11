@@ -141,17 +141,25 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
             return Func.log_softmax(x, dim=1)
 
     def getNoise():
-        output = np.zeros([1, 5])
+        array = np.array([1, 2, 3, 4, 5])
         prob = 0.002
         thres = 1 - prob
-        for i in range(1):
-            for j in range(5):
-                rdn = random.random()
-                if rdn < prob:
-                    output[i][j] = 0
-                elif rdn > thres:
-                    output[i][j] = 255
-        return output
+        rdn = random.random()
+        for i in range(5):
+            if(rdn < prob):
+                array[i] = 0
+            else:
+                array[i] = 2
+        return array
+
+        # for i in range(1):
+        #     for j in range(5):
+        #         rdn = random.random()
+        #         if rdn < prob:
+        #             output[i][j] = 0
+        #         elif rdn > thres:
+        #             output[i][j] = 255
+        # return output
 
     def train(args, client, device, csi, snr, mu, key, key_array):
         cStatus = False
