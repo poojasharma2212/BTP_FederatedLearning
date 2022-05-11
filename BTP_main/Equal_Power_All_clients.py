@@ -165,18 +165,18 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         h = complex(x, y)
 
         data = client['model'].conv1.weight
-        data = data*math.sqrt(Ps)/(h)
+        data = data*math.sqrt(Ps)
         noise = torch.randn(data.size())
-        y_out = h*data + noise*std
+        y_out = data + noise*std
         y_out = y_out/(math.sqrt(Ps))
         y_out = y_out.real
 
         client['model'].conv1.weight.data = y_out
 
         y_out = client['model'].conv2.weight
-        y_out = y_out*math.sqrt(Ps)/(h)
+        y_out = y_out*math.sqrt(Ps)
         noise = torch.randn(y_out.size())
-        y_out = h*y_out + noise*std
+        y_out = y_out + noise*std
         y_out = y_out/(math.sqrt(Ps))
         y_out = y_out.real
 
@@ -233,18 +233,18 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         client['model'].get()
         # noise
         data = client['model'].conv1.weight
-        data = data*math.sqrt(Ps)/h
+        data = data*math.sqrt(Ps)
         noise = torch.randn(data.size())
-        y_out = h*data + noise*std
+        y_out = data + noise*std
         y_out = y_out/(math.sqrt(Ps))
         y_out = y_out.real
 
         client['model'].conv1.weight.data = y_out
 
         y_out = client['model'].conv2.weight
-        y_out = y_out*math.sqrt(Ps)/h
+        y_out = y_out*math.sqrt(Ps)
         noise = torch.randn(y_out.size())
-        y_out = h*y_out + noise*std
+        y_out = y_out + noise*std
         y_out = y_out/(math.sqrt(Ps))
         y_out = y_out.real
 
