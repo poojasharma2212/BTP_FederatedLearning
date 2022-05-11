@@ -13,7 +13,6 @@ import logging
 import os
 import random
 import math
-from skimage.util import random_noise, img_as_float
 import syft as sy
 from functions import mnistIID, mnistnon_IID, FedDataset, getImage
 from utils import averageModels
@@ -51,7 +50,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         'epochs': 3,
         'clients': 20,
         'seed': 0,
-        'rounds': 100,
+        'rounds': 10,
         'C': 0.9,
         'lowest_snr': 10,
         'highest_snr': 20,
@@ -149,17 +148,6 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         x_dict[dict_key] = x_val
         y_dict[dict_key] = y_val
 
-    def add_noise(dataset):
-        noisy_data = []
-        for data in dataset:
-            img, _ = data[0], data[1]
-            noisy_data += torch.tensor(random_noise(img,
-                                                    mode='gaussian', mean=0, var=0.05, clip=True))
-        return noisy_data
-
-    #client['mnist_trainset'] = add_noise(client['mnist_trainset'])
-    #client['mnist_testset'] = add_noise(client['mnist_testset'])
-
     def train(args, client, device):
         cStatus = False
         client['model'].train()
@@ -172,35 +160,37 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         std = math.sqrt(Ps/snr_val)
         # x = random.random()
         # y = random.random()
-        # x = x_dict[client['hook'].id]
-        # y = y_dict[client['hook'].id]
-        # h = complex(x, y)
+        x = x_dict[client['hook'].id]
+        y = y_dict[client['hook'].id]
+        x = random.random()
+        y = random.random()
+        h = complex(x, y)
 
         data = client['model'].conv1.weight
-        data = data*math.sqrt(Ps)
+        data = data*math.sqrt(Ps)/(h)
         noise = torch.randn(data.size())
-        y_out = data + noise
+        y_out = h*data + noise*std
         y_out = y_out/(math.sqrt(Ps))
-        # y_out = y_out.real
+        y_out = y_out.real
 
         client['model'].conv1.weight.data = y_out
 
-        data = client['model'].conv2.weight
-        y_out = y_out*math.sqrt(Ps)
+        y_out = client['model'].conv2.weight
+        y_out = y_out*math.sqrt(Ps)/(h)
         noise = torch.randn(y_out.size())
-        y_out = y_out + noise*std
+        y_out = h*y_out + noise*std
         y_out = y_out/(math.sqrt(Ps))
-        # y_out = y_out.real
+        y_out = y_out.real
 
         client['model'].conv2.weight.data = y_out
 
         client['model'].send(client['hook'])
         print("Client:", client['hook'].id)
-        #print("CSI", abs(h)/(std*std))
+        print("CSI", abs(h)/(std*std))
 
-        key_received = key_array+(np.random.randn(len(key_array))*std*Ps)
+        key_received = h*key_array+(np.random.randn(len(key_array))*std*Ps)
         # print(key_array_received)
-        key_received = (key_received).real
+        key_received = (key_received/(h)).real
 
         for n in range(len(key_received)):
             if(key_received[n] >= 0):
@@ -215,7 +205,8 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         error = Xor_sum/len(key)
         # error = 0
         # if(error == 0 and Optimal_Power >0):
-        print("Error in the channel is ", error)
+        print("The error we get ")
+        print(error)
         if(round(error) == 0):
             cStatus = True     # Client status
             for epoch in range(1, args['epochs']+1):
@@ -233,7 +224,6 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
                     # print("==========ye chalega kya========================")
                     if batch_idx % args['log_interval'] == 0:
                         loss = loss.get()
-
                         print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                             client['hook'].id,
                             epoch, batch_idx *
@@ -246,20 +236,20 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         client['model'].get()
         # noise
         y_out = client['model'].conv1.weight
-        y_out = y_out*math.sqrt(Ps)
+        y_out = y_out*math.sqrt(Ps)/h
         noise = torch.randn(y_out.size())
-        y_out = y_out + noise*std
+        y_out = h*y_out + noise*std
         y_out = y_out/(math.sqrt(Ps))
-       # y_out = y_out.real
+        y_out = y_out.real
 
         client['model'].conv1.weight.data = y_out
 
         y_out = client['model'].conv2.weight
-        y_out = y_out*math.sqrt(Ps)
+        y_out = y_out*math.sqrt(Ps)/h
         noise = torch.randn(y_out.size())
-        y_out = y_out + noise*std
+        y_out = h*y_out + noise*std
         y_out = y_out/(math.sqrt(Ps))
-        # y_out = y_out.real
+        y_out = y_out.real
 
         client['model'].conv2.weight.data = y_out
 
@@ -293,7 +283,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
 
         accu.append(100. * correct / len(test_loader.dataset))
 
-        # print('=====accu======', accu)
+        #print('=====accu======', accu)
     # model = CNN(k)
     # optimizer = optim.SGD(model.parameters(), lr=args['lr'])
 
@@ -312,7 +302,8 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
     # print(client)
 
     for fed_round in range(args['rounds']):
-        # print("fed_round")
+
+        print("fed_round")
         # number of selected clients
         client_good_channel = []
 
@@ -331,8 +322,6 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         active_clients_inds = np.random.choice(selected_clients_inds, int(
             (1-args['drop_rate']) * m), replace=False)  # drop clients
         active_clients = [clients[i] for i in active_clients_inds]
-
-        # Training
 
         # print('=============\\\\\\\=====================')
         idx = 0
@@ -355,7 +344,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         # Testing the average model
         test(args, global_model, device, global_test_loader, count)
 
-        # print("Total Power =", power_1)
+        #print("Total Power =", power_1)
         print()
 
         for client in clients:
@@ -367,6 +356,58 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
     print("============ Accuracy ===========")
     # print(accu)
     return accu
+
+    #     print("Sending data back to Server")
+    #     print()
+    #     power = []
+
+    #     for csi_i in csi :
+    #         power.append(max(0,(1/mu - 1/csi_i)))
+    #     # fig,ax=plt.subplots()
+    #     # line1=ax.plot(csi,power,label="channel power allocated")
+    #     # line2=ax.plot(csi,[1/mu_min]*len(csi),label="maximum power allocated")
+    #     # ax.set_title("csi vs power allocated")
+    #     # ax.set_xlabel("csi (channel gain to noise ratio)")
+    #     # ax.set_ylabel("power allocated")
+    #     # ax.legend()
+    #     # plt.show()
+    # #     # Testing
+    # #     for client in active_clients:
+    # #         test(args, client['model'], device, client['testset'], client['hook'].id)
+
+    #     print()
+    #     csi.sort()
+
+    #     #ClientUpdateVal(clients,key,key_array,power_client)
+    #     #good_channel_odd,power_odd=ClientUpdateVal(client_good_channel,key,key_array,0)
+
+    #     print()
+
+    #     print("Clients having a good channel and considered for averaging")
+    #     # for no in range (len(good_channel_odd)):
+    #     #     print(good_channel_odd[no]['hook'].id)
+    # Averaging
+
+
+# final_acc = []
+# sum = []
+# weight = []
+
+# hook = sy.TorchHook(torch)
+
+# for i in range(4):
+#     accuracy1 = Wrapper(64,0.02,2,20,4,hook)
+#     print(accuracy1)
+#     if(len(sum)==0):
+#         sum = accuracy1
+#     for j in range(len(accuracy1)):
+#         sum[j] = sum[j] + accuracy1[j]
+#     # final_acc[i] = accuracy1
+# for i in range(len(sum)):
+#     sum[i] = sum[i]/10
+# weight = sum/10
+
+# # print(final_acc)
 
 
 # print("====================final ans")
