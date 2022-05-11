@@ -53,7 +53,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         'seed': 0,
         'rounds': 100,
         'C': 0.9,
-        'lowest_snr': 5,
+        'lowest_snr': 10,
         'highest_snr': 20,
         'lowest_csi': 0,
         'highest_csi': 1,
@@ -144,7 +144,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         dict_key = "client" + str(c)
         x_val = random.random()
         y_val = random.random()
-        snr_value = random.randint(5, 20)
+        snr_value = random.randint(args['lowest_snr'], args['highest_snr'])
         snr_dict[dict_key] = snr_value
         x_dict[dict_key] = x_val
         y_dict[dict_key] = y_val
@@ -178,7 +178,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
 
         data = client['model'].conv1.weight
         data = data*math.sqrt(Ps)
-        noise = torch.randint(10, 20, data.size())
+        noise = torch.randn(data.size())
         y_out = data + noise
         y_out = y_out/(math.sqrt(Ps))
         # y_out = y_out.real
@@ -187,7 +187,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
 
         data = client['model'].conv2.weight
         y_out = y_out*math.sqrt(Ps)
-        noise = torch.randint(10, 20, y_out.size())
+        noise = torch.randn(y_out.size())
         y_out = y_out + noise*std
         y_out = y_out/(math.sqrt(Ps))
         # y_out = y_out.real
@@ -247,7 +247,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         # noise
         data = client['model'].conv1.weight
         data = data*math.sqrt(Ps)
-        noise = torch.randint(10, 20, data.size())
+        noise = torch.randn(data.size())
         y_out = data + noise*std
         y_out = y_out/(math.sqrt(Ps))
        # y_out = y_out.real
@@ -256,7 +256,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
 
         y_out = client['model'].conv2.weight
         y_out = y_out*math.sqrt(Ps)
-        noise = torch.randint(10, 20, y_out.size())
+        noise = torch.randn(y_out.size())
         y_out = y_out + noise*std
         y_out = y_out/(math.sqrt(Ps))
         # y_out = y_out.real
