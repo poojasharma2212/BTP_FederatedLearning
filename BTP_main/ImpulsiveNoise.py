@@ -142,7 +142,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
 
     def getNoise():
         output = np.zeros([5, 5], np.uint8)
-        prob = 0.04
+        prob = 0.0002
         thres = 1 - prob
         for i in range(5):
             for j in range(5):
