@@ -48,12 +48,12 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         'lr': 0.007,
         'log_interval': 10,
         'epochs': 2,
-        'clients': 20,
+        'clients': 30,
         'seed': 0,
         'rounds': 100,
         'C': 0.9,
         'lowest_snr': 10,
-        'highest_snr': 20,
+        'highest_snr': 30,
         'lowest_csi': 0,
         'highest_csi': 1,
         'drop_rate': 0.1,
@@ -75,7 +75,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
             hook, id="client{}".format(i+1))})
 
     # os.chdir("/content/drive/MyDrive/FL_ZaaPoo/data/MNIST/raw")
-    nUsers = 20
+    nUsers = 30
     transform = transforms.Compose(
         [transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
     # transform=transforms.ToTensor()
@@ -408,10 +408,9 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
 # print("====================final ans")
 # # print(sum)
 
-accuracy1 = Wrapper(64, 0.01, 3, 20, 10, key, key_array, Ps)
+accuracy1 = Wrapper(64, 0.01, 3, 30, 10, key, key_array, Ps)
 print(accuracy1)
 # accuracy2 = Wrapper(64,0.02,2,20,5,hook)
 # print(accuracy2)
 # accuracy3 = Wrapper(64,0.02,2,20,5,hook)
 # print(accuracy3)
-q
