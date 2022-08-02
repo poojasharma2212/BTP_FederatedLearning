@@ -172,11 +172,12 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
 
         x = torch.flatten(data)
         xTx = 0
-        for i in range(x.size):
-            xTx = xTx + x[i]*x[i]
         print("************8")
         print(data.size())
         print(x.size())
+        for i in range(x.size):
+            xTx = xTx + x[i]*x[i]
+        
         print('-----------')
         # print(data)
         print("xTTTTTTTTTTTTx: ", xTx)
