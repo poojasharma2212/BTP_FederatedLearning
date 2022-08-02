@@ -171,29 +171,34 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         data = client['model'].conv1.weight
 
         x = torch.flatten(data)
+        xTx = 0
+        for i in range(x.size()):
+            xTx = xTx + x[i]*x[i]
         print("************8")
         print(data.size())
         print(x.size())
         print('-----------')
         # print(data)
+        print("xTTTTTTTTTTTTx: ", xTx)
         # print(x)
 
-        xx = x.detach().numpy()
-        # print(xx.shape())
-        print(type(xx))
-        print(xx)
-        xx = xx[np.newaxis]
-        # xx = data.transpose(0, 1)
-        # print('0000000000000000000000000')
-        # print(xx.size())
+        # xx = x.detach().numpy()
+        # # print(xx.shape())
+        # print(type(xx))
+        # print(xx)
+        # xx = xx[np.newaxis]
+        # # xx = data.transpose(0, 1)
+        # # print('0000000000000000000000000')
+        # # print(xx.size())
 
-        print("---------------------")
-        transposed = np.transpose(xx)
-        print(transposed)
-        print(np.size(transposed))
-        # transposed = torch.flatten(xx)
-        print("000000000000000000000000")
-        print(xx*transposed)
+        # print("---------------------")
+        # transposed = np.transpose(xx)
+        # print(transposed)
+        # print(np.size(transposed))
+        # # transposed = torch.flatten(xx)
+        # print("000000000000000000000000")
+        # print(xx*transposed)
+
         data = data*math.sqrt(Ps)/(h)
         # print(data)
         noise = torch.randn(data.size())
