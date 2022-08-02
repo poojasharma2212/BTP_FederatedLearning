@@ -169,16 +169,21 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         h = complex(x, y)
 
         data = client['model'].conv1.weight
+        print("************8")
+        print(data)
+        x = torch.flatten(data)
+        print("---------------------")
+        print(x)
 
+        xx = torch.transpose(data)
+        xx = torch.flatten(xx)
+        print('0000000000000000000000000')
+        print(x*xx)
         data = data*math.sqrt(Ps)/(h)
         print(data)
         noise = torch.randn(data.size())
         y_out = h*data + noise*std
-        x = data
-        x = torch.flatten(data)
-        xx = torch.transpose(data)
-        xx = torch.flatten(xx)
-        print(x*xx)
+
         y_out = y_out/(math.sqrt(Ps))
         y_out = y_out.real
 
