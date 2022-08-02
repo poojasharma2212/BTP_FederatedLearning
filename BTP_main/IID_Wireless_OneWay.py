@@ -179,10 +179,10 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         # print(x)
 
         xx = x.detach().numpy()
-        print(xx.shape())
+        # print(xx.shape())
         print(type(xx))
         print(xx)
-        
+        xx = xx[np.newaxis]
         # xx = data.transpose(0, 1)
         # print('0000000000000000000000000')
         # print(xx.size())
