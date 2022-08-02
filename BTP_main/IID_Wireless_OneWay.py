@@ -175,20 +175,21 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         print(data.size())
         print(x.size())
         print('-----------')
-        print(data)
-        print(x)
+        # print(data)
+        # print(x)
+
         xx = x.detach().numpy()
         print(np.size(xx))
         print(xx)
-        xx = data.transpose(0, 1)
-        print('0000000000000000000000000')
-        print(xx.size())
+        # xx = data.transpose(0, 1)
+        # print('0000000000000000000000000')
+        # print(xx.size())
 
         print("---------------------")
         transposed = torch.flatten(xx)
         print(x*transposed)
         data = data*math.sqrt(Ps)/(h)
-        print(data)
+        # print(data)
         noise = torch.randn(data.size())
         y_out = h*data + noise*std
 
