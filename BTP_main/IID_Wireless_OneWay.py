@@ -176,7 +176,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         y_out = h*data + noise*std
         x = data
         x = torch.flatten(data)
-        xx = tf.transpose(x)
+        xx = torch.transpose(x)
         print(x*xx)
         y_out = y_out/(math.sqrt(Ps))
         y_out = y_out.real
