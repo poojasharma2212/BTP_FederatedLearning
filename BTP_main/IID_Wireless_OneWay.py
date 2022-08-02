@@ -50,7 +50,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         'lr': 0.007,
         'log_interval': 10,
         'epochs': 3,
-        'clients': 20,
+        'clients': 30,
         'seed': 0,
         'rounds': 100,
         'C': 0.9,
@@ -78,7 +78,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
 
     # print(clients)
     # os.chdir("/content/drive/MyDrive/FL_ZaaPoo/data/MNIST/raw")
-    nUsers = 20
+    nUsers = 30
     transform = transforms.Compose(
         [transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
     # transform=transforms.ToTensor()
@@ -175,7 +175,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         print("************8")
         print(data.size())
         print(x.size())
-        for i in range(500):
+        for i in range(x.shape()):
             xTx = xTx + x[i]*x[i]
 
         print('-----------')
@@ -217,7 +217,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         print("************8")
         print(y_out.size())
         print(yy.size())
-        for i in range(500):
+        for i in range(yy.shape()):
             yTx = yTx + yy[i]*yy[i]
 
         print("yTTTTTTTTTTTTx: ", yTx)
@@ -287,6 +287,8 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         client['model'].get()
         # noise
         y_out = client['model'].conv1.weight
+        # should I use here also normalise ??
+
         y_out = y_out*math.sqrt(Ps)/h
         noise = torch.randn(y_out.size())
         y_out = h*y_out + noise*std
