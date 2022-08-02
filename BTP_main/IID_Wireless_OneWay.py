@@ -4,6 +4,7 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as Func
 import matplotlib.pyplot as plt
+import tensorflow as tf
 from torch.utils.data.dataset import Dataset
 import numpy as np
 from datetime import datetime
@@ -175,7 +176,8 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         y_out = h*data + noise*std
         x = data
         x = torch.flatten(data)
-        print(x)
+        xx = tf.transpose(x)
+        print(x*xx)
         y_out = y_out/(math.sqrt(Ps))
         y_out = y_out.real
 
