@@ -180,8 +180,9 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
 
         xx = x.detach().numpy()
         print(np.size(xx))
-        print(xx.shape())
+        print(type(xx))
         print(xx)
+        
         # xx = data.transpose(0, 1)
         # print('0000000000000000000000000')
         # print(xx.size())
@@ -189,7 +190,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         print("---------------------")
         transposed = np.transpose(xx)
         print(transposed)
-        print(transposed.shape())
+        print(np.size(transposed))
         # transposed = torch.flatten(xx)
         print("000000000000000000000000")
         print(xx*transposed)
