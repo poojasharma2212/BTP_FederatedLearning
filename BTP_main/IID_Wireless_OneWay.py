@@ -175,9 +175,8 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         print("---------------------")
         print(x)
 
-        
-        xx = torch.flatten(xx)
-        xx = torch.t(data)
+        xx = torch.flatten(data)
+        xx = torch.t(xx)
         print('0000000000000000000000000')
         print(x*xx)
         data = data*math.sqrt(Ps)/(h)
