@@ -1,3 +1,4 @@
+from operator import length_hint
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -167,9 +168,11 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         h = complex(x, y)
 
         data = client['model'].conv1.weight
+        print((data))
         data = data*math.sqrt(Ps)/(h)
         noise = torch.randn(data.size())
         y_out = h*data + noise*std
+
         y_out = y_out/(math.sqrt(Ps))
         y_out = y_out.real
 
