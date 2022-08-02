@@ -175,7 +175,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         print("************8")
         print(data.size())
         print(x.size())
-        for i in range(x.size):
+        for i in range(500):
             xTx = xTx + x[i]*x[i]
         
         print('-----------')
