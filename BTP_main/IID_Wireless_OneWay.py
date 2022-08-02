@@ -179,7 +179,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         # print(x)
 
         xx = x.detach().numpy()
-        print(np.size(xx))
+        print(xx.shape())
         print(type(xx))
         print(xx)
         
