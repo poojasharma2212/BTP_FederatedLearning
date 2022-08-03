@@ -160,13 +160,13 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
 
         snr_val = 10**(snr/10)
         std = math.sqrt(Ps/snr_val)
-        # x = random.random()
-        # y = random.random()
-        # x = x_dict[client['hook'].id]
-        # y = y_dict[client['hook'].id]
-        # #x = random.random()
-        # #y = random.random()
-        # h = complex(x, y)
+        x = random.random()
+        y = random.random()
+        x = x_dict[client['hook'].id]
+        y = y_dict[client['hook'].id]
+        #x = random.random()
+        #y = random.random()
+        h = complex(x, y)
 
         data = client['model'].conv1.weight
 
@@ -198,47 +198,47 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         # # transposed = torch.flatten(xx)
         # print("000000000000000000000000")
         # print(xx*transposed)
-        # if(xTx <= Ps):
-        #     data = data*math.sqrt(Ps)/(h)
-        # else:
-        # data = data*math.sqrt(Ps)/((h)*(xTx))
-        # # print(data)
-        # noise = torch.randn(data.size())
+        if(xTx <= Ps):
+            data = data*math.sqrt(Ps)/(h)
+        else:
+        data = data*math.sqrt(Ps)/((h)*(xTx))
+        # print(data)
+        noise = torch.randn(data.size())
 
-        # y_out = h*data + noise*std
-        # y_out = y_out/(math.sqrt(Ps))
-        # y_out = y_out.real
+        y_out = h*data + noise*std
+        y_out = y_out/(math.sqrt(Ps))
+        y_out = y_out.real
 
-        # client['model'].conv1.weight.data = y_out
+        client['model'].conv1.weight.data = y_out
 
-        # y_out = client['model'].conv2.weight
+        y_out = client['model'].conv2.weight
 
-        # yy = torch.flatten(y_out)
-        # yTx = 0
-        # print("************")
-        # print(y_out.size())
-        # print(yy.size())
-        # for i in range(list(yy.size())[0]):
-        #     yTx = yTx + yy[i]*yy[i]
+        yy = torch.flatten(y_out)
+        yTx = 0
+        print("************")
+        print(y_out.size())
+        print(yy.size())
+        for i in range(list(yy.size())[0]):
+            yTx = yTx + yy[i]*yy[i]
 
-        # print("yTTTTTTTTTTTTx: ", yTx)
-        # print(yTx)
+        print("yTTTTTTTTTTTTx: ", yTx)
+        print(yTx)
 
-        # if(yTx <= Ps):
-        #     y_out = y_out*math.sqrt(Ps)/(h)
-        # else:
-        #     y_out = y_out*math.sqrt(Ps)/((h)*(yTx))
+        if(yTx <= Ps):
+            y_out = y_out*math.sqrt(Ps)/(h)
+        else:
+            y_out = y_out*math.sqrt(Ps)/((h)*(yTx))
 
-        # noise = torch.randn(y_out.size())
-        # y_out = h*y_out + noise*std
-        # y_out = y_out/(math.sqrt(Ps))
-        # y_out = y_out.real
+        noise = torch.randn(y_out.size())
+        y_out = h*y_out + noise*std
+        y_out = y_out/(math.sqrt(Ps))
+        y_out = y_out.real
 
-        # client['model'].conv2.weight.data = y_out
+        client['model'].conv2.weight.data = y_out
 
-        # client['model'].send(client['hook'])
-        # print("Client:", client['hook'].id)
-        # print("CSI", abs(h)/(std*std))
+        client['model'].send(client['hook'])
+        print("Client:", client['hook'].id)
+        print("CSI", abs(h)/(std*std))
 
         # wireless channel needs to be considered
         # no noise in downlink
