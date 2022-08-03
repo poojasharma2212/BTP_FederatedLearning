@@ -201,7 +201,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         if(xTx <= Ps):
             data = data*math.sqrt(Ps)/(h)
         else:
-        data = data*math.sqrt(Ps)/((h)*(xTx))
+            data = data*math.sqrt(Ps)/((h)*(xTx))
         # print(data)
         noise = torch.randn(data.size())
 
