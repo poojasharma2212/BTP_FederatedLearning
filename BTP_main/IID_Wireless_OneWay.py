@@ -145,8 +145,8 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         dict_key = "client" + str(c)
         x_val = random.random()
         y_val = random.random()
-        # snr_value = random.randint(args['lowest_snr'], args['highest_snr'])
-        # snr_dict[dict_key] = snr_value
+        snr_value = random.randint(args['lowest_snr'], args['highest_snr'])
+        snr_dict[dict_key] = snr_value
         x_dict[dict_key] = x_val
         y_dict[dict_key] = y_val
 
