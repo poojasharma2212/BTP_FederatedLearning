@@ -171,70 +171,70 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         data = client['model'].conv1.weight
 
         x = torch.flatten(data)
-        xTx = 0
-        print("************8")
-        print(data.size())
-        print(data)
-        for i in range(list(x.size())[0]):
-            xTx = xTx + x[i]*x[i]
-
-        print('-----------')
-        print("xTTTTTTTTTTTTx: ", xTx)
-        print(xTx)
-
-        # xx = x.detach().numpy()
-        # # print(xx.shape())
-        # print(type(xx))
-        # print(xx)
-        # xx = xx[np.newaxis]
-        # # xx = data.transpose(0, 1)
-        # # print('0000000000000000000000000')
-        # # print(xx.size())
-
-        # print("---------------------")
-        # transposed = np.transpose(xx)
-        # print(transposed)
-        # print(np.size(transposed))
-        # # transposed = torch.flatten(xx)
-        # print("000000000000000000000000")
-        # print(xx*transposed)
-        if(xTx <= Ps):
-            data = data*math.sqrt(Ps)/(h)
-        else:
-            data = data*math.sqrt(Ps)/((h)*(xTx))
+        # xTx = 0
+        # print("************8")
+        # print(data.size())
         # print(data)
-        noise = torch.randn(data.size())
+        # for i in range(list(x.size())[0]):
+        #     xTx = xTx + x[i]*x[i]
 
-        y_out = h*data + noise*std
-        y_out = y_out/(math.sqrt(Ps))
-        y_out = y_out.real
+        # print('-----------')
+        # print("xTTTTTTTTTTTTx: ", xTx)
+        # print(xTx)
 
-        client['model'].conv1.weight.data = y_out
+        # # xx = x.detach().numpy()
+        # # # print(xx.shape())
+        # # print(type(xx))
+        # # print(xx)
+        # # xx = xx[np.newaxis]
+        # # # xx = data.transpose(0, 1)
+        # # # print('0000000000000000000000000')
+        # # # print(xx.size())
 
-        y_out = client['model'].conv2.weight
+        # # print("---------------------")
+        # # transposed = np.transpose(xx)
+        # # print(transposed)
+        # # print(np.size(transposed))
+        # # # transposed = torch.flatten(xx)
+        # # print("000000000000000000000000")
+        # # print(xx*transposed)
+        # if(xTx <= Ps):
+        #     data = data*math.sqrt(Ps)/(h)
+        # else:
+        #     data = data*math.sqrt(Ps)/((h)*(xTx))
+        # # print(data)
+        # noise = torch.randn(data.size())
 
-        yy = torch.flatten(y_out)
-        yTx = 0
-        print("************")
-        print(y_out.size())
-        print(yy.size())
-        for i in range(list(yy.size())[0]):
-            yTx = yTx + yy[i]*yy[i]
+        # y_out = h*data + noise*std
+        # y_out = y_out/(math.sqrt(Ps))
+        # y_out = y_out.real
 
-        print("yTTTTTTTTTTTTx: ", yTx)
-        print(yTx)
+        # client['model'].conv1.weight.data = y_out
 
-        if(yTx <= Ps):
-            y_out = y_out*math.sqrt(Ps)/(h)
-        else:
-            y_out = y_out*math.sqrt(Ps)/((h)*(yTx))
+        # y_out = client['model'].conv2.weight
 
-        noise = torch.randn(y_out.size())
-        y_out = h*y_out + noise*std
-        y_out = y_out/(math.sqrt(Ps))
-        y_out = y_out.real
+        # yy = torch.flatten(y_out)
+        # yTx = 0
+        # print("************")
+        # print(y_out.size())
+        # print(yy.size())
+        # for i in range(list(yy.size())[0]):
+        #     yTx = yTx + yy[i]*yy[i]
 
-        client['model'].conv2.weight.data = y_out
+        # print("yTTTTTTTTTTTTx: ", yTx)
+        # print(yTx)
+
+        # if(yTx <= Ps):
+        #     y_out = y_out*math.sqrt(Ps)/(h)
+        # else:
+        #     y_out = y_out*math.sqrt(Ps)/((h)*(yTx))
+
+        # noise = torch.randn(y_out.size())
+        # y_out = h*y_out + noise*std
+        # y_out = y_out/(math.sqrt(Ps))
+        # y_out = y_out.real
+
+        # client['model'].conv2.weight.data = y_out
 
         client['model'].send(client['hook'])
         print("Client:", client['hook'].id)
