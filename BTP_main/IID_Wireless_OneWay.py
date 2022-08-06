@@ -55,7 +55,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         'rounds': 1,
         'C': 0.9,
         'lowest_snr': 10,
-        'highest_snr': 20,
+        # 'highest_snr': 20,
         'lowest_csi': 0,
         'highest_csi': 1,
         'drop_rate': 0.1,
@@ -145,8 +145,9 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         dict_key = "client" + str(c)
         x_val = random.random()
         y_val = random.random()
-        snr_value = random.randint(args['lowest_snr'], args['highest_snr'])
-        snr_dict[dict_key] = snr_value
+        # snr_value = random.randint(args['lowest_snr'], args['highest_snr'])
+        snr_value = args['lowest_snr']
+        # snr_dict[dict_key] = snr_value
         x_dict[dict_key] = x_val
         y_dict[dict_key] = y_val
 
@@ -155,7 +156,7 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         client['model'].train()
         # snr = random.randint(0, 40)
         print("client_ID", client['hook'].id)
-        snr = snr_dict[client['hook'].id]
+        snr = snr_value
         print("SNR==", snr)
 
         snr_val = 10**(snr/10)
@@ -168,9 +169,9 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         #y = random.random()
         h = complex(x, y)
 
-        data = client['model'].conv1.weight
+        # data = client['model'].conv1.weight
 
-        x = torch.flatten(data)
+        # x = torch.flatten(data)
         # xTx = 0
         # print("************8")
         # print(data.size())
@@ -182,29 +183,13 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         # print("xTTTTTTTTTTTTx: ", xTx)
         # print(xTx)
 
-        # # xx = x.detach().numpy()
-        # # # print(xx.shape())
-        # # print(type(xx))
-        # # print(xx)
-        # # xx = xx[np.newaxis]
-        # # # xx = data.transpose(0, 1)
-        # # # print('0000000000000000000000000')
-        # # # print(xx.size())
-
-        # # print("---------------------")
-        # # transposed = np.transpose(xx)
-        # # print(transposed)
-        # # print(np.size(transposed))
-        # # # transposed = torch.flatten(xx)
-        # # print("000000000000000000000000")
-        # # print(xx*transposed)
         # if(xTx <= Ps):
         #     data = data*math.sqrt(Ps)/(h)
         # else:
         #     data = data*math.sqrt(Ps)/((h)*(xTx))
         # # print(data)
         # noise = torch.randn(data.size())
-
+        # data = data*math.sqrt(Ps)/((h)*(xTx)
         # y_out = h*data + noise*std
         # y_out = y_out/(math.sqrt(Ps))
         # y_out = y_out.real
@@ -290,9 +275,16 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         client['model'].get()
         # noise
         y_out = client['model'].conv1.weight
+        x = torch.flatten(y_out)
+        xTx = 0
         # should I use here also normalise ??
+        for i in range(list(x.size())[0]):
+            xTx = xTx + x[i]*x[i]
 
-        y_out = y_out*math.sqrt(Ps)/h
+        print('-----------')
+        print("xTTTTTTTTTTTTx: ", xTx)
+        print(xTx)
+        y_out = y_out*math.sqrt(Ps)/((h)*(xTx))
 
         noise = torch.randn(y_out.size())
         y_out = h*y_out + noise*std
@@ -302,7 +294,18 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         client['model'].conv1.weight.data = y_out
 
         y_out = client['model'].conv2.weight
-        y_out = y_out*math.sqrt(Ps)/h
+        yy = torch.flatten(y_out)
+        yTy = 0
+        # should I use here also normalise ??
+        for i in range(list(x.size())[0]):
+            yTy = yTy + yy[i]*yy[i]
+
+        print('-----------')
+        print("xTTTTTTTTTTTTx: ", yTy)
+        print(yTy)
+
+        y_out = y_out*math.sqrt(Ps)/((h)*(yTy))
+        # y_out = y_out*math.sqrt(Ps)/h
         noise = torch.randn(y_out.size())
         y_out = h*y_out + noise*std
         y_out = y_out/(math.sqrt(Ps))
