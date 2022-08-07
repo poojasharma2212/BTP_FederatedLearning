@@ -40,7 +40,8 @@ key_array = np.array(key_n)
 accu = []
 
 
-def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_array, Ps):
+# def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_array, Ps):
+def Wrapper(batch_size):
     count = 0
     print("yes")
 
@@ -154,11 +155,11 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
     def train(args, client, device):
         cStatus = False
         client['model'].train()
+        client['model'].send(client['hook'])
         # snr = random.randint(0, 40)
         print("client_ID", client['hook'].id)
         snr = snr_value
         print("SNR==", snr)
-
         snr_val = 10**(snr/10)
         std = math.sqrt(Ps/snr_val)
         x = random.random()
@@ -168,60 +169,6 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
         #x = random.random()
         #y = random.random()
         h = complex(x, y)
-
-        # data = client['model'].conv1.weight
-
-        # x = torch.flatten(data)
-        # xTx = 0
-        # print("************8")
-        # print(data.size())
-        # print(data)
-        # for i in range(list(x.size())[0]):
-        #     xTx = xTx + x[i]*x[i]
-
-        # print('-----------')
-        # print("xTTTTTTTTTTTTx: ", xTx)
-        # print(xTx)
-
-        # if(xTx <= Ps):
-        #     data = data*math.sqrt(Ps)/(h)
-        # else:
-        #     data = data*math.sqrt(Ps)/((h)*(xTx))
-        # # print(data)
-        # noise = torch.randn(data.size())
-        # data = data*math.sqrt(Ps)/((h)*(xTx)
-        # y_out = h*data + noise*std
-        # y_out = y_out/(math.sqrt(Ps))
-        # y_out = y_out.real
-
-        # client['model'].conv1.weight.data = y_out
-
-        # y_out = client['model'].conv2.weight
-
-        # yy = torch.flatten(y_out)
-        # yTx = 0
-        # print("************")
-        # print(y_out.size())
-        # print(yy.size())
-        # for i in range(list(yy.size())[0]):
-        #     yTx = yTx + yy[i]*yy[i]
-
-        # print("yTTTTTTTTTTTTx: ", yTx)
-        # print(yTx)
-
-        # if(yTx <= Ps):
-        #     y_out = y_out*math.sqrt(Ps)/(h)
-        # else:
-        #     y_out = y_out*math.sqrt(Ps)/((h)*(yTx))
-
-        # noise = torch.randn(y_out.size())
-        # y_out = h*y_out + noise*std
-        # y_out = y_out/(math.sqrt(Ps))
-        # y_out = y_out.real
-
-        # client['model'].conv2.weight.data = y_out
-
-        client['model'].send(client['hook'])
         print("Client:", client['hook'].id)
         print("CSI", abs(h)/(std*std))
 
@@ -472,7 +419,8 @@ def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_a
 
 # print("====================final ans")
 # # print(sum)
-accuracy1 = Wrapper(64, 0.01, 3, 20, 10, key, key_array, Ps)
+# accuracy1 = Wrapper(64, 0.007, 3, 20, 10, key, key_array, Ps)
+accuracy1 = Wrapper(64)
 print(accuracy1)
 # accuracy2 = Wrapper(64,0.02,2,20,5,hook)
 # print(accuracy2)
