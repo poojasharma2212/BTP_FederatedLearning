@@ -153,7 +153,7 @@ def Wrapper():
         y_dict[dict_key] = y_val
 
     def train(args, client, device):
-        cStatus = False
+        cStatus = True
         client['model'].train()
         client['model'].send(client['hook'])
         # snr = random.randint(0, 40)
