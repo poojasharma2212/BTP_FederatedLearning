@@ -53,7 +53,7 @@ def Wrapper():
         'epochs': 3,
         'clients': 30,
         'seed': 0,
-        'rounds': 100,
+        'rounds': 50,
         'C': 0.9,
         'lowest_snr': 10,
         # 'highest_snr': 20,
@@ -234,10 +234,10 @@ def Wrapper():
         print("xTTTTTTTTTTTTx: ", xTx)
         print(xTx)
 
-        y_out = y_out*math.sqrt(Ps)/((h)*(xTx))
+        y_out = y_out*math.sqrt(Ps)/((h))
 
         noise = torch.randn(y_out.size())
-        y_out = h*y_out + noise*std
+        y_out = h*y_out
         y_out = y_out/(math.sqrt(Ps))
         y_out = y_out.real
 
@@ -254,10 +254,10 @@ def Wrapper():
         print("xTTTTTTTTTTTTx: ", yTy)
         print(yTy)
 
-        y_out = y_out*math.sqrt(Ps)/((h)*(yTy))
+        y_out = y_out*math.sqrt(Ps)/((h))
         # y_out = y_out*math.sqrt(Ps)/h
         noise = torch.randn(y_out.size())
-        y_out = h*y_out + noise*std
+        y_out = h*y_out
         y_out = y_out/(math.sqrt(Ps))
         y_out = y_out.real
 
