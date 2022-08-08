@@ -247,7 +247,7 @@ def Wrapper():
         yy = torch.flatten(y_out)
         yTy = 0
         # should I use here also normalise ??
-        for i in range(list(x.size())[0]):
+        for i in range(list(yy.size())[0]):
             yTy = yTy + yy[i]*yy[i]
 
         print('-----------')
