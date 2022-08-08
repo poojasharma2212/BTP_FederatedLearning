@@ -41,7 +41,7 @@ accu = []
 
 
 # def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_array, Ps):
-def Wrapper(batch_size):
+def Wrapper():
     count = 0
     print("yes")
 
@@ -233,6 +233,7 @@ def Wrapper(batch_size):
         print('-----------')
         print("xTTTTTTTTTTTTx: ", xTx)
         print(xTx)
+
         y_out = y_out*math.sqrt(Ps)/((h)*(xTx))
 
         noise = torch.randn(y_out.size())
@@ -422,7 +423,7 @@ def Wrapper(batch_size):
 # print("====================final ans")
 # # print(sum)
 # accuracy1 = Wrapper(64, 0.007, 3, 20, 10, key, key_array, Ps)
-accuracy1 = Wrapper(64)
+accuracy1 = Wrapper()
 print(accuracy1)
 # accuracy2 = Wrapper(64,0.02,2,20,5,hook)
 # print(accuracy2)
