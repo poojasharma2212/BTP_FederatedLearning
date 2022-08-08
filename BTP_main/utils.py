@@ -13,9 +13,9 @@ def averageModels(global_model, clients, snr_value, Ps):
         print("SNR==", snr)
         snr_val = 10**(snr/10)
         std = math.sqrt(Ps/snr_val)
-        print("Client", client_models)
+        # print("Client", client_models)
         print("-----------------")
-        print(global_dict)
+        # print(global_dict)
         # noise = torch.randn(global_dict.size())
         global_dict[k] = torch.stack([client_models[i].state_dict()[k].float(
         ) * samples[i] for i in range(len(client_models))], 0).sum(0)
