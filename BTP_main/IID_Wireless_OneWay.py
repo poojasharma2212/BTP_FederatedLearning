@@ -190,34 +190,36 @@ def Wrapper(batch_size):
         Xor_sum = sum(np.bitwise_xor(key, key_received))
         error = Xor_sum/len(key)
         # error = 0
-        # if(error == 0 and Optimal_Power >0):
-        print("The error we get ")
-        print(error)
-        if(round(error) == 0):
-            cStatus = True     # Client status
-            for epoch in range(1, args['epochs']+1):
-                for batch_idx, (data, target) in enumerate(client['mnist_trainset']):
-                    data = data.send(client['hook'])
-                    target = target.send(client['hook'])
-                    data, target = data.to(device), target.to(device)
-                    client['optimizer'].zero_grad()
-                    output = client['model'](data)
-                    loss = Func.nll_loss(output, target)
-                    loss.backward()
-                    # print(loss.grad)
-                    client['optimizer'].step()
+        # for equal power allocation - random clients
 
-                    # print("==========ye chalega kya========================")
-                    if batch_idx % args['log_interval'] == 0:
-                        loss = loss.get()
-                        print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                            client['hook'].id,
-                            epoch, batch_idx *
-                            args['batch_size'], len(
-                                client['mnist_trainset']) * args['batch_size'],
-                            100. * batch_idx / len(client['mnist_trainset']), loss.item()))
-        else:
-            print("Channel is not taken for fedavg in this round")
+        # if(error == 0 and Optimal_Power >0):
+        # print("The error we get ")
+        # print(error)
+        # if(round(error) == 0):
+        # cStatus = True     # Client status
+        for epoch in range(1, args['epochs']+1):
+            for batch_idx, (data, target) in enumerate(client['mnist_trainset']):
+                data = data.send(client['hook'])
+                target = target.send(client['hook'])
+                data, target = data.to(device), target.to(device)
+                client['optimizer'].zero_grad()
+                output = client['model'](data)
+                loss = Func.nll_loss(output, target)
+                loss.backward()
+                # print(loss.grad)
+                client['optimizer'].step()
+
+                # print("==========ye chalega kya========================")
+                if batch_idx % args['log_interval'] == 0:
+                    loss = loss.get()
+                    print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+                        client['hook'].id,
+                        epoch, batch_idx *
+                        args['batch_size'], len(
+                            client['mnist_trainset']) * args['batch_size'],
+                        100. * batch_idx / len(client['mnist_trainset']), loss.item()))
+        # else:
+        #     print("Channel is not taken for fedavg in this round")
 
         client['model'].get()
         # noise
