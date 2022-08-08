@@ -349,7 +349,8 @@ def Wrapper():
             print(client_good_channel[no]['hook'].id)
         print()
         print("reached this step")
-        global_model = averageModels(global_model, client_good_channel)
+        global_model = averageModels(
+            global_model, client_good_channel, snr_value, Ps)
 
         # Testing the average model
         test(args, global_model, device, global_test_loader, count)
