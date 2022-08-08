@@ -20,6 +20,7 @@ def averageModels(global_model, clients, snr_value, Ps):
         global_dict[k] = torch.stack([client_models[i].state_dict()[k].float(
         ) * samples[i] for i in range(len(client_models))], 0).sum(0)
 
-    print(global_model.load_state_dict(global_dict))
+    print(global_dict)
     global_model.load_state_dict(global_dict)
+
     return global_model
