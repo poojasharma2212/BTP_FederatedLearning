@@ -209,9 +209,10 @@ def Wrapper():
         print('-----------')
         print("xTTTTTTTTTTTTx: ", xTx)
         print(xTx)
-
-        y_out = y_out*math.sqrt(Ps)/((h))
-
+        if(xTx <= Ps):
+            y_out = y_out*math.sqrt(Ps)/((h))
+        else:
+            y_out = y_out*math.sqrt(Ps)/((h)*xTx)
         noise = torch.randn(y_out.size())
         y_out = h*y_out
         y_out = y_out/(math.sqrt(Ps))
@@ -228,8 +229,10 @@ def Wrapper():
         print('-----------')
         print("xTTTTTTTTTTTTx: ", yTy)
         print(yTy)
-
-        y_out = y_out*math.sqrt(Ps)/((h))
+        if(yTy <= Ps):
+            y_out = y_out*math.sqrt(Ps)/((h))
+        else:
+            y_out = y_out*math.sqrt(Ps)/((h)*yTy)
         noise = torch.randn(y_out.size())
         y_out = h*y_out
         y_out = y_out/(math.sqrt(Ps))
@@ -310,13 +313,18 @@ def Wrapper():
         # print('=============\\\\\\\=====================')
         idx = 0
         power_1 = 0
-        from keras.layers import GaussianNoise
-        # define noise layer
-        layer = GaussianNoise(0.1)
+
+        # def add_noise(weights, noise):
+        #     with torch.no_grad():
+        #     weight_noise = nn.Parameter(weights + noise.to("cuda"))
+        # return weight_noise
+
         for client in active_clients:
             print("train")
-            if idx == 0:
-                client['model'].add(GaussianNoise(math.sqrt(10)))
+            # if fed_round == 0:
+            #     self.noise_conv1 = torch.randn(nn.Parameter(self.conv1.weight).size())*0.6 + 0
+            #     self.noise_conv2 = torch.randn(nn.Parameter(self.conv2.weight).size())*0.6 + 0
+            # client['model'].add(GaussianNoise(math.sqrt(10)))
 
             good_channel = train(args, client, device)
             if(good_channel == True):
