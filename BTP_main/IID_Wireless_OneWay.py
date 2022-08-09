@@ -138,7 +138,6 @@ def Wrapper():
             x = self.fc2(x)
             return Func.log_softmax(x, dim=1)
 
-    snr_dict = {}
     x_dict = {}
     y_dict = {}
 
@@ -174,28 +173,7 @@ def Wrapper():
 
         # wireless channel needs to be considered
         # no noise in downlink
-        key_received = h*key_array+(np.random.randn(len(key_array))*std*Ps)
-        # print(key_array_received)
-        key_received = (key_received/(h)).real
 
-        for n in range(len(key_received)):
-            if(key_received[n] >= 0):
-                key_received[n] = 0
-            else:
-                key_received[n] = 1
-
-        key_received = key_received.tolist()
-        key_received = [int(item) for item in key_received]
-
-        Xor_sum = sum(np.bitwise_xor(key, key_received))
-        error = Xor_sum/len(key)
-        # error = 0
-        # for equal power allocation - random clients
-
-        # if(error == 0 and Optimal_Power >0):
-        # print("The error we get ")
-        # print(error)
-        # if(round(error) == 0):
         # cStatus = True     # Client status
         for epoch in range(1, args['epochs']+1):
             for batch_idx, (data, target) in enumerate(client['mnist_trainset']):
@@ -218,11 +196,9 @@ def Wrapper():
                         args['batch_size'], len(
                             client['mnist_trainset']) * args['batch_size'],
                         100. * batch_idx / len(client['mnist_trainset']), loss.item()))
-        # else:
-        #     print("Channel is not taken for fedavg in this round")
 
         client['model'].get()
-        # noise
+
         y_out = client['model'].conv1.weight
         x = torch.flatten(y_out)
         xTx = 0
@@ -246,7 +222,6 @@ def Wrapper():
         y_out = client['model'].conv2.weight
         yy = torch.flatten(y_out)
         yTy = 0
-        # should I use here also normalise ??
         for i in range(list(yy.size())[0]):
             yTy = yTy + yy[i]*yy[i]
 
@@ -255,7 +230,6 @@ def Wrapper():
         print(yTy)
 
         y_out = y_out*math.sqrt(Ps)/((h))
-        # y_out = y_out*math.sqrt(Ps)/h
         noise = torch.randn(y_out.size())
         y_out = h*y_out
         y_out = y_out/(math.sqrt(Ps))
@@ -336,8 +310,14 @@ def Wrapper():
         # print('=============\\\\\\\=====================')
         idx = 0
         power_1 = 0
+        from keras.layers import GaussianNoise
+        # define noise layer
+        layer = GaussianNoise(0.1)
         for client in active_clients:
             print("train")
+            if idx == 0:
+                client['model'].add(GaussianNoise(math.sqrt(10)))
+
             good_channel = train(args, client, device)
             if(good_channel == True):
                 client_good_channel.append(client)
