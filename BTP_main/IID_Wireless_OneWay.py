@@ -53,7 +53,7 @@ def Wrapper():
         'epochs': 3,
         'clients': 30,
         'seed': 0,
-        'rounds': 50,
+        'rounds': 150,
         'C': 0.9,
         'lowest_snr': 10,
         # 'highest_snr': 20,
@@ -367,37 +367,6 @@ def Wrapper():
     print("============ Accuracy ===========")
     # print(accu)
     return accu
-
-    #     print("Sending data back to Server")
-    #     print()
-    #     power = []
-
-    #     for csi_i in csi :
-    #         power.append(max(0,(1/mu - 1/csi_i)))
-    #     # fig,ax=plt.subplots()
-    #     # line1=ax.plot(csi,power,label="channel power allocated")
-    #     # line2=ax.plot(csi,[1/mu_min]*len(csi),label="maximum power allocated")
-    #     # ax.set_title("csi vs power allocated")
-    #     # ax.set_xlabel("csi (channel gain to noise ratio)")
-    #     # ax.set_ylabel("power allocated")
-    #     # ax.legend()
-    #     # plt.show()
-    # #     # Testing
-    # #     for client in active_clients:
-    # #         test(args, client['model'], device, client['testset'], client['hook'].id)
-
-    #     print()
-    #     csi.sort()
-
-    #     #ClientUpdateVal(clients,key,key_array,power_client)
-    #     #good_channel_odd,power_odd=ClientUpdateVal(client_good_channel,key,key_array,0)
-
-    #     print()
-
-    #     print("Clients having a good channel and considered for averaging")
-    #     # for no in range (len(good_channel_odd)):
-    #     #     print(good_channel_odd[no]['hook'].id)
-    # Averaging
 
 
 # final_acc = []
