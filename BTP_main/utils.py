@@ -7,7 +7,7 @@ def averageModels(global_model, clients, snr_value, Ps):
     samples = [clients[i]['samples'] for i in range(len(clients))]
     global_dict = global_model.state_dict()
 
-    print('global_dict', global_dict)
+    # print('global_dict', global_dict)
     for k in global_dict.keys():  # key is CNN layer index and value is layer parameters
         # take a weighted average and not average because the clients may not have the same amount of data to train upon
         snr = snr_value
