@@ -209,10 +209,10 @@ def Wrapper():
         print('-----------')
         print("xTTTTTTTTTTTTx: ", xTx)
         print(xTx)
-        if(xTx <= Ps):
-            y_out = y_out*math.sqrt(Ps)/((h))
-        else:
-            y_out = y_out*math.sqrt(Ps)/((h)*xTx)
+        # if(xTx <= Ps):
+        y_out = y_out*math.sqrt(Ps)/((h))
+        # else:
+        # y_out = y_out*math.sqrt(Ps)/((h)*xTx)
         noise = torch.randn(y_out.size())
         y_out = h*y_out
         y_out = y_out/(math.sqrt(Ps))
@@ -229,10 +229,10 @@ def Wrapper():
         print('-----------')
         print("xTTTTTTTTTTTTx: ", yTy)
         print(yTy)
-        if(yTy <= Ps):
-            y_out = y_out*math.sqrt(Ps)/((h))
-        else:
-            y_out = y_out*math.sqrt(Ps)/((h)*yTy)
+        # if(yTy <= Ps):
+        y_out = y_out*math.sqrt(Ps)/((h))
+        # else:
+        # y_out = y_out*math.sqrt(Ps)/((h)*yTy)
         noise = torch.randn(y_out.size())
         y_out = h*y_out
         y_out = y_out/(math.sqrt(Ps))
