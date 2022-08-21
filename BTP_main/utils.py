@@ -25,4 +25,45 @@ def averageModels(global_model, clients, snr_value, Ps):
     # print(global_dict)
     global_model.load_state_dict(global_dict)
 
+    y_out = global_model.conv1.weight
+    x = torch.flatten(y_out)
+    xTx = 0
+    # should I use here also normalise ??
+    for i in range(list(x.size())[0]):
+        xTx = xTx + x[i]*x[i]
+
+    print('-----------')
+    print("newModel Normalised value : ", xTx)
+    print(xTx)
+    # if(xTx <= Ps):
+    y_out = y_out*math.sqrt(Ps)
+    # else:
+    # y_out = y_out*math.sqrt(Ps)/((h)*xTx)
+    noise = torch.randn(y_out.size())
+    y_out = y_out + noise*std
+    y_out = y_out/(math.sqrt(Ps))
+    y_out = y_out.real
+
+    global_model.conv1.weight.data = y_out
+
+    y_out = global_model.conv2.weight
+    yy = torch.flatten(y_out)
+    yTy = 0
+    for i in range(list(yy.size())[0]):
+        yTy = yTy + yy[i]*yy[i]
+
+    print('-----------')
+    print("xTTTTTTTTTTTTx: ", yTy)
+    print(yTy)
+    # if(yTy <= Ps):
+    y_out = y_out*math.sqrt(Ps)
+    # else:
+    # y_out = y_out*math.sqrt(Ps)/((h)*yTy)
+    noise = torch.randn(y_out.size())
+    y_out = y_out + noise*std
+    y_out = y_out/(math.sqrt(Ps))
+    y_out = y_out.real
+
+    global_model.conv2.weight.data = y_out
+
     return global_model
