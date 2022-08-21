@@ -36,12 +36,13 @@ def averageModels(global_model, clients, snr_value, Ps):
     print("newModel Normalised value : ", xTx)
     print(xTx)
     # if(xTx <= Ps):
-    # y_out = y_out*math.sqrt(Ps)
+    Ps = Ps/xTx
+    y_out = y_out*math.sqrt(Ps)
     # else:
     # y_out = y_out*math.sqrt(Ps)/((h)*xTx)
     noise = torch.randn(y_out.size())
     y_out = y_out + noise*std
-    # y_out = y_out/(math.sqrt(Ps))
+    y_out = y_out/(math.sqrt(Ps))
     # y_out = y_out.real
 
     global_model.conv1.weight.data = y_out
@@ -55,14 +56,14 @@ def averageModels(global_model, clients, snr_value, Ps):
     print('-----------')
     print("xTTTTTTTTTTTTx: ", yTy)
     print(yTy)
+    Ps = Ps/yTy
     # if(yTy <= Ps):
-    # y_out = y_out*math.sqrt(Ps)
+    y_out = y_out*math.sqrt(Ps)
     # else:
     # y_out = y_out*math.sqrt(Ps)/((h)*yTy)
     noise = torch.randn(y_out.size())
     y_out = y_out + noise*std
-    # y_out = y_out/(math.sqrt(Ps))
-    # y_out = y_out.real
+    y_out = y_out/(math.sqrt(Ps))
 
     global_model.conv2.weight.data = y_out
 
