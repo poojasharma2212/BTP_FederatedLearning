@@ -45,4 +45,5 @@ def averageModels(global_model, clients, snr_value, Ps):
 
     global_model.conv2.weight.data = y_out
 
+    print(global_model)
     return global_model
