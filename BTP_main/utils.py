@@ -44,7 +44,6 @@ def averageModels(global_model, clients, snr_value, Ps):
     # y_out = y_out/(math.sqrt(Ps))
 
     global_model.conv2.weight.data = y_out
-    global_model.get()
 
     print(global_model)
     return global_model
