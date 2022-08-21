@@ -36,7 +36,7 @@ def averageModels(global_model, clients, snr_value, Ps):
     print("newModel Normalised value : ", xTx)
     print(xTx)
     # if(xTx <= Ps):
-    Ps = Ps/xTx
+    # Ps = Ps/xTx
     y_out = y_out*math.sqrt(Ps)
     # else:
     # y_out = y_out*math.sqrt(Ps)/((h)*xTx)
@@ -56,7 +56,7 @@ def averageModels(global_model, clients, snr_value, Ps):
     print('-----------')
     print("xTTTTTTTTTTTTx: ", yTy)
     print(yTy)
-    Ps = Ps/yTy
+    # Ps = Ps/yTy
     # if(yTy <= Ps):
     y_out = y_out*math.sqrt(Ps)
     # else:
