@@ -72,8 +72,8 @@ def Wrapper():
 
     hook = sy.TorchHook(torch)
     clients = []
-    snr_val = 10**(snr/10)
-    std = math.sqrt(Ps/snr_val)
+    # snr_val = 10**(snr/10)
+    # std = math.sqrt(Ps/snr_val)
 
     for i in range(args['clients']):
         clients.append({'hook': sy.VirtualWorker(
@@ -130,9 +130,8 @@ def Wrapper():
             self.fc1 = nn.Linear(4*4*50, 500)
             self.fc2 = nn.Linear(500, 10)
 
-            self.noise_conv1 = torch.randn(nn.Parameter(self.conv1.weight).size())*std + 0                                                                                                                                                                                      
-            self.noise_conv2 = torch.randn(nn.Parameter(self.conv2.weight).size())*std + 0                                                                                                                                                                                      
-           
+            # self.noise_conv1 = torch.randn(nn.Parameter(self.conv1.weight).size())*std + 0
+            # self.noise_conv2 = torch.randn(nn.Parameter(self.conv2.weight).size())*std + 0
 
         def forward(self, x):
             x = Func.relu(self.conv1(x))
