@@ -41,7 +41,7 @@ def averageModels(global_model, clients, snr_value, Ps):
     # y_out = y_out*math.sqrt(Ps)
     noise = torch.randn(y_out.size())
     y_out = y_out + noise*std
-    # y_out = y_out/(math.sqrt(Ps))
+    y_out = y_out/(math.sqrt(Ps)*27)
 
     global_model.conv2.weight.data = y_out
 
