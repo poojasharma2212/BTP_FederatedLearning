@@ -53,7 +53,7 @@ def Wrapper():
         'epochs': 3,
         'clients': 30,
         'seed': 0,
-        'rounds': 50,
+        'rounds': 150,
         'C': 0.9,
         'lowest_snr': 10,
         # 'highest_snr': 20,
@@ -73,7 +73,7 @@ def Wrapper():
     hook = sy.TorchHook(torch)
     clients = []
     # snr_val = 10**(snr/10)
-    # std = math.sqrt(Ps/snr_val)n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         b                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+    # std = math.sqrt(Ps/snr_val)n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         b
 
     for i in range(args['clients']):
         clients.append({'hook': sy.VirtualWorker(
@@ -219,7 +219,7 @@ def Wrapper():
         # else:
         # y_out = y_out*math.sqrt(Ps)/((h)*xTx)
         noise = torch.randn(y_out.size())
-        y_out = h*y_out
+        y_out = h*y_out+noise*std
         y_out = y_out/(math.sqrt(Ps))
         y_out = y_out.real
 
@@ -239,7 +239,7 @@ def Wrapper():
         # else:
         # y_out = y_out*math.sqrt(Ps)/((h)*yTy)
         noise = torch.randn(y_out.size())
-        y_out = h*y_out
+        y_out = h*y_out + noise*std
         y_out = y_out/(math.sqrt(Ps))
         y_out = y_out.real
 
