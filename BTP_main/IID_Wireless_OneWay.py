@@ -220,7 +220,7 @@ def Wrapper():
         # y_out = y_out*math.sqrt(Ps)/((h)*xTx)
         noise = torch.randn(y_out.size())
         y_out = h*y_out+noise*std
-        y_out = y_out/(math.sqrt(Ps))
+        y_out = y_out/(math.sqrt(Ps)*27)
         y_out = y_out.real
 
         client['model'].conv1.weight.data = y_out
@@ -240,7 +240,7 @@ def Wrapper():
         # y_out = y_out*math.sqrt(Ps)/((h)*yTy)
         noise = torch.randn(y_out.size())
         y_out = h*y_out + noise*std
-        y_out = y_out/(math.sqrt(Ps))
+        y_out = y_out/(math.sqrt(Ps*27))
         y_out = y_out.real
 
         client['model'].conv2.weight.data = y_out
@@ -314,6 +314,7 @@ def Wrapper():
         active_clients_inds = np.random.choice(selected_clients_inds, int(
             (1-args['drop_rate']) * m), replace=False)  # drop clients
         active_clients = [clients[i] for i in active_clients_inds]
+        print(length(active_clients_inds))
 
         # print('=============\\\\\\\=====================')
         idx = 0
