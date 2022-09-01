@@ -314,7 +314,7 @@ def Wrapper():
         active_clients_inds = np.random.choice(selected_clients_inds, int(
             (1-args['drop_rate']) * m), replace=False)  # drop clients
         active_clients = [clients[i] for i in active_clients_inds]
-        print(length(active_clients_inds))
+        print(len(active_clients_inds))
 
         # print('=============\\\\\\\=====================')
         idx = 0
