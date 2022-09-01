@@ -156,6 +156,8 @@ def Wrapper():
         x_dict[dict_key] = x_val
         y_dict[dict_key] = y_val
 
+    K_clients = len(active_clients_inds)
+
     def train(args, client, device):
         cStatus = True
         client['model'].train()
@@ -219,8 +221,8 @@ def Wrapper():
         # else:
         # y_out = y_out*math.sqrt(Ps)/((h)*xTx)
         noise = torch.randn(y_out.size())
-        y_out = h*y_out+noise*std
-        y_out = y_out/(math.sqrt(Ps)*len(active_clients_inds))
+        y_out = h*y_out+noise*(std/K_clients)
+        y_out = y_out/(math.sqrt(Ps)*K_clients)
         y_out = y_out.real
 
         client['model'].conv1.weight.data = y_out
@@ -239,8 +241,8 @@ def Wrapper():
         # else:
         # y_out = y_out*math.sqrt(Ps)/((h)*yTy)
         noise = torch.randn(y_out.size())
-        y_out = h*y_out + noise*std
-        y_out = y_out/(math.sqrt(Ps*len(active_clients_inds)))
+        y_out = h*y_out + noise*(std/K_clients)
+        y_out = y_out/(math.sqrt(Ps*K_clients))
         y_out = y_out.real
 
         client['model'].conv2.weight.data = y_out
