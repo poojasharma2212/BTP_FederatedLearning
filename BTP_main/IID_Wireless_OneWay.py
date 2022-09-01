@@ -206,42 +206,42 @@ def Wrapper():
         client['model'].get()
 
         y_out = client['model'].conv1.weight
-        x = torch.flatten(y_out)
-        xTx = 0
-        # should I use here also normalise ??
-        for i in range(list(x.size())[0]):
-            xTx = xTx + x[i]*x[i]
+        # x = torch.flatten(y_out)
+        # xTx = 0
+        # # should I use here also normalise ??
+        # for i in range(list(x.size())[0]):
+        #     xTx = xTx + x[i]*x[i]
 
-        print('-----------')
-        print("xTTTTTTTTTTTTx: ", xTx)
-        print(xTx)
+        # print('-----------')
+        # print("xTTTTTTTTTTTTx: ", xTx)
+        # print(xTx)
         # if(xTx <= Ps):
         y_out = y_out*math.sqrt(Ps)/((h))
         # else:
         # y_out = y_out*math.sqrt(Ps)/((h)*xTx)
         noise = torch.randn(y_out.size())
         y_out = h*y_out+noise*(std/K_clients)
-        y_out = y_out/(math.sqrt(Ps)*K_clients)
+        y_out = y_out/(math.sqrt(Ps))
         y_out = y_out.real
 
         client['model'].conv1.weight.data = y_out
 
         y_out = client['model'].conv2.weight
         yy = torch.flatten(y_out)
-        yTy = 0
-        for i in range(list(yy.size())[0]):
-            yTy = yTy + yy[i]*yy[i]
+        # yTy = 0
+        # for i in range(list(yy.size())[0]):
+        #     yTy = yTy + yy[i]*yy[i]
 
-        print('-----------')
-        print("xTTTTTTTTTTTTx: ", yTy)
-        print(yTy)
+        # print('-----------')
+        # print("xTTTTTTTTTTTTx: ", yTy)
+        # print(yTy)
         # if(yTy <= Ps):
         y_out = y_out*math.sqrt(Ps)/((h))
         # else:
         # y_out = y_out*math.sqrt(Ps)/((h)*yTy)
         noise = torch.randn(y_out.size())
         y_out = h*y_out + noise*(std/K_clients)
-        y_out = y_out/(math.sqrt(Ps*K_clients))
+        y_out = y_out/(math.sqrt(Ps))
         y_out = y_out.real
 
         client['model'].conv2.weight.data = y_out
