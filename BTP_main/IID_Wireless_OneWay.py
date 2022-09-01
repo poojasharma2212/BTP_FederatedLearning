@@ -156,7 +156,7 @@ def Wrapper():
         x_dict[dict_key] = x_val
         y_dict[dict_key] = y_val
 
-    K_clients = len(active_clients_inds)
+    
 
     def train(args, client, device):
         cStatus = True
@@ -178,6 +178,7 @@ def Wrapper():
         print("Client:", client['hook'].id)
         print("CSI", abs(h)/(std*std))
 
+        K_clients = len(active_clients_inds)
         # wireless channel needs to be considered
         # no noise in downlink
 
