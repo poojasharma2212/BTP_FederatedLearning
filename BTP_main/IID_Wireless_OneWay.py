@@ -48,7 +48,7 @@ def Wrapper():
     args = {
         'batch_size': 64,
         'test_batch_size': 1000,
-        'lr': 0.01,
+        'lr': 0.04,
         'log_interval': 10,
         'epochs': 3,
         'clients': 30,
@@ -155,8 +155,6 @@ def Wrapper():
         # snr_dict[dict_key] = snr_value
         x_dict[dict_key] = x_val
         y_dict[dict_key] = y_val
-
-    
 
     def train(args, client, device):
         cStatus = True
