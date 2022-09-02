@@ -48,7 +48,7 @@ def Wrapper():
     args = {
         'batch_size': 64,
         'test_batch_size': 1000,
-        'lr': 0.001,
+        'lr': 0.01,
         'log_interval': 10,
         'epochs': 3,
         'clients': 30,
@@ -221,7 +221,7 @@ def Wrapper():
         # y_out = y_out*math.sqrt(Ps)/((h)*xTx)
         noise = torch.randn(y_out.size())
         y_out = h*y_out+noise*(std/K_clients)
-        y_out = y_out/(math.sqrt(Ps))
+        y_out = y_out/(math.sqrt(Ps*K_clients))
         y_out = y_out.real
 
         client['model'].conv1.weight.data = y_out
@@ -241,7 +241,7 @@ def Wrapper():
         # y_out = y_out*math.sqrt(Ps)/((h)*yTy)
         noise = torch.randn(y_out.size())
         y_out = h*y_out + noise*(std/K_clients)
-        y_out = y_out/(math.sqrt(Ps))
+        y_out = y_out/(math.sqrt(Ps*K_clients))
         y_out = y_out.real
 
         client['model'].conv2.weight.data = y_out
