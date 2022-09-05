@@ -48,7 +48,7 @@ def Wrapper():
     args = {
         'batch_size': 64,
         'test_batch_size': 1000,
-        'lr': 0.05,
+        'lr': 0.01,
         'log_interval': 10,
         'epochs': 3,
         'clients': 30,
@@ -206,15 +206,15 @@ def Wrapper():
         client['model'].get()
 
         y_out = client['model'].conv1.weight
-        # x = torch.flatten(y_out)
-        # xTx = 0
+        x = torch.flatten(y_out)
+        xTx = 0
         # # should I use here also normalise ??
-        # for i in range(list(x.size())[0]):
-        #     xTx = xTx + x[i]*x[i]
+        for i in range(list(x.size())[0]):
+            xTx = xTx + x[i]*x[i]
 
-        # print('-----------')
-        # print("xTTTTTTTTTTTTx: ", xTx)
-        # print(xTx)
+        print('-----------')
+        print("xTTTTTTTTTTTTx: ", xTx)
+        print(xTx)
         # if(xTx <= Ps):
         y_out = y_out*math.sqrt(Ps)/((h))
         # else:
@@ -228,13 +228,13 @@ def Wrapper():
 
         y_out = client['model'].conv2.weight
         yy = torch.flatten(y_out)
-        # yTy = 0
-        # for i in range(list(yy.size())[0]):
-        #     yTy = yTy + yy[i]*yy[i]
+        yTy = 0
+        for i in range(list(yy.size())[0]):
+            yTy = yTy + yy[i]*yy[i]
 
-        # print('-----------')
-        # print("xTTTTTTTTTTTTx: ", yTy)
-        # print(yTy)
+        print('-----------')
+        print("xTTTTTTTTTTTTx: ", yTy)
+        print(yTy)
         # if(yTy <= Ps):
         y_out = y_out*math.sqrt(Ps)/((h))
         # else:
