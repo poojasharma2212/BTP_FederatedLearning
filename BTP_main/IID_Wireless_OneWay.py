@@ -215,6 +215,8 @@ def Wrapper():
         print('-----------')
         print("xTTTTTTTTTTTTx: ", xTx)
         print(xTx)
+
+        Ps = Ps/xTx
         # if(xTx <= Ps):
         y_out = y_out*math.sqrt(Ps)/((h))
         # else:
@@ -236,6 +238,7 @@ def Wrapper():
         print("xTTTTTTTTTTTTx: ", yTy)
         print(yTy)
         # if(yTy <= Ps):
+        Ps = Ps/yTy
         y_out = y_out*math.sqrt(Ps)/((h))
         # else:
         # y_out = y_out*math.sqrt(Ps)/((h)*yTy)
