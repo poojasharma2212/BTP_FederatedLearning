@@ -55,7 +55,7 @@ def Wrapper():
         'seed': 0,
         'rounds': 50,
         'C': 0.9,
-        'lowest_snr': 20,
+        'lowest_snr': 10,
         # 'highest_snr': 20,
         'lowest_csi': 0,
         'highest_csi': 1,
@@ -238,7 +238,7 @@ def Wrapper():
         print("xTTTTTTTTTTTTx: ", yTy)
         print(yTy)
         # if(yTy <= Ps):
-        Pk = (24*math.sqrt(Ps))/yTy
+        Pk = (24*math.sqrt(Ps))2/yTy
         y_out = y_out*math.sqrt(Pk)/((h))
         # else:
         # y_out = y_out*math.sqrt(Ps)/((h)*yTy)
