@@ -1,3 +1,4 @@
+from ctypes.wintypes import PSHORT
 from operator import length_hint
 import torch
 import torch.nn as nn
@@ -238,13 +239,13 @@ def Wrapper():
         print("xTTTTTTTTTTTTx: ", yTy)
         print(yTy)
         # if(yTy <= Ps):
-        Pk1 = (Ps)/yTy
-        y_out = y_out*math.sqrt(Pk1)/(h)
+        Ps = (Ps)/yTy
+        y_out = y_out*math.sqrt(Ps)/(h)
         # else:
         # y_out = y_out*math.sqrt(Ps)/((h)*yTy)
         noise = torch.randn(y_out.size())
         y_out = h*y_out + noise*(std/(math.sqrt(K_clients)))
-        y_out = y_out/(math.sqrt(Pk1))
+        y_out = y_out/(math.sqrt(PSHORT))
         y_out = y_out.real
 
         client['model'].conv2.weight.data = y_out
