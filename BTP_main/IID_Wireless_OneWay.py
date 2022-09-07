@@ -157,7 +157,7 @@ def Wrapper():
         x_dict[dict_key] = x_val
         y_dict[dict_key] = y_val
 
-    def train(args, client, device):
+    def train(args, client, device, Ps):
         cStatus = True
         client['model'].train()
         client['model'].send(client['hook'])
@@ -337,7 +337,7 @@ def Wrapper():
             #     self.noise_conv2 = torch.randn(nn.Parameter(self.conv2.weight).size())*0.6 + 0
             # client['model'].add(GaussianNoise(math.sqrt(10)))
 
-            good_channel = train(args, client, device)
+            good_channel = train(args, client, device, Ps)
             if(good_channel == True):
                 client_good_channel.append(client)
             # idx = idx+1
