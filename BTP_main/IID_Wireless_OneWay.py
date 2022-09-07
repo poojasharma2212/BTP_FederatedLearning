@@ -48,14 +48,14 @@ def Wrapper():
     args = {
         'batch_size': 64,
         'test_batch_size': 1000,
-        'lr': 0.01,
+        'lr': 0.02,
         'log_interval': 10,
         'epochs': 3,
         'clients': 30,
         'seed': 0,
-        'rounds': 150,
+        'rounds': 30,
         'C': 0.9,
-        'lowest_snr': 0,
+        'lowest_snr': 20,
         # 'highest_snr': 20,
         'lowest_csi': 0,
         'highest_csi': 1,
@@ -239,7 +239,7 @@ def Wrapper():
         print(yTy)
         # if(yTy <= Ps):
         Pk = (Ps)/yTy
-        y_out = y_out*math.sqrt(Pk)/((h))
+        y_out = y_out*math.sqrt(Pk)/(h)
         # else:
         # y_out = y_out*math.sqrt(Ps)/((h)*yTy)
         noise = torch.randn(y_out.size())
