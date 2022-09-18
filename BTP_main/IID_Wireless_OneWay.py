@@ -20,7 +20,7 @@ import syft as sy
 from functions import mnistIID, mnistnon_IID, FedDataset, getImage
 from utils import averageModels
 
-Ps = 2  # signal power
+Ps = 1  # signal power
 key = []
 for i in range(60000):  # generating a random password to activate training (Pilot signal)
     temp = random.randint(0, 1)
@@ -239,13 +239,13 @@ def Wrapper():
         print("xTTTTTTTTTTTTx: ", yTy)
         print(yTy)
         # if(yTy <= Ps):
-        Ps = (Ps)/yTy
-        y_out = y_out*math.sqrt(Ps)/(h)
+        Pk = (Ps)/yTy
+        y_out = y_out*math.sqrt(Pk)/(h)
         # else:
         # y_out = y_out*math.sqrt(Ps)/((h)*yTy)
         noise = torch.randn(y_out.size())
         y_out = h*y_out + noise*(std/(math.sqrt(K_clients)))
-        y_out = y_out/(math.sqrt(Ps))
+        y_out = y_out/(math.sqrt(Pk))
         y_out = y_out.real
 
         client['model'].conv2.weight.data = y_out
