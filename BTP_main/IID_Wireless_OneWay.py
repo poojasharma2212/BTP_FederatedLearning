@@ -54,7 +54,7 @@ def Wrapper():
         'epochs': 3,
         'clients': 30,
         'seed': 0,
-        'rounds': 30,
+        'rounds': 150,
         'C': 0.9,
         'lowest_snr': 10,
         # 'highest_snr': 20,
@@ -217,7 +217,7 @@ def Wrapper():
         print("xTTTTTTTTTTTTx: ", xTx)
         print(xTx)
 
-        Pk = ((Ps))/xTx
+        Pk = ((K_clients)*(Ps))/xTx
         # if(xTx <= Ps):
         y_out = y_out*math.sqrt(Pk)/((h))
         # else:
@@ -239,7 +239,7 @@ def Wrapper():
         print("xTTTTTTTTTTTTx: ", yTy)
         print(yTy)
         # if(yTy <= Ps):
-        Pk = (Ps)/yTy
+        Pk = ((K_clients)*Ps)/yTy
         y_out = y_out*math.sqrt(Pk)/(h)
         # else:
         # y_out = y_out*math.sqrt(Ps)/((h)*yTy)
