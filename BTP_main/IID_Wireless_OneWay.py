@@ -55,7 +55,7 @@ def Wrapper():
         'seed': 0,
         'rounds': 150,
         'C': 0.9,
-        'lowest_snr': 3,
+        'lowest_snr': 4,
         # 'highest_snr': 20,
         'lowest_csi': 0,
         'highest_csi': 1,
