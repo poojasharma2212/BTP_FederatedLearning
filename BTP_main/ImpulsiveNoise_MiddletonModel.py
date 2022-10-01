@@ -55,7 +55,7 @@ def Wrapper():
         'clients': 30,
         'seed': 0,
         
-        'rounds': 20,
+        'rounds': 150,
         'C': 0.9,
         'lowest_snr': 20,
         # 'highest_snr': 20,
@@ -269,7 +269,7 @@ def Wrapper():
         # a1 = 0.00009999
         a0 = 0.909090909
         a1 = 0.090909090
-        
+
         std1 = math.sqrt(Ps/snr_val*(a0+50*a1))
         std2 = 50*std1
         n2 = torch.randn(y_out.size())
