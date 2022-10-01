@@ -54,6 +54,7 @@ def Wrapper():
         'epochs': 3,
         'clients': 30,
         'seed': 0,
+        
         'rounds': 20,
         'C': 0.9,
         'lowest_snr': 20,
@@ -166,7 +167,7 @@ def Wrapper():
         snr = snr_value
         print("SNR==", snr)
         snr_val = 10**(snr/10)
-        std = math.sqrt(Ps/snr_val)
+        #std = math.sqrt(Ps/snr_val)
         x = random.random()
         y = random.random()
         x = x_dict[client['hook'].id]
@@ -181,6 +182,7 @@ def Wrapper():
         # wireless channel needs to be considered
         # no noise in downlink
 
+        std = math.sqrt(2/(100*13.7039))
         # cStatus = True     # Client status
         for epoch in range(1, args['epochs']+1):
             for batch_idx, (data, target) in enumerate(client['mnist_trainset']):
@@ -226,9 +228,14 @@ def Wrapper():
         # y_out = h*y_out+noise*(std/(math.sqrt(K_clients)))
         n1 = torch.randn(y_out.size())
         a0 = 0.740740741
-        a1 = 0.259259
+        a1 = 0.259259259
+        
+        std1 = math.sqrt(0.02/(a0+50*a1))
+        std2 = 50*std1
+
+        print("std1",std)
         n2 = torch.randn(y_out.size())
-        noise = a0*n1*std + a1*n2*50*std
+        noise = a0*n1*std1 + a1*n2*std2
         y_out = y_out/(math.sqrt(Pk))
         y_out = y_out.real
 
@@ -250,9 +257,11 @@ def Wrapper():
         # y_out = y_out*math.sqrt(Ps)/((h)*yTy)
         n1 = torch.randn(y_out.size())
         a0 = 0.740740741
-        a1 = 0.259259
+        a1 = 0.259259259
+        std1 = math.sqrt(0.02/(a0+50*a1))
+        std2 = 50*std1
         n2 = torch.randn(y_out.size())
-        noise = a0*n1*std + a1*n2*50*std
+        noise = a0*n1*std1 + a1*n2*std2
         y_out = h*y_out + noise
         y_out = y_out/(math.sqrt(Pk))
         y_out = y_out.real
