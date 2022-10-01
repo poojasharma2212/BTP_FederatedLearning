@@ -172,7 +172,7 @@ def Wrapper():
         y = random.random()
         x = x_dict[client['hook'].id]
         y = y_dict[client['hook'].id]
-        std = math.sqrt(Ps/(snr_val*1.00489951))
+        std = math.sqrt(Ps/(snr_val*5.4545409))
         #x = random.random()
         #y = random.random()
         h = complex(x, y)
@@ -231,10 +231,11 @@ def Wrapper():
         #a0 = 0.740740741
         #a1 = 0.259259259
         
-        a0 = 0.99990001
-        a1 = 0.00009999
+        #a0 = 0.99990001
+        #a1 = 0.00009999
 
-    
+        a0 = 0.90909090
+        a1 = 0.09090909
         std1 = math.sqrt(Ps/snr_val*(a0+50*a1))
         std2 = 50*std1
         #std1 = math.sqrt(0.02/(a0+50*a1))
@@ -264,8 +265,11 @@ def Wrapper():
         n1 = torch.randn(y_out.size())
         #a0 = 0.740740741
         #a1 = 0.259259259
-        a0 = 0.99990001
-        a1 = 0.00009999
+        # a0 = 0.99990001
+        # a1 = 0.00009999
+        a0 = 0.909090909
+        a1 = 0.090909090
+        
         std1 = math.sqrt(Ps/snr_val*(a0+50*a1))
         std2 = 50*std1
         n2 = torch.randn(y_out.size())
