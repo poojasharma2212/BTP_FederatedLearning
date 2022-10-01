@@ -172,7 +172,7 @@ def Wrapper():
         y = random.random()
         x = x_dict[client['hook'].id]
         y = y_dict[client['hook'].id]
-        std = math.sqrt(Ps/(snr_val*13.7039))
+        std = math.sqrt(Ps/(snr_val*1.00489951))
         #x = random.random()
         #y = random.random()
         h = complex(x, y)
@@ -233,11 +233,13 @@ def Wrapper():
         
         a0 = 0.99990001
         a1 = 0.00009999
+
+    
         std1 = math.sqrt(Ps/snr_val*(a0+50*a1))
         std2 = 50*std1
         #std1 = math.sqrt(0.02/(a0+50*a1))
 
-        print("std1",std)
+        print("std1",std1)
         n2 = torch.randn(y_out.size())
         noise = a0*n1*std1 + a1*n2*std2
         y_out = y_out/(math.sqrt(Pk))
