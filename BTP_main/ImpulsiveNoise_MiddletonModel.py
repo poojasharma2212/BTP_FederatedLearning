@@ -270,7 +270,7 @@ def Wrapper():
         a0 = 0.909090909
         a1 = 0.090909090
 
-        std1 = math.sqrt(Ps/snr_val*(a0+50*a1))
+        std1 = math.sqrt(Ps/(snr_val*(a0+50*a1)))
         std2 = 50*std1
         n2 = torch.randn(y_out.size())
         noise = a0*n1*std1 + a1*n2*std2
