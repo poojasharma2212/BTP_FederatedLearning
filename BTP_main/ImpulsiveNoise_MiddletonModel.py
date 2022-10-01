@@ -172,6 +172,7 @@ def Wrapper():
         y = random.random()
         x = x_dict[client['hook'].id]
         y = y_dict[client['hook'].id]
+        std = math.sqrt(2/(100*13.7039))
         #x = random.random()
         #y = random.random()
         h = complex(x, y)
@@ -182,7 +183,7 @@ def Wrapper():
         # wireless channel needs to be considered
         # no noise in downlink
 
-        std = math.sqrt(2/(100*13.7039))
+        
         # cStatus = True     # Client status
         for epoch in range(1, args['epochs']+1):
             for batch_idx, (data, target) in enumerate(client['mnist_trainset']):
