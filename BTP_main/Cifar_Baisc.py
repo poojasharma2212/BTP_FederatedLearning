@@ -19,7 +19,7 @@ load_pretrained_model = True
 pretrained_epoch = 25
 #############################
 use_cuda = False
-device = torch.cuda.device("cuda" if use_cuda else "cpu")
+device = torch.cpu.device("cuda" if use_cuda else "cpu")
 
 transform_train = transforms.Compose([
     transforms.RandomCrop(32, padding=4),
