@@ -90,7 +90,7 @@ def test_accuracy(net, testset_loader, epoch):
         correct = correct.argmax(0).cpu().numpy()
     
     print(total)
-    print(correct.argmax())
+    print(correct)
 
     v = tf.divide(correct,total)
     print('Accuracy of the network after epoch '+str(epoch+1)+' is: ' + str(100 * v))
