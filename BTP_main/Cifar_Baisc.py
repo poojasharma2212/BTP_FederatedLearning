@@ -86,10 +86,10 @@ def test_accuracy(net, testset_loader, epoch):
         correct += (predicted == labels).sum()
         # correct = tf.get_static_value(correct)
         # correct = correct.numpy().tolist()
-        correct = correct.cpu().data.numpy().argmax()
+        index = correct.cpu().data.numpy().argmax()
     
     print(total)
-    print(correct)
+    print(correct[0])
 
     v = tf.divide(correct,total)
     print('Accuracy of the network after epoch '+str(epoch+1)+' is: ' + str(100 * v))
