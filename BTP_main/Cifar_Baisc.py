@@ -92,8 +92,8 @@ def test_accuracy(net, testset_loader, epoch):
     print(correct.data)
     vv = correct.cpu().clone().numpy()
     print(vv)
-    v = tf.divide(correct,total)
-    print('Accuracy of the network after epoch '+str(epoch+1)+' is: ' + str(100 * v))
+    v = tf.divide(vv,total)
+    print('Accuracy of the network after epoch '+str(epoch+1)+' is: ' + str(100 * vv/total))
     
 #We save the model after every 5 epochs
 def save_model(net, epoch):
