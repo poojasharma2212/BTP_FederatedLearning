@@ -148,6 +148,7 @@ else:
             loss.backward()
             optimizer.step()
             print(loss.data)
+            print(loss.item)
             # print(loss.item)
             # print the loss
             running_loss += loss.data(0)
