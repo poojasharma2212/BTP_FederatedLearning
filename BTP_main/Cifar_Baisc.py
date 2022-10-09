@@ -147,12 +147,12 @@ else:
             loss = criterion(output, labels)
             loss.backward()
             optimizer.step()
-            print(loss.data)
+            # print(loss.data)
             # print(loss.item)
             # print the loss
             running_loss += loss.item()
         # print the loss after every epoch
-        print('loss in epoch ' + str(epoch + 1) + ': ' + str(running_loss / 50000))
+        print('loss in epoch ' + str(epoch + 1) + ': ' + str(running_loss // 50000))
         if (epoch + 1)%5 == 0:
             # Test for accuracy after every 5 epochs
             test_accuracy(net, testset_loader, epoch)
