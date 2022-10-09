@@ -83,8 +83,10 @@ def test_accuracy(net, testset_loader, epoch):
         _, predicted = torch.max(output.data, 1)
         total += labels.size(0)
         correct += (predicted == labels).sum()
-    print('Accuracy of the network after epoch '+str(epoch+1)+' is: ' + str(100 * torch.div(correct, total)))
+    print(total)
     print(correct)
+    print('Accuracy of the network after epoch '+str(epoch+1)+' is: ' + str(100 * torch.div(correct, total)))
+    
 #We save the model after every 5 epochs
 def save_model(net, epoch):
     filename = "model_with_epoch" + str(epoch+1) + ".pth"
