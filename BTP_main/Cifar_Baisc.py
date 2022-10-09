@@ -147,7 +147,7 @@ else:
             loss = criterion(output, labels)
             loss.backward()
             optimizer.step()
-            print(loss)
+            print(loss.data)
             # print the loss
             running_loss += loss.data[0]
         # print the loss after every epoch
