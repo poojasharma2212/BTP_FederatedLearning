@@ -84,7 +84,8 @@ def test_accuracy(net, testset_loader, epoch):
         _, predicted = torch.max(output.data, 1)
         total += labels.size(0)
         correct += (predicted == labels).sum()
-        correct = tf.get_static_value(correct)
+        # correct = tf.get_static_value(correct)
+        correct = correct.numpy().tolist()
     
     print(total)
     print(correct)
@@ -135,7 +136,7 @@ if load_pretrained_model == False:
 else:
     net = ConvNet()
     # net.load_state_dict(torch.load("model_with_epoch" + str(pretrained_epoch) + ".pth"))
-    # net.cuda()
+    net.cuda()
     #optimizer = optim.SGD(net.parameters(), lr=learning_rate, momentum=0.9)
     for epoch in range(pretrained_epoch, epochs):
         running_loss = 0.0
