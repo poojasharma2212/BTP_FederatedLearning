@@ -7,6 +7,7 @@ import torchvision.transforms as transforms
 from torch.autograd import Variable
 import torch.nn as nn
 import torch.nn.functional as F
+import tensorflow as tf
 
 # Configuration area
 #############################
@@ -83,7 +84,7 @@ def test_accuracy(net, testset_loader, epoch):
         _, predicted = torch.max(output.data, 1)
         total += labels.size(0)
         correct += (predicted == labels).sum()
-        correct = torch. IntTensor(correct)
+        correct = tf.get_static_value(correct)
     print(total)
     print(correct)
 
