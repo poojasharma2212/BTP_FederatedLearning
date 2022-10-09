@@ -84,8 +84,8 @@ def test_accuracy(net, testset_loader, epoch):
         total += labels.size(0)
         correct += (predicted == labels).sum()
     print(total)
-    print(correct)
-    v = torch.div(correct.data,total)
+    print(correct/total)
+    v = torch.div(correct,total)
     print('Accuracy of the network after epoch '+str(epoch+1)+' is: ' + str(100 * v))
     
 #We save the model after every 5 epochs
