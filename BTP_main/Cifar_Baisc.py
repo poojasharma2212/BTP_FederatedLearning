@@ -85,7 +85,8 @@ def test_accuracy(net, testset_loader, epoch):
         total += labels.size(0)
         correct += (predicted == labels).sum()
         # correct = tf.get_static_value(correct)
-        correct = correct.numpy().tolist()
+        # correct = correct.numpy().tolist()
+        correct = correct.cpu().data.numpy().argmax()
     
     print(total)
     print(correct)
