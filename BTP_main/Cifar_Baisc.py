@@ -83,6 +83,7 @@ def test_accuracy(net, testset_loader, epoch):
         _, predicted = torch.max(output.data, 1)
         total += labels.size(0)
         correct += (predicted == labels).sum()
+        correct = torch. IntTensor(correct)
     print(total)
     print(correct)
 
