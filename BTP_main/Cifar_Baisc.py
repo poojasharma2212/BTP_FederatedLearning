@@ -127,7 +127,7 @@ if load_pretrained_model == False:
             save_model(net, epoch)
 else:
     net = ConvNet()
-    net.load_state_dict(torch.load("model_with_epoch" + str(pretrained_epoch) + ".pth"))
+    # net.load_state_dict(torch.load("model_with_epoch" + str(pretrained_epoch) + ".pth"))
     net.cuda()
     #optimizer = optim.SGD(net.parameters(), lr=learning_rate, momentum=0.9)
     for epoch in range(pretrained_epoch, epochs):
