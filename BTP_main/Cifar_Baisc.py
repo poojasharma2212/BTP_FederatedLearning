@@ -18,8 +18,8 @@ num_workers = 4
 load_pretrained_model = True
 pretrained_epoch = 25
 #############################
-use_cuda = False
-device = torch.cpu.device("cuda" if use_cuda else "cpu")
+use_cuda = True
+device = torch.cuda.device("cuda" if use_cuda else "cpu")
 
 transform_train = transforms.Compose([
     transforms.RandomCrop(32, padding=4),
@@ -135,7 +135,7 @@ if load_pretrained_model == False:
 else:
     net = ConvNet()
     # net.load_state_dict(torch.load("model_with_epoch" + str(pretrained_epoch) + ".pth"))
-    net.cuda()
+    # net.cuda()
     #optimizer = optim.SGD(net.parameters(), lr=learning_rate, momentum=0.9)
     for epoch in range(pretrained_epoch, epochs):
         running_loss = 0.0
