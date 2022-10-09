@@ -147,10 +147,10 @@ else:
             loss = criterion(output, labels)
             loss.backward()
             optimizer.step()
-            # print(loss.data)
+            print(loss.data)
             # print(loss.item)
             # print the loss
-            running_loss += loss.data
+            running_loss += loss.data(0)
         # print the loss after every epoch
         print('loss in epoch ' + str(epoch + 1) + ': ' + str(running_loss / 50000))
         if (epoch + 1)%5 == 0:
