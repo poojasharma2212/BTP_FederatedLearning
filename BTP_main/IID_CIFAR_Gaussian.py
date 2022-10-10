@@ -107,6 +107,7 @@ def Wrapper():
     # mnist_testset = datasets.MNIST(
     #     root='./data', train=False, download=True, transform=transform)
 
+    print(cifar_trainset)
     k = len(set(cifar_testset.targets.numpy()))
     # print(k)
     if(args['datatype'] == 'iid'):
