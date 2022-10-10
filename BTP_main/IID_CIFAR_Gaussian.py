@@ -252,8 +252,8 @@ def Wrapper():
                 running_loss += loss.data
                 # print the loss after every epoch
                 tt = torch.div(running_loss,len(data))
-                print(running_loss)
-                print('loss in epoch ' + str(epoch + 1) + ': ' + str(tt)) 
+                # print(running_loss)
+                # print('loss in epoch ' + str(epoch + 1) + ': ' + str(tt)) 
                         # print("==========ye chalega kya========================")
                 if batch_idx % args['log_interval'] == 0:
                     loss = loss.get()
