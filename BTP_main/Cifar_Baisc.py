@@ -129,7 +129,7 @@ if load_pretrained_model == False:
             print(loss.data)
             running_loss += loss.data
         # print the loss after every epoch
-        tt = torch.divide(running_loss,50000)
+        tt = torch.div(running_loss,50000)
         print('loss in epoch ' + str(epoch + 1) + ': ' + str(tt))    
         if (epoch + 1)%5 == 0:
             # Test for accuracy after every 5 epochs
