@@ -48,7 +48,7 @@ def Wrapper():
     args = {
         'batch_size': 64,
         'test_batch_size': 1000,
-        'lr': 0.001 ,
+        'lr': 0.0001 ,
         'log_interval': 10,
         'epochs': 4,
         'clients': 30,
@@ -60,7 +60,7 @@ def Wrapper():
         'lowest_csi': 0,
         'highest_csi': 1,
         'drop_rate': 0.1,
-        'images': 60000,
+        'images': 50000,
         'datatype': 'iid',
         'use_cuda': False,
         'save_model': True
@@ -141,7 +141,7 @@ def Wrapper():
         './', train=False, download=True, transform=transform)
     
     global_test_loader = DataLoader(
-        global_test_dataset, batch_size=args['batch_size'], shuffle=False)
+        global_test_dataset, batch_size=args['batch_size'], shuffle=True)
 
     class CNN(nn.Module):
         def __init__(self):
