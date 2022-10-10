@@ -8,7 +8,7 @@ from torch.utils.data import DataLoader, Dataset
 
 def mnistIID(data, nUsers):
     nImages = int(len(data)/nUsers)
-    # print(num_images)
+    print(len(data))
     # length of dataset is 60k
     usersDict, indices = {}, [i for i in (range(len(data)))]
     for i in range(nUsers):
@@ -18,7 +18,7 @@ def mnistIID(data, nUsers):
         indices = list(set(indices)-usersDict[i])
         # print("i :::", end=" ")
         # print(usersDict)
-        print(len(usersDict), "-----------------")
+        print(len(usersDict), "-----------------",len(indices), "---000000----")
     return usersDict
 
     #************************ ======== Non-IID Dataset ========== ******************#
