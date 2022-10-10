@@ -109,7 +109,7 @@ def Wrapper():
 
     print(cifar_trainset)
     # cc = np.array(cifar_trainset, dtype=np.float32)
-    k = len((cifar_trainset.targets.numpy()))
+    k = len((cifar_trainset.targets))
     # print(k)
     if(args['datatype'] == 'iid'):
         print("iid")
