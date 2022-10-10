@@ -246,8 +246,8 @@ def Wrapper():
                         client['hook'].id,
                         epoch, batch_idx *
                         args['batch_size'], len(
-                            client['mnist_trainset']) * args['batch_size'],
-                        100. * batch_idx / len(client['mnist_trainset']), loss.item()))
+                            client['cifar_trainset']) * args['batch_size'],
+                        100. * batch_idx / len(client['cifar_trainset']), loss.item()))
 
         client['model'].get()
 
