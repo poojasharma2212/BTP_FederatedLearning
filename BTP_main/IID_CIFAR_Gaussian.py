@@ -53,7 +53,7 @@ def Wrapper():
         'epochs': 3,
         'clients': 30,
         'seed': 0,
-        'rounds': 150,
+        'rounds': 20,
         'C': 0.9,
         'lowest_snr': 20,
         # 'highest_snr': 20,
@@ -208,10 +208,10 @@ def Wrapper():
         client['model'].send(client['hook'])
         # snr = random.randint(0, 40)
         print("client_ID", client['hook'].id)
-        snr = snr_value
-        print("SNR==", snr)
-        snr_val = 10**(snr/10)
-        std = math.sqrt(Ps/snr_val)
+        # snr = snr_value
+        # print("SNR==", snr)
+        # snr_val = 10**(snr/10)
+        # std = math.sqrt(Ps/snr_val)
         x = random.random()
         y = random.random()
         x = x_dict[client['hook'].id]
@@ -220,7 +220,7 @@ def Wrapper():
         #y = random.random()
         h = complex(x, y)
         print("Client:", client['hook'].id)
-        print("CSI", abs(h)/(std*std))
+        # print("CSI", abs(h)/(std*std))
 
         K_clients = len(active_clients_inds)
         # wireless channel needs to be considered
@@ -242,12 +242,12 @@ def Wrapper():
                 # print("==========ye chalega kya========================")
                 if batch_idx % args['log_interval'] == 0:
                     loss = loss.get()
-                    # print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                    #     client['hook'].id,
-                    #     epoch, batch_idx *
-                    #     args['batch_size'], len(
-                    #         client['mnist_trainset']) * args['batch_size'],
-                    #     100. * batch_idx / len(client['mnist_trainset']), loss.item()))
+                    print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+                        client['hook'].id,
+                        epoch, batch_idx *
+                        args['batch_size'], len(
+                            client['mnist_trainset']) * args['batch_size'],
+                        100. * batch_idx / len(client['mnist_trainset']), loss.item()))
 
         client['model'].get()
 
@@ -255,21 +255,21 @@ def Wrapper():
         x = torch.flatten(y_out)
         xTx = 0
         # # should I use here also normalise ??
-        for i in range(list(x.size())[0]):
-            xTx = xTx + x[i]*x[i]
+        # for i in range(list(x.size())[0]):
+        #     xTx = xTx + x[i]*x[i]
 
-        print('-----------')
-        print("xTTTTTTTTTTTTx: ", xTx)
-        print(xTx)
+        # print('-----------')
+        # print("xTTTTTTTTTTTTx: ", xTx)
+        # print(xTx)
 
-        Pk = ((K_clients)*(Ps))/xTx
+        # Pk = ((K_clients)*(Ps))/xTx
         # if(xTx <= Ps):
         y_out = y_out*math.sqrt(Pk)/((h))
         # else:
         # y_out = y_out*math.sqrt(Ps)/((h)*xTx)
         noise = torch.randn(y_out.size())
-        y_out = h*y_out+noise*(std/(math.sqrt(K_clients)))
-        y_out = y_out/(math.sqrt(Pk))
+        # y_out = h*y_out+noise*(std/(math.sqrt(K_clients)))
+        y_out = y_out/(math.sqrt(Ps))
         y_out = y_out.real
 
         client['model'].conv1.weight.data = y_out
@@ -289,8 +289,8 @@ def Wrapper():
         # else:
         # y_out = y_out*math.sqrt(Ps)/((h)*yTy)
         noise = torch.randn(y_out.size())
-        y_out = h*y_out + noise*(std/(math.sqrt(K_clients)))
-        y_out = y_out/(math.sqrt(Pk))
+        # y_out = h*y_out + noise*(std/(math.sqrt(K_clients)))
+        y_out = y_out/(math.sqrt(Ps))
         y_out = y_out.real
 
         client['model'].conv2.weight.data = y_out
