@@ -338,14 +338,15 @@ def Wrapper():
         torch.manual_seed(args['seed'])
         client['model'] = CNN().to(device)
         # print(client)
-        client['optimizer'] = optim.SGD(
-            client['model'].parameters(), lr=args['lr'])
+        # client['optimizer'] = optim.SGD(
+        #     client['model'].parameters(), lr=args['lr'])
+        client['optimizer'] = optim.Adam(client['model'].parameters(), lr=args['lr'])
 
     # print(client)
 
     for fed_round in range(args['rounds']):
 
-        print(fed_round)
+        print(fed_round) 
         # number of selected clients
         client_good_channel = []
 
