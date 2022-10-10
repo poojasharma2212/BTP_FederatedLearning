@@ -89,14 +89,14 @@ def Wrapper():
     transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
     ])
 
-    transform_test = transforms.Compose([
+    transform = transforms.Compose([
     transforms.ToTensor(),
     transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),])
     
-    cifar_trainset = datasets.CIFAR10(root='./data', train=True, download=True, transform=transform_train)
+    cifar_trainset = datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
     # trainset_loader = torch.utils.data.DataLoader(cifar_trainset, batch_size=batch_size,shuffle=True, num_workers=num_workers)
 
-    cifar_testset = datasets.CIFAR10(root='./data', train=False, download=True, transform=transform_test)
+    cifar_testset = datasets.CIFAR10(root='./data', train=False, download=True, transform=transform)
     # testset_loader = torch.utils.data.DataLoader(cifar_testset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
 
     # transform = transforms.Compose(
@@ -108,8 +108,8 @@ def Wrapper():
     #     root='./data', train=False, download=True, transform=transform)
 
     print(cifar_trainset)
-    cc = np.array(cifar_trainset, dtype=np.float32)
-    k = len(set(cc.targets.numpy()))
+    # cc = np.array(cifar_trainset, dtype=np.float32)
+    k = len((cifar_trainset.targets.numpy()))
     # print(k)
     if(args['datatype'] == 'iid'):
         print("iid")
