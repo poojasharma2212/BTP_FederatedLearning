@@ -21,6 +21,7 @@ pretrained_epoch = 25
 use_cuda = False
 device = torch.cuda.device("cuda" if use_cuda else "cpu")
 
+
 transform_train = transforms.Compose([
     transforms.RandomCrop(32, padding=4),
     transforms.RandomHorizontalFlip(),
