@@ -99,6 +99,8 @@ def Wrapper():
     cifar_testset = datasets.CIFAR10(root='./data', train=False, download=True, transform=transform)
     # testset_loader = torch.utils.data.DataLoader(cifar_testset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
 
+    criterion = nn.CrossEntropyLoss()
+    
     # transform = transforms.Compose(
     #     [transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
     # # transform=transforms.ToTensor()
@@ -234,7 +236,8 @@ def Wrapper():
                 data, target = data.to(device), target.to(device)
                 client['optimizer'].zero_grad()
                 output = client['model'](data)
-                loss = Func.nll_loss(output, target)
+                # loss = Func.nll_loss(output, target)
+                loss = criterion(output,target)
                 loss.backward()
                 # print(loss.grad)
                 client['optimizer'].step()
@@ -264,7 +267,7 @@ def Wrapper():
 
         # Pk = ((K_clients)*(Ps))/xTx
         # if(xTx <= Ps):
-        y_out = y_out*math.sqrt(Pk)/((h))
+        y_out = y_out*math.sqrt(Ps)/((h))
         # else:
         # y_out = y_out*math.sqrt(Ps)/((h)*xTx)
         noise = torch.randn(y_out.size())
