@@ -1,5 +1,6 @@
 # Name: Peng Cheng
 # UIN: 674792652
+from cProfile import run
 import torch
 import torchvision
 import torchvision.datasets as datasets
@@ -126,10 +127,11 @@ if load_pretrained_model == False:
             optimizer.step()
             # print the loss
             l = loss.data
-            print(loss.data)
+            # print(loss.data)
             running_loss += loss.data
         # print the loss after every epoch
         tt = torch.div(running_loss,50000)
+        print(running_loss)
         print('loss in epoch ' + str(epoch + 1) + ': ' + str(tt))    
         if (epoch + 1)%5 == 0:
             # Test for accuracy after every 5 epochs
