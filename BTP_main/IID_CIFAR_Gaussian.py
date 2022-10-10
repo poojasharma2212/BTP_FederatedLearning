@@ -48,9 +48,9 @@ def Wrapper():
     args = {
         'batch_size': 64,
         'test_batch_size': 1000,
-        'lr': 0.01 ,
+        'lr': 0.001 ,
         'log_interval': 10,
-        'epochs': 3,
+        'epochs': 4,
         'clients': 30,
         'seed': 0,
         'rounds': 20,
@@ -99,8 +99,6 @@ def Wrapper():
     cifar_testset = datasets.CIFAR10(root='./data', train=False, download=True, transform=transform)
     # testset_loader = torch.utils.data.DataLoader(cifar_testset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
 
-    criterion = nn.CrossEntropyLoss()
-    
     # transform = transforms.Compose(
     #     [transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
     # # transform=transforms.ToTensor()
@@ -210,10 +208,10 @@ def Wrapper():
         client['model'].send(client['hook'])
         # snr = random.randint(0, 40)
         print("client_ID", client['hook'].id)
-        # snr = snr_value
-        # print("SNR==", snr)
-        # snr_val = 10**(snr/10)
-        # std = math.sqrt(Ps/snr_val)
+        snr = snr_value
+        print("SNR==", snr)
+        snr_val = 10**(snr/10)
+        std = math.sqrt(Ps/snr_val)
         x = random.random()
         y = random.random()
         x = x_dict[client['hook'].id]
@@ -236,8 +234,7 @@ def Wrapper():
                 data, target = data.to(device), target.to(device)
                 client['optimizer'].zero_grad()
                 output = client['model'](data)
-                # loss = Func.nll_loss(output, target)
-                loss = criterion(output,target)
+                loss = Func.nll_loss(output, target)
                 loss.backward()
                 # print(loss.grad)
                 client['optimizer'].step()
@@ -258,21 +255,21 @@ def Wrapper():
         x = torch.flatten(y_out)
         xTx = 0
         # # should I use here also normalise ??
-        # for i in range(list(x.size())[0]):
-        #     xTx = xTx + x[i]*x[i]
+        for i in range(list(x.size())[0]):
+            xTx = xTx + x[i]*x[i]
 
-        # print('-----------')
-        # print("xTTTTTTTTTTTTx: ", xTx)
-        # print(xTx)
+        print('-----------')
+        print("xTTTTTTTTTTTTx: ", xTx)
+        print(xTx)
 
-        # Pk = ((K_clients)*(Ps))/xTx
+        Pk = ((K_clients)*(Ps))/xTx
         # if(xTx <= Ps):
-        y_out = y_out*math.sqrt(Ps)/((h))
+        y_out = y_out*math.sqrt(Pk)/((h))
         # else:
         # y_out = y_out*math.sqrt(Ps)/((h)*xTx)
         noise = torch.randn(y_out.size())
-        # y_out = h*y_out+noise*(std/(math.sqrt(K_clients)))
-        y_out = y_out/(math.sqrt(Ps))
+        y_out = h*y_out+noise*(std/(math.sqrt(K_clients)))
+        y_out = y_out/(math.sqrt(Pk))
         y_out = y_out.real
 
         client['model'].conv1.weight.data = y_out
@@ -292,8 +289,8 @@ def Wrapper():
         # else:
         # y_out = y_out*math.sqrt(Ps)/((h)*yTy)
         noise = torch.randn(y_out.size())
-        # y_out = h*y_out + noise*(std/(math.sqrt(K_clients)))
-        y_out = y_out/(math.sqrt(Ps))
+        y_out = h*y_out + noise*(std/(math.sqrt(K_clients)))
+        y_out = y_out/(math.sqrt(Pk))
         y_out = y_out.real
 
         client['model'].conv2.weight.data = y_out
