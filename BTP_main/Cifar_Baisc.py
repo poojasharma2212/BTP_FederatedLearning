@@ -125,6 +125,8 @@ if load_pretrained_model == False:
             loss.backward()
             optimizer.step()
             # print the loss
+            l = loss.data
+            print(loss.data)
             running_loss += loss.data[0]
         # print the loss after every epoch
         print('loss in epoch ' + str(epoch + 1) + ': ' + str(running_loss / 50000))    
