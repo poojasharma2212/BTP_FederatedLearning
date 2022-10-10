@@ -208,6 +208,7 @@ def Wrapper():
 
     def train(args, client, device, Ps):
         cStatus = True
+        running_loss = 0.0
         client['model'].train()
         client['model'].send(client['hook'])
         # snr = random.randint(0, 40)
