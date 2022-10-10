@@ -18,7 +18,7 @@ num_workers = 4
 load_pretrained_model = False
 pretrained_epoch = 25
 #############################
-use_cuda = True
+use_cuda = False
 device = torch.cuda.device("cuda" if use_cuda else "cpu")
 
 transform_train = transforms.Compose([
