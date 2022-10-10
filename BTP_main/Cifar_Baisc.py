@@ -15,7 +15,7 @@ epochs = 50
 batch_size = 50
 learning_rate = 0.001
 num_workers = 4
-load_pretrained_model = True
+load_pretrained_model = False
 pretrained_epoch = 25
 #############################
 use_cuda = True
