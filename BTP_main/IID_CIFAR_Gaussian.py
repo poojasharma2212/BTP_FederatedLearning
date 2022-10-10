@@ -203,7 +203,7 @@ def Wrapper():
 
         # cStatus = True     # Client status
         for epoch in range(1, args['epochs']+1):
-            for batch_idx, (data, target) in enumerate(client['mnist_trainset']):
+            for batch_idx, (data, target) in enumerate(client['cifar_trainset']):
                 data = data.send(client['hook'])
                 target = target.send(client['hook'])
                 data, target = data.to(device), target.to(device)
