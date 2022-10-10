@@ -69,19 +69,22 @@ class ConvNet(nn.Module):
         x = self.Dropout(x)
         x = self.fc3(x)
         return x
+
 # Define loss function and optimizer. We employ cross-entropy and Adam
 import torch.optim as optim
 
 criterion = nn.CrossEntropyLoss()
 # define the test accuracy function
+
 def test_accuracy(net, testset_loader, epoch):
     # Test the model
     net.eval()
     correct = 0
-    total = 0
+    total = 0 
     for data in testset_loader:
         images, labels = data
         images, labels = Variable(images).cuda(), labels.cuda()
+        print(labels)
         output = net(images)
         _, predicted = torch.max(output.data, 1)
         total += labels.size(0)
