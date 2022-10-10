@@ -60,7 +60,7 @@ def Wrapper():
         'lowest_csi': 0,
         'highest_csi': 1,
         'drop_rate': 0.1,
-        'images': 50000,
+        'images': 60000,
         'datatype': 'iid',
         'use_cuda': False,
         'save_model': True
@@ -192,6 +192,10 @@ def Wrapper():
     x_dict = {}
     y_dict = {}
 
+    criterion = nn.CrossEntropyLoss()
+    # define the test accuracy function
+
+
     for c in range(args['clients']+1):
         dict_key = "client" + str(c)
         x_val = random.random()
@@ -234,12 +238,22 @@ def Wrapper():
                 data, target = data.to(device), target.to(device)
                 client['optimizer'].zero_grad()
                 output = client['model'](data)
-                loss = Func.nll_loss(output, target)
+                # loss = Func.nll_loss(output, target)
+                loss = criterion(output,target)
+
                 loss.backward()
                 # print(loss.grad)
                 client['optimizer'].step()
-
-                # print("==========ye chalega kya========================")
+                
+                # print the loss
+                l = loss.data
+                # print(loss.data)
+                running_loss += loss.data
+                # print the loss after every epoch
+                tt = torch.div(running_loss,len(data))
+                print(running_loss)
+                print('loss in epoch ' + str(epoch + 1) + ': ' + str(tt)) 
+                        # print("==========ye chalega kya========================")
                 if batch_idx % args['log_interval'] == 0:
                     loss = loss.get()
                     print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
