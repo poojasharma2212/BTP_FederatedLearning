@@ -325,9 +325,9 @@ def Wrapper():
                 output = model(data)
 
                 # add losses together
-                test_loss += Func.nll_loss(output,
-                                           target, reduction='sum').item()
-
+                # test_loss += Func.nll_loss(output,
+                                        #    target, reduction='sum').item()
+                test_loss += criterion(output, target)
                 # get the index of the max probability class
                 pred = output.argmax(1, keepdim=True)
                 correct += pred.eq(target.view_as(pred)).sum().item()
