@@ -83,8 +83,8 @@ def Wrapper():
     # os.chdir("/content/drive/MyDrive/FL_ZaaPoo/data/MNIST/raw")
     nUsers = 30
     transform_train = transforms.Compose([
-    transforms.RandomCrop(32, padding=4),
-    transforms.RandomHorizontalFlip(),
+    # transforms.RandomCrop(32, padding=4),
+    # transforms.RandomHorizontalFlip(),
     transforms.ToTensor(),
     transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
     ])
@@ -266,49 +266,49 @@ def Wrapper():
 
         client['model'].get()
 
-        y_out = client['model'].conv1.weight
-        x = torch.flatten(y_out)
-        xTx = 0
-        # # should I use here also normalise ??
-        for i in range(list(x.size())[0]):
-            xTx = xTx + x[i]*x[i]
+        # y_out = client['model'].conv1.weight
+        # x = torch.flatten(y_out)
+        # xTx = 0
+        # # # should I use here also normalise ??
+        # for i in range(list(x.size())[0]):
+        #     xTx = xTx + x[i]*x[i]
 
-        print('-----------')
-        print("xTTTTTTTTTTTTx: ", xTx)
-        print(xTx)
+        # print('-----------')
+        # print("xTTTTTTTTTTTTx: ", xTx)
+        # print(xTx)
 
-        Pk = ((K_clients)*(Ps))/xTx
-        # if(xTx <= Ps):
-        y_out = y_out*math.sqrt(Pk)/((h))
-        # else:
-        # y_out = y_out*math.sqrt(Ps)/((h)*xTx)
-        noise = torch.randn(y_out.size())
-        y_out = h*y_out+noise*(std/(math.sqrt(K_clients)))
-        y_out = y_out/(math.sqrt(Pk))
-        y_out = y_out.real
+        # Pk = ((K_clients)*(Ps))/xTx
+        # # if(xTx <= Ps):
+        # y_out = y_out*math.sqrt(Pk)/((h))
+        # # else:
+        # # y_out = y_out*math.sqrt(Ps)/((h)*xTx)
+        # noise = torch.randn(y_out.size())
+        # y_out = h*y_out+noise*(std/(math.sqrt(K_clients)))
+        # y_out = y_out/(math.sqrt(Pk))
+        # y_out = y_out.real
 
-        client['model'].conv1.weight.data = y_out
+        # client['model'].conv1.weight.data = y_out
 
-        y_out = client['model'].conv2.weight
-        yy = torch.flatten(y_out)
-        yTy = 0
-        for i in range(list(yy.size())[0]):
-            yTy = yTy + yy[i]*yy[i]
+        # y_out = client['model'].conv2.weight
+        # yy = torch.flatten(y_out)
+        # yTy = 0
+        # for i in range(list(yy.size())[0]):
+        #     yTy = yTy + yy[i]*yy[i]
 
-        print('-----------')
-        print("xTTTTTTTTTTTTx: ", yTy)
-        print(yTy)
-        # if(yTy <= Ps):
-        Pk = ((K_clients)*Ps)/yTy
-        y_out = y_out*math.sqrt(Pk)/(h)
-        # else:
-        # y_out = y_out*math.sqrt(Ps)/((h)*yTy)
-        noise = torch.randn(y_out.size())
-        y_out = h*y_out + noise*(std/(math.sqrt(K_clients)))
-        y_out = y_out/(math.sqrt(Pk))
-        y_out = y_out.real
+        # print('-----------')
+        # print("xTTTTTTTTTTTTx: ", yTy)
+        # print(yTy)
+        # # if(yTy <= Ps):
+        # Pk = ((K_clients)*Ps)/yTy
+        # y_out = y_out*math.sqrt(Pk)/(h)
+        # # else:
+        # # y_out = y_out*math.sqrt(Ps)/((h)*yTy)
+        # noise = torch.randn(y_out.size())
+        # y_out = h*y_out + noise*(std/(math.sqrt(K_clients)))
+        # y_out = y_out/(math.sqrt(Pk))
+        # y_out = y_out.real
 
-        client['model'].conv2.weight.data = y_out
+        # client['model'].conv2.weight.data = y_out
 
         # client['model'].get()
 
