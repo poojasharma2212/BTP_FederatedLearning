@@ -44,10 +44,10 @@ testset_loader = torch.utils.data.DataLoader(cifar_testset, batch_size=batch_siz
 class ConvNet(nn.Module):
     def __init__(self):
         super(ConvNet, self).__init__()
-        self.conv1 = nn.Conv2d(3, 48, 5, padding=(1,1))
-        self.conv2 = nn.Conv2d(48, 96, 5, padding=(1,1))
-        self.conv3 = nn.Conv2d(96, 192, 5, padding=(1,1))
-        self.conv4 = nn.Conv2d(192, 256, 5, padding=(1,1))
+        self.conv1 = nn.Conv2d(3, 16, 5, padding=(1,1))
+        self.conv2 = nn.Conv2d(16, 48, 5, padding=(1,1))
+        self.conv3 = nn.Conv2d(48, 64, 5, padding=(1,1))
+        self.conv4 = nn.Conv2d(64, 256, 5, padding=(1,1))
         self.pool = nn.MaxPool2d(2,2)
         self.fc1 = nn.Linear(in_features=5*5*256, out_features=512)
         self.fc2 = nn.Linear(in_features=512, out_features=64)
