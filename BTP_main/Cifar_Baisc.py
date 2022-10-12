@@ -122,8 +122,8 @@ def test_accuracy(net, testset_loader, epoch):
         # correct = correct.numpy().tolist()
         index = correct.cpu().data.numpy().argmax()
     
-    print(total)
-    print(correct.data)
+    # print(total)
+    # print(correct.data)
     vv = correct.cpu().clone().numpy()
     print(vv)
     v = tf.divide(vv,total)
