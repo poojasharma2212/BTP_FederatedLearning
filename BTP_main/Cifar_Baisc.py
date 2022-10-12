@@ -24,8 +24,8 @@ device = torch.device("cuda" if use_cuda else "cpu")
 
 
 transform_train = transforms.Compose([
-    transforms.RandomCrop(32, padding=4),
-    transforms.RandomHorizontalFlip(),
+    # transforms.RandomCrop(32, padding=4),
+    # transforms.RandomHorizontalFlip(),
     transforms.ToTensor(),
     transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
 ])
@@ -92,7 +92,7 @@ class ConvNet(nn.Module):
         x = F.relu(self.conv4(x)) #16*16*256
         x = self.pool(x) # 8*8*256
         x = self.Dropout(x)
-        x = x.view(-1, 8*8*256) # reshape x
+        # x = x.view(-1, 8*8*256) # reshape x
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = self.Dropout(x)
