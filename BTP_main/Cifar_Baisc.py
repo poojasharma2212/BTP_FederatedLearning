@@ -51,7 +51,7 @@ class ConvNet(nn.Module):
         self.pool = nn.MaxPool2d(2,2)
         self.fc1 = nn.Linear(in_features=8*8*256, out_features=512)
         self.fc2 = nn.Linear(in_features=512, out_features=64)
-        self.Dropout = nn.Dropout(0.25)
+        self.Dropout = nn.Dropout(0.2)
         self.fc3 = nn.Linear(in_features=64, out_features=10)
 
     def forward(self, x):
