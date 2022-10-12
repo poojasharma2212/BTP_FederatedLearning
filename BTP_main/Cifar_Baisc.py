@@ -73,10 +73,10 @@ testset_loader = torch.utils.data.DataLoader(cifar_testset, batch_size=batch_siz
 class ConvNet(nn.Module):
     def __init__(self):
         super(ConvNet, self).__init__()
-        self.conv1 = nn.Conv2d(3,48,kernel_size=(3,3), padding=(1,1))
-        self.conv2 = nn.Conv2d(48,96,kernel_size=(3,3), padding=(1,1))
-        self.conv3 = nn.Conv2d(96,192,kernel_size=(3,3), padding=(1,1))
-        self.conv4 = nn.Conv2d(192,256,kernel_size=(3,3), padding=(1,1))
+        self.conv1 = nn.Conv2d(3,48,3, padding=(1,1))
+        self.conv2 = nn.Conv2d(48,96,3, padding=(1,1))
+        self.conv3 = nn.Conv2d(96,192,3, padding=(1,1))
+        self.conv4 = nn.Conv2d(192,256,3, padding=(1,1))
         self.pool = nn.MaxPool2d(2,2)
         self.fc1 = nn.Linear(8*8*256, 512)
         self.fc2 = nn.Linear(512, 64)
@@ -113,7 +113,7 @@ def test_accuracy(net, testset_loader, epoch):
     for data in testset_loader:
         images, labels = data
         images, labels = Variable(images).cuda(), labels.cuda()
-        print(labels)
+        # print(labels)
         output = net(images)
         _, predicted = torch.max(output.data, 1)
         total += labels.size(0)
