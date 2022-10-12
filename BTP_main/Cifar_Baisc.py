@@ -75,10 +75,10 @@ class ConvNet(nn.Module):
         super(ConvNet, self).__init__()
         self.conv1 = nn.Conv2d(3,64,3, padding=(1,1))
         self.conv2 = nn.Conv2d(64,128,3, padding=(1,1))
-        self.conv3 = nn.Conv2d(128,192,3, padding=(1,1))
-        self.conv4 = nn.Conv2d(192,256,3, padding=(1,1))
+        self.conv3 = nn.Conv2d(128,256,3, padding=(1,1))
+        self.conv4 = nn.Conv2d(256,512,3, padding=(1,1))
         self.pool = nn.MaxPool2d(2,2)
-        self.fc1 = nn.Linear(8*8*256, 512)
+        self.fc1 = nn.Linear(8*8*512, 512)
         self.fc2 = nn.Linear(512, 64)
         self.Dropout = nn.Dropout(0.25)
         self.fc3 = nn.Linear(64,10)
@@ -92,7 +92,7 @@ class ConvNet(nn.Module):
         x = F.relu(self.conv4(x)) #16*16*256
         x = self.pool(x) # 8*8*256
         x = self.Dropout(x)
-        x = x.view(-1, 8*8*256) # reshape x
+        x = x.view(-1, 8*8*512) # reshape x
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = self.Dropout(x)
