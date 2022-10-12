@@ -39,19 +39,19 @@ cifar_trainset = datasets.CIFAR10(root='./data', train=True, download=True, tran
 trainset_loader = torch.utils.data.DataLoader(cifar_trainset, batch_size=batch_size,shuffle=True, num_workers=num_workers)
 
 cifar_testset = datasets.CIFAR10(root='./data', train=False, download=True, transform=transform_test)
-testset_loader = torch.utils.data.DataLoader(cifar_testset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
+testset_loader = torch.utils.data.DataLoader(cifar_testset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
 
 class ConvNet(nn.Module):
     def __init__(self):
         super(ConvNet, self).__init__()
-        self.conv1 = nn.Conv2d(in_channels=3, out_channels=48, kernel_size=(3,3), padding=(1,1))
-        self.conv2 = nn.Conv2d(in_channels=48, out_channels=96, kernel_size=(3,3), padding=(1,1))
-        self.conv3 = nn.Conv2d(in_channels=96, out_channels=192, kernel_size=(3,3), padding=(1,1))
-        self.conv4 = nn.Conv2d(in_channels=192, out_channels=256, kernel_size=(3,3), padding=(1,1))
+        self.conv1 = nn.Conv2d(3, 48, 5, padding=(1,1))
+        self.conv2 = nn.Conv2d(48, 96, 5, padding=(1,1))
+        self.conv3 = nn.Conv2d(96, 192, 5, padding=(1,1))
+        self.conv4 = nn.Conv2d(192, 256, 5, padding=(1,1))
         self.pool = nn.MaxPool2d(2,2)
         self.fc1 = nn.Linear(in_features=8*8*256, out_features=512)
         self.fc2 = nn.Linear(in_features=512, out_features=64)
-        self.Dropout = nn.Dropout(0.19)
+        self.Dropout = nn.Dropout(0.22)
         self.fc3 = nn.Linear(in_features=64, out_features=10)
 
     def forward(self, x):
