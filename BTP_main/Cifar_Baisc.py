@@ -73,9 +73,9 @@ testset_loader = torch.utils.data.DataLoader(cifar_testset, batch_size=batch_siz
 class ConvNet(nn.Module):
     def __init__(self):
         super(ConvNet, self).__init__()
-        self.conv1 = nn.Conv2d(3,48,3, padding=(1,1))
-        self.conv2 = nn.Conv2d(48,96,3, padding=(1,1))
-        self.conv3 = nn.Conv2d(96,192,3, padding=(1,1))
+        self.conv1 = nn.Conv2d(3,64,3, padding=(1,1))
+        self.conv2 = nn.Conv2d(64,128,3, padding=(1,1))
+        self.conv3 = nn.Conv2d(128,192,3, padding=(1,1))
         self.conv4 = nn.Conv2d(192,256,3, padding=(1,1))
         self.pool = nn.MaxPool2d(2,2)
         self.fc1 = nn.Linear(8*8*256, 512)
@@ -173,42 +173,42 @@ if load_pretrained_model == False:
         elif epoch == epochs - 1:
             test_accuracy(net, testset_loader, epoch)
             save_model(net, epoch)
-else:
-    net = ConvNet()
-    # net.load_state_dict(torch.load("model_with_epoch" + str(pretrained_epoch) + ".pth"))
-    net.cuda()
-    #optimizer = optim.SGD(net.parameters(), lr=learning_rate, momentum=0.9)
-    for epoch in range(pretrained_epoch, epochs):
-        running_loss = 0.0
-        if epoch <= 10:
-            optimizer = optim.Adam(net.parameters(), lr=learning_rate)
-        elif epoch > 10 and epoch <= 25:
-            optimizer = optim.Adam(net.parameters(), lr=(learning_rate)/10)
-        else:
-            optimizer = optim.Adam(net.parameters(), lr=(learning_rate)/50)
-        for i, data in enumerate(trainset_loader):
-            input_data, labels = data # data is a list of 2, the first element is 4*3*32*32 (4 images) the second element is a list of 4 (classes)
-            input_data, labels = Variable(input_data).cuda(),Variable(labels).cuda()
-            optimizer.zero_grad() # every time reset the parameter gradients to zero
-            # forward backward optimize
-            output = net(input_data)
-            loss = criterion(output, labels)
-            loss.backward()
-            optimizer.step()
-            # print(loss.data)
-            # print(loss.item)
-            # print the loss
-            running_loss += loss.data
-        # print the loss after every epoch
-        t = torch.div(running_loss, 50000)
-        print('loss in epoch ' + str(epoch + 1) + ': ' + str(t))
-        if (epoch + 1)%5 == 0:
-            # Test for accuracy after every 5 epochs
-            test_accuracy(net, testset_loader, epoch)
-            # Save model after every 5 epochs
-            save_model(net, epoch)
-        elif epoch == epochs - 1:
-            test_accuracy(net, testset_loader, epoch)
-            save_model(net, epoch)        
+# else:
+#     net = ConvNet()
+#     # net.load_state_dict(torch.load("model_with_epoch" + str(pretrained_epoch) + ".pth"))
+#     net.cuda()
+#     #optimizer = optim.SGD(net.parameters(), lr=learning_rate, momentum=0.9)
+#     for epoch in range(pretrained_epoch, epochs):
+#         running_loss = 0.0
+#         if epoch <= 10:
+#             optimizer = optim.Adam(net.parameters(), lr=learning_rate)
+#         elif epoch > 10 and epoch <= 25:
+#             optimizer = optim.Adam(net.parameters(), lr=(learning_rate)/10)
+#         else:
+#             optimizer = optim.Adam(net.parameters(), lr=(learning_rate)/50)
+#         for i, data in enumerate(trainset_loader):
+#             input_data, labels = data # data is a list of 2, the first element is 4*3*32*32 (4 images) the second element is a list of 4 (classes)
+#             input_data, labels = Variable(input_data).cuda(),Variable(labels).cuda()
+#             optimizer.zero_grad() # every time reset the parameter gradients to zero
+#             # forward backward optimize
+#             output = net(input_data)
+#             loss = criterion(output, labels)
+#             loss.backward()
+#             optimizer.step()
+#             # print(loss.data)
+#             # print(loss.item)
+#             # print the loss
+#             running_loss += loss.data
+#         # print the loss after every epoch
+#         t = torch.div(running_loss, 50000)
+#         print('loss in epoch ' + str(epoch + 1) + ': ' + str(t))
+#         if (epoch + 1)%5 == 0:
+#             # Test for accuracy after every 5 epochs
+#             test_accuracy(net, testset_loader, epoch)
+#             # Save model after every 5 epochs
+#             save_model(net, epoch)
+#         elif epoch == epochs - 1:
+#             test_accuracy(net, testset_loader, epoch)
+#             save_model(net, epoch)        
 
 print("Training and Testing Completed!")
