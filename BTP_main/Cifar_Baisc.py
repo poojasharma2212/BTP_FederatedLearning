@@ -50,7 +50,7 @@ class ConvNet(nn.Module):
         self.conv3 = nn.Conv2d(64, 128, 5, padding=(1,1))
         self.conv4 = nn.Conv2d(128, 256, 5, padding=(1,1))
         self.pool = nn.MaxPool2d(2,2)
-        self.conv5 = nn.Conv2d(64,128, 5, padding=(1,1))
+        self.conv5 = nn.Conv2d(50,128, 10, padding=(1,1))
         self.fc1 = nn.Linear(in_features=5*5*128, out_features=512)
         self.fc2 = nn.Linear(in_features=512, out_features=64)
         self.Dropout = nn.Dropout(0.15)
