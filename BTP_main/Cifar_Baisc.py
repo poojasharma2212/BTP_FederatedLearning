@@ -49,7 +49,7 @@ class ConvNet(nn.Module):
         self.conv3 = nn.Conv2d(96, 192, 5, padding=(1,1))
         self.conv4 = nn.Conv2d(192, 256, 5, padding=(1,1))
         self.pool = nn.MaxPool2d(2,2)
-        self.fc1 = nn.Linear(in_features=8*8*256, out_features=512)
+        self.fc1 = nn.Linear(in_features=5*5*256, out_features=512)
         self.fc2 = nn.Linear(in_features=512, out_features=64)
         self.Dropout = nn.Dropout(0.22)
         self.fc3 = nn.Linear(in_features=64, out_features=10)
@@ -63,7 +63,7 @@ class ConvNet(nn.Module):
         x = F.relu(self.conv4(x)) #16*16*256
         x = self.pool(x) # 8*8*256
         x = self.Dropout(x)
-        x = x.view(-1, 8*8*256) # reshape x
+        x = x.view(-1, 5*5*256) # reshape x
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = self.Dropout(x)
