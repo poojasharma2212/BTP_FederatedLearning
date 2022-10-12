@@ -63,9 +63,10 @@ class ConvNet(nn.Module):
         x = self.Dropout(x)
         x = F.relu(self.conv3(x)) #16*16*192
         x = F.relu(self.conv4(x)) #16*16*256
+        x = F.relu(self.conv5(x)) #16*16*256
         x = self.pool(x) # 8*8*256
         x = self.Dropout(x)
-        x = F.relu(self.conv5(x)) #16*16*256
+       
         x = x.view(-1, 5*5*512) # reshape x
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
