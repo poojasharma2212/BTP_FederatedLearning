@@ -70,7 +70,7 @@ def Wrapper():
 
     use_cuda = args['use_cuda'] and torch.cuda.is_available()
     device = torch.device("cuda" if use_cuda else "cpu")
-    # kwargs = {'num_workers': 1, 'pin_memory': True} if use_cuda else {}
+    # kwargs = {'num_workers': 1, 'pi  n_memory': True} if use_cuda else {}
 
     hook = sy.TorchHook(torch)
     clients = []
@@ -234,11 +234,11 @@ def Wrapper():
         # a0 = 0.99990001
         # a1 = 0.00009999
 
-        # a0 = 0.90909090
-        # a1 = 0.09090909
+        a0 = 0.90909090
+        a1 = 0.09090909
 
-        a0 = 0.999000999
-        a1 = 0.000999001
+        # a0 = 0.999000999
+        # a1 = 0.000999001
 
         std1 = math.sqrt(Ps/(snr_val*(a0+50*a1)))
         std2 = 50*std1
