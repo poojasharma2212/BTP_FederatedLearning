@@ -25,7 +25,7 @@ def mnistIID(data, nUsers):
 
 
 def mnistnon_IID(data, nuser):
-    diff_class = 60
+    diff_class = 40
     images = int(len(data)/diff_class)
     diff_class_index = [i for i in range(diff_class)]
     usersDict = {i: np.array([]) for i in range(nuser)}
