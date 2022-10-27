@@ -42,7 +42,7 @@ accu = []
 # def Wrapper(batch_size, lr, no_of_epoch, no_of_clients, no_of_rounds, key, key_array, Ps):
 def Wrapper():
     count = 0
-    print("yes")
+    # print("yes")
 
     args = {
         'batch_size': 64,
@@ -173,13 +173,13 @@ def Wrapper():
         #y = random.random()
         h = complex(x, y)
         print("Client:", client['hook'].id)
-        print("CSI", abs(h)/(std*std))
+        # print("CSI", abs(h)/(std*std))
 
         K_clients = len(active_clients_inds)
         # wireless channel needs to be considered
         # no noise in downlink
         
-        print(K_clients)
+        # print(K_clients)
         # cStatus = True     # Client status
         for epoch in range(1, args['epochs']+1):
             for batch_idx, (data, target) in enumerate(client['mnist_trainset']):
@@ -212,8 +212,8 @@ def Wrapper():
         for i in range(list(x.size())[0]):
             xTx = xTx + x[i]*x[i]
 
-        print('-----------')
-        print("xTTTTTTTTTTTTx: ", xTx)
+        # print('-----------')
+        # print("xTTTTTTTTTTTTx: ", xTx)
         print(xTx)
 
         Pk = ((K_clients)*(Ps))/xTx
@@ -234,8 +234,8 @@ def Wrapper():
         for i in range(list(yy.size())[0]):
             yTy = yTy + yy[i]*yy[i]
 
-        print('-----------')
-        print("xTTTTTTTTTTTTx: ", yTy)
+        # print('-----------')
+        # print("xTTTTTTTTTTTTx: ", yTy)
         print(yTy)
         # if(yTy <= Ps):
         Pk = ((K_clients)*Ps)/yTy
@@ -341,12 +341,12 @@ def Wrapper():
                 client_good_channel.append(client)
             # idx = idx+1
             # print(client)'
-        print()
+        # print()
         print("Clients with good channel are considered for averaging")
         for no in range(len(client_good_channel)):
             print(client_good_channel[no]['hook'].id)
-        print()
-        print("reached this step")
+        # print()
+        # print("reached this step")
         global_model = averageModels(
             global_model, client_good_channel, snr_value, Ps)
 
@@ -393,7 +393,7 @@ def Wrapper():
 # accuracy1 = Wrapper(64, 0.007, 3, 20, 10, key, key_array, Ps)
 accuracy1 = Wrapper()
 print(accuracy1)
-print("second result with P = sum(root(Pk))")
+# print("second result with P = sum(root(Pk))")
 # accuracy2 = Wrapper(64,0.02,2,20,5,hook)
 # print(accuracy2)
 # accuracy3 = Wrapper(64,0.02,2,20,5,hook)
