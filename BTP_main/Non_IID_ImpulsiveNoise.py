@@ -178,7 +178,8 @@ def Wrapper():
         K_clients = len(active_clients_inds)
         # wireless channel needs to be considered
         # no noise in downlink
-
+        
+        print(K_clients)
         # cStatus = True     # Client status
         for epoch in range(1, args['epochs']+1):
             for batch_idx, (data, target) in enumerate(client['mnist_trainset']):
