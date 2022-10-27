@@ -52,7 +52,7 @@ def Wrapper():
         'epochs': 3,
         'clients': 20,
         'seed': 0,
-        'rounds': 150,
+        'rounds': 100,
         'C': 0.9,
         'lowest_snr': 20,
         # 'highest_snr': 20,
