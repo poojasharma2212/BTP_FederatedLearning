@@ -155,6 +155,103 @@ def Wrapper():
         x_dict[dict_key] = x_val
         y_dict[dict_key] = y_val
 
+    # def train(args, client, device, Ps):
+    #     cStatus = True
+    #     client['model'].train()
+    #     client['model'].send(client['hook'])
+    #     # snr = random.randint(0, 40)
+    #     print("client_ID", client['hook'].id)
+    #     snr = snr_value
+    #     print("SNR==", snr)
+    #     snr_val = 10**(snr/10)
+    #     std = math.sqrt(Ps/snr_val)
+    #     x = random.random()
+    #     y = random.random()
+    #     x = x_dict[client['hook'].id]
+    #     y = y_dict[client['hook'].id]
+    #     #x = random.random()
+    #     #y = random.random()
+    #     h = complex(x, y)
+    #     print("Client:", client['hook'].id)
+    #     # print("CSI", abs(h)/(std*std))
+
+    #     K_clients = len(active_clients_inds)
+    #     # wireless channel needs to be considered
+    #     # no noise in downlink
+        
+    #     # print(K_clients)
+    #     # cStatus = True     # Client status
+    #     for epoch in range(1, args['epochs']+1):
+    #         for batch_idx, (data, target) in enumerate(client['mnist_trainset']):
+    #             data = data.send(client['hook'])
+    #             target = target.send(client['hook'])
+    #             data, target = data.to(device), target.to(device)
+    #             client['optimizer'].zero_grad()
+    #             output = client['model'](data)
+    #             loss = Func.nll_loss(output, target)
+    #             loss.backward()
+    #             # print(loss.grad)
+    #             client['optimizer'].step()
+
+    #             # print("==========ye chalega kya========================")
+    #             if batch_idx % args['log_interval'] == 0:
+    #                 loss = loss.get()
+    #                 print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+    #                     client['hook'].id,
+    #                     epoch, batch_idx *
+    #                     args['batch_size'], len(
+    #                         client['mnist_trainset']) * args['batch_size'],
+    #                     100. * batch_idx / len(client['mnist_trainset']), loss.item()))
+
+    #     client['model'].get()
+
+    #     y_out = client['model'].conv1.weight
+    #     x = torch.flatten(y_out)
+    #     xTx = 0
+    #     # # should I use here also normalise ??
+    #     for i in range(list(x.size())[0]):
+    #         xTx = xTx + x[i]*x[i]
+
+    #     # print('-----------')
+    #     # print("xTTTTTTTTTTTTx: ", xTx)
+    #     print(xTx)
+
+    #     Pk = ((K_clients)*(Ps))/xTx
+    #     # if(xTx <= Ps):
+    #     y_out = y_out*math.sqrt(Pk)/((h))
+    #     # else:
+    #     # y_out = y_out*math.sqrt(Ps)/((h)*xTx)
+    #     noise = torch.randn(y_out.size())
+    #     y_out = h*y_out+noise*(std/(math.sqrt(K_clients)))
+    #     y_out = y_out/(math.sqrt(Pk))
+    #     y_out = y_out.real
+
+    #     client['model'].conv1.weight.data = y_out
+
+    #     y_out = client['model'].conv2.weight
+    #     yy = torch.flatten(y_out)
+    #     yTy = 0
+    #     for i in range(list(yy.size())[0]):
+    #         yTy = yTy + yy[i]*yy[i]
+
+    #     # print('-----------')
+    #     # print("xTTTTTTTTTTTTx: ", yTy)
+    #     print(yTy)
+    #     # if(yTy <= Ps):
+    #     Pk = ((K_clients)*Ps)/yTy
+    #     y_out = y_out*math.sqrt(Pk)/(h)
+    #     # else:
+    #     # y_out = y_out*math.sqrt(Ps)/((h)*yTy)
+    #     noise = torch.randn(y_out.size())
+    #     y_out = h*y_out + noise*(std/(math.sqrt(K_clients)))
+    #     y_out = y_out/(math.sqrt(Pk))
+    #     y_out = y_out.real
+
+    #     client['model'].conv2.weight.data = y_out
+
+    #     # client['model'].get()
+
+    #     return cStatus
     def train(args, client, device, Ps):
         cStatus = True
         client['model'].train()
@@ -162,13 +259,14 @@ def Wrapper():
         # snr = random.randint(0, 40)
         print("client_ID", client['hook'].id)
         snr = snr_value
-        print("SNR==", snr)
+        # print("SNR==", snr)
         snr_val = 10**(snr/10)
-        std = math.sqrt(Ps/snr_val)
+        #std = math.sqrt(Ps/snr_val)
         x = random.random()
         y = random.random()
         x = x_dict[client['hook'].id]
         y = y_dict[client['hook'].id]
+        std = math.sqrt(Ps/(snr_val*5.4545409))
         #x = random.random()
         #y = random.random()
         h = complex(x, y)
@@ -178,8 +276,8 @@ def Wrapper():
         K_clients = len(active_clients_inds)
         # wireless channel needs to be considered
         # no noise in downlink
+
         
-        # print(K_clients)
         # cStatus = True     # Client status
         for epoch in range(1, args['epochs']+1):
             for batch_idx, (data, target) in enumerate(client['mnist_trainset']):
@@ -212,17 +310,44 @@ def Wrapper():
         for i in range(list(x.size())[0]):
             xTx = xTx + x[i]*x[i]
 
-        # print('-----------')
-        # print("xTTTTTTTTTTTTx: ", xTx)
-        print(xTx)
+        print('-----------')
+        print("xTTTTTTTTTTTTx: ", xTx)
+        # print(xTx)
 
         Pk = ((K_clients)*(Ps))/xTx
         # if(xTx <= Ps):
         y_out = y_out*math.sqrt(Pk)/((h))
         # else:
         # y_out = y_out*math.sqrt(Ps)/((h)*xTx)
-        noise = torch.randn(y_out.size())
-        y_out = h*y_out+noise*(std/(math.sqrt(K_clients)))
+        # noise = torch.randn(y_out.size())
+        # y_out = h*y_out+noise*(std/(math.sqrt(K_clients)))
+        n1 = torch.randn(y_out.size())
+
+        # a0 = 0.740740741
+        # a1 = 0.259259259
+        
+        # a0 = 0.99990001
+        # a1 = 0.00009999
+
+        # a0 = 0.90909090
+        # a1 = 0.09090909
+
+        # a0 = 0.999000999
+        # a1 = 0.000999001
+
+        # a0 = 0.997008973
+        # a1 = 0.0029910269
+
+        a0 = 0.9708737864
+        a1 = 0.029126214
+
+        std1 = math.sqrt(Ps/(snr_val*(a0+50*a1)))
+        std2 = 50*std1
+        #std1 = math.sqrt(0.02/(a0+50*a1))
+        print(Ps/(snr_val*(a0+50*a1)))
+        # print("std1",std1)
+        n2 = torch.randn(y_out.size())
+        noise = a0*n1*std1 + a1*n2*std2
         y_out = y_out/(math.sqrt(Pk))
         y_out = y_out.real
 
@@ -242,8 +367,33 @@ def Wrapper():
         y_out = y_out*math.sqrt(Pk)/(h)
         # else:
         # y_out = y_out*math.sqrt(Ps)/((h)*yTy)
-        noise = torch.randn(y_out.size())
-        y_out = h*y_out + noise*(std/(math.sqrt(K_clients)))
+        n1 = torch.randn(y_out.size())
+
+        # a0 = 0.740740741
+        # a1 = 0.259259259
+        # a0 = 0.99990001
+        # a1 = 0.00009999
+
+        # a0 = 0.909090909
+        # a1 = 0.090909090
+
+        # a0 = 0.999000999
+        # a1 = 0.000999001
+
+        # a0 = 0.997008973
+        # a1 = 0.0029910269
+
+        a0 = 0.9708737864
+        a1 = 0.029126214
+        
+        std1 = math.sqrt(Ps/(snr_val*(a0+50*a1)))
+        std2 = 50*std1
+        # print(std1)
+        # print(std2)
+        
+        n2 = torch.randn(y_out.size())
+        noise = a0*n1*std1 + a1*n2*std2
+        y_out = h*y_out + noise
         y_out = y_out/(math.sqrt(Pk))
         y_out = y_out.real
 
@@ -251,8 +401,7 @@ def Wrapper():
 
         # client['model'].get()
 
-        return cStatus
-
+        return cStatus    
     def test(args, model, device, test_loader, count):
         # print("TEST SET PRDEICTION")
         model.eval()
