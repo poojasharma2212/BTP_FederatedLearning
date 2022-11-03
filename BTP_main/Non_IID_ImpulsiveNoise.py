@@ -266,7 +266,7 @@ def Wrapper():
         y = random.random()
         x = x_dict[client['hook'].id]
         y = y_dict[client['hook'].id]
-        std = math.sqrt(Ps/(snr_val*5.4545409))
+        # std = math.sqrt(Ps/(snr_val*5.4545409))
         #x = random.random()
         #y = random.random()
         h = complex(x, y)
@@ -335,11 +335,11 @@ def Wrapper():
         # a0 = 0.999000999
         # a1 = 0.000999001
 
-        # a0 = 0.997008973
-        # a1 = 0.0029910269
+        a0 = 0.997008973
+        a1 = 0.0029910269
 
-        a0 = 0.9708737864
-        a1 = 0.029126214
+        # a0 = 0.9708737864
+        # a1 = 0.029126214
 
         std1 = math.sqrt(Ps/(snr_val*(a0+50*a1)))
         std2 = 50*std1
@@ -380,11 +380,11 @@ def Wrapper():
         # a0 = 0.999000999
         # a1 = 0.000999001
 
-        # a0 = 0.997008973
-        # a1 = 0.0029910269
+        a0 = 0.997008973
+        a1 = 0.0029910269
 
-        a0 = 0.9708737864
-        a1 = 0.029126214
+        # a0 = 0.9708737864
+        # a1 = 0.029126214
         
         std1 = math.sqrt(Ps/(snr_val*(a0+50*a1)))
         std2 = 50*std1
