@@ -176,7 +176,7 @@ def Wrapper():
         #y = random.random()
         h = complex(x, y)
         print("Client:", client['hook'].id)
-        print("CSI", abs(h)/(std*std))
+        # print("CSI", abs(h)/(std*std))
 
         K_clients = len(active_clients_inds)
         # wireless channel needs to be considered
