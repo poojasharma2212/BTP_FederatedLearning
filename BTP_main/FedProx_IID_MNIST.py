@@ -160,7 +160,7 @@ def Wrapper():
     def train(args, client, device,global_model, Ps,rclients = False):
         cStatus = True
         client['model'].train()
-        client['model'].send(client['hook'])
+        # client['model'].send(client['hook'])
         # snr = random.randint(0, 40)
         print("client_ID", client['hook'].id)
         snr = snr_value
