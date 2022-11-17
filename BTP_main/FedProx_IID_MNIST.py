@@ -53,8 +53,9 @@ def Wrapper():
         'epochs': 3,
         'clients': 30,
         'seed': 0,
-        'rounds': 150,
+        'rounds': 30,
         'C': 0.9,
+        'mu':0.1,
         'lowest_snr': 20,
         # 'highest_snr': 20,
         'lowest_csi': 0,
@@ -156,7 +157,7 @@ def Wrapper():
         x_dict[dict_key] = x_val
         y_dict[dict_key] = y_val
 
-    def train(args, client, device, Ps):
+    def train(args, client, device,global_model, Ps,rclients = False):
         cStatus = True
         client['model'].train()
         client['model'].send(client['hook'])
@@ -174,7 +175,7 @@ def Wrapper():
         #y = random.random()
         h = complex(x, y)
         print("Client:", client['hook'].id)
-        print("CSI", abs(h)/(std*std))
+        # print("CSI", abs(h)/(std*std))
 
         
         K_clients = len(active_clients_inds)
@@ -182,27 +183,35 @@ def Wrapper():
         # no noise in downlink
   
         # cStatus = True     # Client status
+        Epochs = args['epoch']+1
+        if rclients:
+            Epochs = np.random.randint(low=1, high=Epochs)
+            Epochs = 2
+
         for epoch in range(1, args['epochs']+1):
             for batch_idx, (data, target) in enumerate(client['mnist_trainset']):
                 data = data.send(client['hook'])
                 target = target.send(client['hook'])
+                client['model'].send(data.location)
+
                 data, target = data.to(device), target.to(device)
                 client['optimizer'].zero_grad()
                 output = client['model'](data)
                 loss = Func.nll_loss(output, target)
                 loss.backward()
                 # print(loss.grad)
-                client['optimizer'].step()
-
+                client['optimizer'].step(global_model.send(client['hook']))
+                client['model'].get() 
+                global_model.get()
                 # print("==========ye chalega kya========================")
                 if batch_idx % args['log_interval'] == 0:
                     loss = loss.get()
-                    # print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                    #     client['hook'].id,
-                    #     epoch, batch_idx *
-                    #     args['batch_size'], len(
-                    #         client['mnist_trainset']) * args['batch_size'],
-                    #     100. * batch_idx / len(client['mnist_trainset']), loss.item()))
+                    print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+                        client['hook'].id,
+                        epoch, batch_idx *
+                        args['batch_size'], len(
+                            client['mnist_trainset']) * args['batch_size'],
+                        100. * batch_idx / len(client['mnist_trainset']), loss.item()))
 
         client['model'].get()
 
@@ -284,6 +293,25 @@ def Wrapper():
     # model = CNN(k)
     # optimizer = optim.SGD(model.parameters(), lr=args['lr'])
 
+    class FedProxOptim(optim.Optimizer):
+        def __init__(self, params, lr=args['lr'], mu=args['mu']):
+            defaults = dict(lr=lr, mu=mu)
+            super(FedProxOptim, self).__init__(params, defaults)
+        
+        def step(self, global_model=None, closure = None):
+            loss = None
+            if closure is not None:
+                loss = closure()
+            for group in self.param_groups:
+                lr, mu = group['lr'], group['mu']
+                for p in zip(group['params'], list(global_model.parameters())):
+                    if p[0].grad is None:
+                        continue
+                    d_p = p[0].grad.data # local model grads
+                    p[0].data.sub_(group['lr'], (d_p + mu * (p[0].data.clone() - p[1].data.clone())))
+                    
+            return loss
+
     logging.info("Starting training !!")
 
     torch.manual_seed(args['seed'])
@@ -293,8 +321,9 @@ def Wrapper():
         torch.manual_seed(args['seed'])
         client['model'] = CNN().to(device)
         # print(client)
-        client['optimizer'] = optim.SGD(
-            client['model'].parameters(), lr=args['lr'])
+        # client['optimizer'] = optim.SGD(
+        #     client['model'].parameters(), lr=args['lr'])
+        client['optimizer'] = FedProxOptim(client['model'].parameters(), lr=args['lr'], mu=args['mu'])
 
     # print(client)
 
@@ -310,8 +339,7 @@ def Wrapper():
         # Selected devices
         np.random.seed(fed_round)
         # dont choose same client more than once
-        selected_clients_inds = np.random.choice(
-            range(len(clients)), m, replace=False)
+        selected_clients_inds = np.random.choice(range(len(clients)), m, replace=False)
         selected_clients = [clients[i] for i in selected_clients_inds]
 
         # Active devices
@@ -321,47 +349,61 @@ def Wrapper():
         active_clients = [clients[i] for i in active_clients_inds]
         print(len(active_clients_inds))
 
-        # print('=============\\\\\\\=====================')
-        idx = 0
-        power_1 = 0
+         # The rest of the active devices (selected but dropped)
+        rest_clients_inds = np.setdiff1d(selected_clients_inds, active_clients_inds)
+        rest_clients = [clients[i] for i in rest_clients_inds]
+        
+        # # print('=============\\\\\\\=====================')
+        # idx = 0
+        # power_1 = 0
 
-        # def add_noise(weights, noise):
-        #     with torch.no_grad():
-        #     weight_noise = nn.Parameter(weights + noise.to("cuda"))
-        # return weight_noise
-
+            # Training the active devices
         for client in active_clients:
-            print("train")
-            # if fed_round == 0:
-            #     self.noise_conv1 = torch.randn(nn.Parameter(self.conv1.weight).size())*0.6 + 0
-            #     self.noise_conv2 = torch.randn(nn.Parameter(self.conv2.weight).size())*0.6 + 0
-            # client['model'].add(GaussianNoise(math.sqrt(10)))
+            train(args, device, client, global_model,Ps)
+        
 
-            good_channel = train(args, client, device, Ps)
-            if(good_channel == True):
-                client_good_channel.append(client)
-            # idx = idx+1
-            # print(client)'
-        print()
-        print("Clients with good channel are considered for averaging")
-        for no in range(len(client_good_channel)):
-            print(client_good_channel[no]['hook'].id)
-        print()
-        print("reached this step")
-        global_model = averageModels(
-            global_model, client_good_channel, snr_value, Ps)
+        # Training the rest with less number of epochs
+        for client in rest_clients:
+            train(args, device, client, global_model, Ps,True)
 
-        # Testing the average model
+
+        global_model = averageModels(global_model, selected_clients)
+        
         test(args, global_model, device, global_test_loader, count)
-
-        #print("Total Power =", power_1)
-        print()
-
+        
         for client in clients:
             client['model'].load_state_dict(global_model.state_dict())
 
+     
+
+        #     good_channel = train(args, client, device, Ps)
+        #     if(good_channel == True):
+        #         client_good_channel.append(client)
+        #     # idx = idx+1
+        #     # print(client)'
+        # print()
+        # print("Clients with good channel are considered for averaging")
+        # for no in range(len(client_good_channel)):
+        #     print(client_good_channel[no]['hook'].id)
+        # print()
+        # print("reached this step")
+        # global_model = averageModels(
+        #     global_model, client_good_channel, snr_value, Ps)
+
+        # # Testing the average model
+        # test(args, global_model, device, global_test_loader, count)
+
+        # #print("Total Power =", power_1)
+        # print()
+
+        # for client in clients:
+        #     client['model'].load_state_dict(global_model.state_dict())
+
     if (args['save_model']):
-        torch.save(global_model.state_dict(), "FederatedLearning.pt")
+        torch.save(global_model.state_dict(), "FedProx.pt")
+    
+    # if (args['save_model']):
+    #     torch.save(global_model.state_dict(), "FederatedLearning.pt")
 
     print("============ Accuracy ===========")
     # print(accu)
