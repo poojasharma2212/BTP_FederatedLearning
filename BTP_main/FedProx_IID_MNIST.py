@@ -261,7 +261,7 @@ def Wrapper():
 
         # client['model'].get()
 
-        return cStatus
+        # return cStatus
 
     def test(args, model, device, test_loader, count):
         # print("TEST SET PRDEICTION")
