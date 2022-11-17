@@ -359,12 +359,12 @@ def Wrapper():
 
             # Training the active devices
         for client in active_clients:
-            train(args, device, client, global_model,Ps)
+            train(args, client, device, global_model,Ps)
         
 
         # Training the rest with less number of epochs
         for client in rest_clients:
-            train(args, device, client, global_model, Ps,True)
+            train(args, client, device,global_model, Ps,True)
 
 
         global_model = averageModels(global_model, selected_clients)
