@@ -161,7 +161,7 @@ def Wrapper():
         cStatus = True
         client['model'].train()
         # client['model'].send(client['hook'])
-        # snr = random.randint(0, 40)
+
         print("client_ID", client['hook'].id)
         snr = snr_value
         print("SNR==", snr)
@@ -169,10 +169,8 @@ def Wrapper():
         std = math.sqrt(Ps/snr_val)
         x = random.random()
         y = random.random()
-        x = x_dict[client['hook'].id]
-        y = y_dict[client['hook'].id]
-        #x = random.random()
-        #y = random.random()
+        # x = x_dict[client['hook'].id]
+        # y = y_dict[client['hook'].id]
         h = complex(x, y)
         print("Client:", client['hook'].id)
         # print("CSI", abs(h)/(std*std))
