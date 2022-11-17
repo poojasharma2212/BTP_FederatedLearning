@@ -183,7 +183,7 @@ def Wrapper():
         # no noise in downlink
   
         # cStatus = True     # Client status
-        Epochs = args['epoch']+1
+        Epochs = args['epochs']+1
         if rclients:
             Epochs = np.random.randint(low=1, high=Epochs)
             Epochs = 2
