@@ -414,20 +414,6 @@ def Wrapper():
 
 # hook = sy.TorchHook(torch)
 
-# for i in range(4):
-#     accuracy1 = Wrapper(64,0.02,2,20,4,hook)
-#     print(accuracy1)
-#     if(len(sum)==0):
-#         sum = accuracy1
-#     for j in range(len(accuracy1)):
-#         sum[j] = sum[j] + accuracy1[j]
-#     # final_acc[i] = accuracy1
-# for i in range(len(sum)):
-#     sum[i] = sum[i]/10
-# weight = sum/10
-
-# # print(final_acc)
-
 
 # print("====================final ans")
 # # print(sum)
