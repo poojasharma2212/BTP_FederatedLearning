@@ -365,7 +365,7 @@ def Wrapper():
             train(args, client, device,global_model, Ps,True)
 
 
-        global_model = averageModels(global_model, selected_clients)
+        global_model = averageModels(global_model, selected_clients,snr_value, Ps)
         
         test(args, global_model, device, global_test_loader, count)
         
