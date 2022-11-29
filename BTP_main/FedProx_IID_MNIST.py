@@ -199,8 +199,8 @@ def Wrapper():
                 loss.backward()
                 # print(loss.grad)
                 client['optimizer'].step(global_model.send(client['hook']))
-                # client['model'].get() 
-                # global_model.get()
+                client['model'].get() 
+                global_model.get()
                 # print("==========ye chalega kya========================")
                 if batch_idx % args['log_interval'] == 0:
                     loss = loss.get()
@@ -211,8 +211,7 @@ def Wrapper():
                             client['mnist_trainset']) * args['batch_size'],
                         100. * batch_idx / len(client['mnist_trainset']), loss.item()))
 
-        client['model'].get()
-        global_model.get()
+        # client['model'].get()
 
         y_out = client['model'].conv1.weight
         x = torch.flatten(y_out)
