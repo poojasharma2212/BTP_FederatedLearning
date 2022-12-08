@@ -48,12 +48,12 @@ def Wrapper():
     args = {
         'batch_size': 64,
         'test_batch_size': 1000,
-        'lr': 0.004 ,
+        'lr': 0.01 ,
         'log_interval': 10,
         'epochs': 3,
         'clients': 30,
         'seed': 0,
-        'rounds': 80,
+        'rounds': 50,
         'C': 0.9,
         'mu':0.1,
         'lowest_snr': 20,
@@ -225,14 +225,45 @@ def Wrapper():
         print(xTx)
 
         Pk = ((K_clients)*(Ps))/xTx
-        # if(xTx <= Ps):
+    
         y_out = y_out*math.sqrt(Pk)/((h))
-        # else:
-        # y_out = y_out*math.sqrt(Ps)/((h)*xTx)
-        noise = torch.randn(y_out.size())
-        y_out = h*y_out+noise*(std/(math.sqrt(K_clients)))
+
+        # noise = torch.randn(y_out.size())
+
+        n1 = torch.randn(y_out.size())
+
+        # a0 = 0.740740741
+        # a1 = 0.259259259
+        
+        # a0 = 0.99990001
+        # a1 = 0.00009999
+
+        # a0 = 0.90909090
+        # a1 = 0.09090909
+
+        # a0 = 0.999000999
+        # a1 = 0.000999001
+
+        # a0 = 0.997008973
+        # a1 = 0.0029910269
+
+        a0 = 0.9708737864
+        a1 = 0.029126214
+
+        std1 = math.sqrt(Ps/(snr_val*(a0+50*a1)))
+        std2 = 50*std1
+        #std1 = math.sqrt(0.02/(a0+50*a1))
+        print(Ps/(snr_val*(a0+50*a1)))
+        print("std1",std1)
+        n2 = torch.randn(y_out.size())
+        noise = a0*n1*std1 + a1*n2*std2
+        y_out = h*y_out + noise
         y_out = y_out/(math.sqrt(Pk))
         y_out = y_out.real
+
+        # y_out = h*y_out+noise*(std/(math.sqrt(K_clients)))
+        # y_out = y_out/(math.sqrt(Pk))
+        # y_out = y_out.real
 
         client['model'].conv1.weight.data = y_out
 
@@ -247,15 +278,52 @@ def Wrapper():
         print(yTy)
         # if(yTy <= Ps):
         Pk = ((K_clients)*Ps)/yTy
+        y_out = h*y_out + noise
         y_out = y_out*math.sqrt(Pk)/(h)
         # else:
         # y_out = y_out*math.sqrt(Ps)/((h)*yTy)
-        noise = torch.randn(y_out.size())
-        y_out = h*y_out + noise*(std/(math.sqrt(K_clients)))
+        n1 = torch.randn(y_out.size())
+
+        # a0 = 0.740740741
+        # a1 = 0.259259259
+        # a0 = 0.99990001
+        # a1 = 0.00009999
+
+        # a0 = 0.909090909
+        # a1 = 0.090909090
+
+        # a0 = 0.999000999
+        # a1 = 0.000999001
+
+        # a0 = 0.997008973
+        # a1 = 0.0029910269
+
+        a0 = 0.9708737864
+        a1 = 0.029126214
+        
+        std1 = math.sqrt(Ps/(snr_val*(a0+50*a1)))
+        std2 = 50*std1
+        print(std1)
+        print(std2)
+        
+        n2 = torch.randn(y_out.size())
+        noise = a0*n1*std1 + a1*n2*std2
+        y_out = h*y_out + noise
         y_out = y_out/(math.sqrt(Pk))
         y_out = y_out.real
 
         client['model'].conv2.weight.data = y_out
+        
+        # Pk = ((K_clients)*Ps)/yTy
+        # y_out = y_out*math.sqrt(Pk)/(h)
+        # # else:
+        # # y_out = y_out*math.sqrt(Ps)/((h)*yTy)
+        # # noise = torch.randn(y_out.size())
+        # # y_out = h*y_out + noise*(std/(math.sqrt(K_clients)))
+        # # y_out = y_out/(math.sqrt(Pk))
+        # # y_out = y_out.real
+
+        # client['model'].conv2.weight.data = y_out
 
         # client['model'].get()
 
