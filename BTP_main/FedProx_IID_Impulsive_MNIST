@@ -53,7 +53,7 @@ def Wrapper():
         'epochs': 3,
         'clients': 30,
         'seed': 0,
-        'rounds': 50,
+        'rounds': 50 ,
         'C': 0.9,
         'mu':0.1,
         'lowest_snr': 20,
@@ -311,7 +311,7 @@ def Wrapper():
         
         n2 = torch.randn(y_out.size())
         noise = a0*n1*std1 + a1*n2*std2
-        
+
         y_out = h*y_out + noise
         y_out = y_out/(math.sqrt(Pk))
         y_out = y_out.real
