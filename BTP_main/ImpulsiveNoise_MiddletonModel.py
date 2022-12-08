@@ -54,7 +54,7 @@ def Wrapper():
         'epochs': 3,
         'clients': 30,
         'seed': 0,
-        'rounds': 100,
+        'rounds': 40,
         'C': 0.9,
         'lowest_snr': 20,
         # 'highest_snr': 20,
@@ -228,8 +228,8 @@ def Wrapper():
         # y_out = h*y_out+noise*(std/(math.sqrt(K_clients)))
         n1 = torch.randn(y_out.size())
 
-        # a0 = 0.740740741
-        # a1 = 0.259259259
+        a0 = 0.740740741
+        a1 = 0.259259259
         
         # a0 = 0.99990001
         # a1 = 0.00009999
@@ -243,8 +243,8 @@ def Wrapper():
         # a0 = 0.997008973
         # a1 = 0.0029910269
 
-        a0 = 0.9708737864
-        a1 = 0.029126214
+        # a0 = 0.9708737864
+        # a1 = 0.029126214
 
         std1 = math.sqrt(Ps/(snr_val*(a0+50*a1)))
         std2 = 50*std1
@@ -253,6 +253,7 @@ def Wrapper():
         print("std1",std1)
         n2 = torch.randn(y_out.size())
         noise = a0*n1*std1 + a1*n2*std2
+        y_out = h*y_out + noise
         y_out = y_out/(math.sqrt(Pk))
         y_out = y_out.real
 
@@ -267,29 +268,14 @@ def Wrapper():
         print('-----------')
         print("xTTTTTTTTTTTTx: ", yTy)
         print(yTy)
-        # if(yTy <= Ps):
+        
+
         Pk = ((K_clients)*Ps)/yTy
+        # y_out = h*y_out + noise
         y_out = y_out*math.sqrt(Pk)/(h)
         # else:
         # y_out = y_out*math.sqrt(Ps)/((h)*yTy)
         n1 = torch.randn(y_out.size())
-
-        # a0 = 0.740740741
-        # a1 = 0.259259259
-        # a0 = 0.99990001
-        # a1 = 0.00009999
-
-        # a0 = 0.909090909
-        # a1 = 0.090909090
-
-        # a0 = 0.999000999
-        # a1 = 0.000999001
-
-        # a0 = 0.997008973
-        # a1 = 0.0029910269
-
-        a0 = 0.9708737864
-        a1 = 0.029126214
         
         std1 = math.sqrt(Ps/(snr_val*(a0+50*a1)))
         std2 = 50*std1
@@ -298,6 +284,7 @@ def Wrapper():
         
         n2 = torch.randn(y_out.size())
         noise = a0*n1*std1 + a1*n2*std2
+
         y_out = h*y_out + noise
         y_out = y_out/(math.sqrt(Pk))
         y_out = y_out.real
