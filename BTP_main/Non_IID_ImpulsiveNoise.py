@@ -80,7 +80,7 @@ def Wrapper():
 
     # print(clients)
     # os.chdir("/content/drive/MyDrive/FL_ZaaPoo/data/MNIST/raw")
-    nUsers = 20
+    nUsers = 30
     transform = transforms.Compose(
         [transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
     # transform=transforms.ToTensor()
@@ -300,7 +300,6 @@ def Wrapper():
                         args['batch_size'], len(
                             client['mnist_trainset']) * args['batch_size'],
                         100. * batch_idx / len(client['mnist_trainset']), loss.item()))
-
         client['model'].get()
 
         y_out = client['model'].conv1.weight
@@ -323,14 +322,14 @@ def Wrapper():
         # y_out = h*y_out+noise*(std/(math.sqrt(K_clients)))
         n1 = torch.randn(y_out.size())
 
-        # a0 = 0.740740741
-        # a1 = 0.259259259
+        a0 = 0.740740741
+        a1 = 0.259259259
         
         # a0 = 0.99990001
         # a1 = 0.00009999
 
-        a0 = 0.90909090
-        a1 = 0.09090909
+        # a0 = 0.90909090
+        # a1 = 0.09090909
 
         # a0 = 0.999000999
         # a1 = 0.000999001
@@ -345,9 +344,11 @@ def Wrapper():
         std2 = 50*std1
         #std1 = math.sqrt(0.02/(a0+50*a1))
         print(Ps/(snr_val*(a0+50*a1)))
-        # print("std1",std1)
+        print("std1",std1)
         n2 = torch.randn(y_out.size())
         noise = a0*n1*std1 + a1*n2*std2
+
+        y_out = h*y_out + noise
         y_out = y_out/(math.sqrt(Pk))
         y_out = y_out.real
 
@@ -360,31 +361,16 @@ def Wrapper():
             yTy = yTy + yy[i]*yy[i]
 
         # print('-----------')
-        # print("xTTTTTTTTTTTTx: ", yTy)
-        print(yTy)
-        # if(yTy <= Ps):
+        print("yTTTTTTTTTTTTy: ", yTy)
+        # print(yTy)
+        
+
         Pk = ((K_clients)*Ps)/yTy
+        # y_out = h*y_out + noise
         y_out = y_out*math.sqrt(Pk)/(h)
         # else:
         # y_out = y_out*math.sqrt(Ps)/((h)*yTy)
         n1 = torch.randn(y_out.size())
-
-        # a0 = 0.740740741
-        # a1 = 0.259259259
-        # a0 = 0.99990001
-        # a1 = 0.00009999
-
-        a0 = 0.909090909
-        a1 = 0.090909090
-
-        # a0 = 0.999000999
-        # a1 = 0.000999001
-
-        # a0 = 0.997008973
-        # a1 = 0.0029910269
-
-        # a0 = 0.9708737864
-        # a1 = 0.029126214
         
         std1 = math.sqrt(Ps/(snr_val*(a0+50*a1)))
         std2 = 50*std1
@@ -393,6 +379,7 @@ def Wrapper():
         
         n2 = torch.randn(y_out.size())
         noise = a0*n1*std1 + a1*n2*std2
+
         y_out = h*y_out + noise
         y_out = y_out/(math.sqrt(Pk))
         y_out = y_out.real
@@ -402,6 +389,8 @@ def Wrapper():
         # client['model'].get()
 
         return cStatus    
+ 
+  
     def test(args, model, device, test_loader, count):
         # print("TEST SET PRDEICTION")
         model.eval()
