@@ -253,7 +253,9 @@ def Wrapper():
         print("std1",std1)
         n2 = torch.randn(y_out.size())
         noise = a0*n1*std1 + a1*n2*std2
+
         y_out = h*y_out + noise
+        
         y_out = y_out/(math.sqrt(Pk))
         y_out = y_out.real
 
@@ -265,8 +267,8 @@ def Wrapper():
         for i in range(list(yy.size())[0]):
             yTy = yTy + yy[i]*yy[i]
 
-        print('-----------')
-        print("xTTTTTTTTTTTTx: ", yTy)
+        # print('-----------')
+        # print("xTTTTTTTTTTTTx: ", yTy)
         print(yTy)
         
 
