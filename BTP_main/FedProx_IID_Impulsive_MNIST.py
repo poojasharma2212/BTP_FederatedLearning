@@ -53,7 +53,7 @@ def Wrapper():
         'epochs': 3,
         'clients': 30,
         'seed': 0,
-        'rounds': 50 ,
+        'rounds': 30 ,
         'C': 0.9,
         'mu':0.1,
         'lowest_snr': 20,
@@ -222,7 +222,7 @@ def Wrapper():
 
         print('-----------')
         print("xTTTTTTTTTTTTx: ", xTx)
-        print(xTx)
+        # print(xTx)
 
         Pk = ((K_clients)*(Ps))/xTx
     
