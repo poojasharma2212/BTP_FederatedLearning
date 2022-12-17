@@ -47,7 +47,7 @@ def Wrapper():
     args = {
         'batch_size': 64,
         'test_batch_size': 1000,
-        'lr': 0.04 ,
+        'lr': 0.05 ,
         'log_interval': 10,
         'epochs': 4,
         'clients': 20,
@@ -193,7 +193,7 @@ def Wrapper():
                 # print(loss.grad)
                 client['optimizer'].step()
 
-                # print("==========ye chalega kya========================")
+                # print("==========ye chalega kya================= =======")
                 if batch_idx % args['log_interval'] == 0:
                     loss = loss.get()
                     # print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
