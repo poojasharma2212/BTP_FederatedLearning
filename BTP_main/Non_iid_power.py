@@ -47,7 +47,7 @@ def Wrapper():
     args = {
         'batch_size': 64,
         'test_batch_size': 1000,
-        'lr': 0.04 ,
+        'lr': 0.05 ,
         'log_interval': 10,
         'epochs': 4,
         'clients': 20,
@@ -162,7 +162,7 @@ def Wrapper():
         # snr = random.randint(0, 40)
         print("client_ID", client['hook'].id)
         snr = snr_value
-        print("SNR==", snr)
+        # print("SNR==", snr)
         snr_val = 10**(snr/10)
         std = math.sqrt(Ps/snr_val)
         x = random.random()
@@ -172,7 +172,7 @@ def Wrapper():
         #x = random.random()
         #y = random.random()
         h = complex(x, y)
-        print("Client:", client['hook'].id)
+        # print("Client:", client['hook'].id)
         # print("CSI", abs(h)/(std*std))
 
         K_clients = len(active_clients_inds)
@@ -213,8 +213,8 @@ def Wrapper():
             xTx = xTx + x[i]*x[i]
 
         # print('-----------')
-        # print("xTTTTTTTTTTTTx: ", xTx)
-        print(xTx)
+        print("xTTTTTTTTTTTTx: ", xTx)
+        # print(xTx)
 
         Pk = ((K_clients)*(Ps))/xTx
         # if(xTx <= Ps):
@@ -236,7 +236,7 @@ def Wrapper():
 
         # print('-----------')
         # print("xTTTTTTTTTTTTx: ", yTy)
-        print(yTy)
+        # print(yTy)
         # if(yTy <= Ps):
         Pk = ((K_clients)*Ps)/yTy
         y_out = y_out*math.sqrt(Pk)/(h)
@@ -515,30 +515,6 @@ def Wrapper():
     # print(accu)
     return accu
 
-
-# final_acc = []
-# sum = []
-# weight = []
-
-# hook = sy.TorchHook(torch)
-
-# for i in range(4):
-#     accuracy1 = Wrapper(64,0.02,2,20,4,hook)
-#     print(accuracy1)
-#     if(len(sum)==0):
-#         sum = accuracy1
-#     for j in range(len(accuracy1)):
-#         sum[j] = sum[j] + accuracy1[j]
-#     # final_acc[i] = accuracy1
-# for i in range(len(sum)):
-#     sum[i] = sum[i]/10
-# weight = sum/10
-
-# # print(final_acc)
-
-
-# print("====================final ans")
-# # print(sum)
 # accuracy1 = Wrapper(64, 0.007, 3, 20, 10, key, key_array, Ps)
 accuracy1 = Wrapper()
 print(accuracy1)
