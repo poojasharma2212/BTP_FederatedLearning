@@ -294,12 +294,12 @@ def Wrapper():
                 # print("==========ye chalega kya========================")
                 if batch_idx % args['log_interval'] == 0:
                     loss = loss.get()
-                    print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                        client['hook'].id,
-                        epoch, batch_idx *
-                        args['batch_size'], len(
-                            client['mnist_trainset']) * args['batch_size'],
-                        100. * batch_idx / len(client['mnist_trainset']), loss.item()))
+                    # print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+                    #     client['hook'].id,
+                    #     epoch, batch_idx *
+                    #     args['batch_size'], len(
+                    #         client['mnist_trainset']) * args['batch_size'],
+                    #     100. * batch_idx / len(client['mnist_trainset']), loss.item()))
         client['model'].get()
 
         y_out = client['model'].conv1.weight
