@@ -11,7 +11,6 @@ import torchvision
 from torchvision import transforms, datasets
 from torch.utils.data import DataLoader, Dataset
 import logging
-import os
 import random
 import math
 import syft as sy
