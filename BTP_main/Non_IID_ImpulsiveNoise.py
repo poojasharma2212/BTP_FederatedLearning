@@ -52,7 +52,7 @@ def Wrapper():
         'epochs': 4,
         'clients': 20,
         'seed': 0,
-        'rounds': 40,
+        'rounds': 20,
         'C': 0.9,
         'lowest_snr': 20,
         # 'highest_snr': 20,
@@ -80,7 +80,7 @@ def Wrapper():
 
     # print(clients)
     # os.chdir("/content/drive/MyDrive/FL_ZaaPoo/data/MNIST/raw")
-    nUsers = 30
+    nUsers = 20
     transform = transforms.Compose(
         [transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
     # transform=transforms.ToTensor()
@@ -257,7 +257,7 @@ def Wrapper():
         client['model'].train()
         client['model'].send(client['hook'])
         # snr = random.randint(0, 40)
-        print("client_ID", client['hook'].id)
+        # print("client_ID", client['hook'].id)
         snr = snr_value
         # print("SNR==", snr)
         snr_val = 10**(snr/10)
