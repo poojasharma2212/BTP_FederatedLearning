@@ -162,9 +162,9 @@ def Wrapper():
         client['model'].train()
         # client['model'].send(client['hook'])
 
-        print("client_ID", client['hook'].id)
+        # print("client_ID", client['hook'].id)
         snr = snr_value
-        print("SNR==", snr)
+        # print("SNR==", snr)
         snr_val = 10**(snr/10)
         std = math.sqrt(Ps/snr_val)
         x = random.random()
@@ -204,12 +204,12 @@ def Wrapper():
                 # print("==========ye chalega kya========================")
                 if batch_idx % args['log_interval'] == 0:
                     loss = loss.get()
-                    print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                        client['hook'].id,
-                        epoch, batch_idx *
-                        args['batch_size'], len(
-                            client['mnist_trainset']) * args['batch_size'],
-                        100. * batch_idx / len(client['mnist_trainset']), loss.item()))
+                    # print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+                    #     client['hook'].id,
+                    #     epoch, batch_idx *
+                    #     args['batch_size'], len(
+                    #         client['mnist_trainset']) * args['batch_size'],
+                    #     100. * batch_idx / len(client['mnist_trainset']), loss.item()))
 
         # client['model'].get()
 
