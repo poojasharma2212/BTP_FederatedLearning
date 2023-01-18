@@ -346,7 +346,8 @@ def Wrapper():
             # idx = idx+1
             # print(client)'
             print("Client max alpha banane wali value" , client['Evalue'])
-        alpha = torch.argmax(Evalue_arr)
+        print('Evalue', Evalue_arr)
+        alpha = max(Evalue_arr)
         print()
         print("Clients with good channel are considered for averaging")
         for no in range(len(client_good_channel)):
