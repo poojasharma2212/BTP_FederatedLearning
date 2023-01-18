@@ -236,7 +236,7 @@ def Wrapper():
 
         y_out = h*updated + noise*(std/(math.sqrt(K_clients)))
 
-        y_out = y_out/(math.sqrt(Pk))
+        y_out = y_out/(math.sqrt(Ps))
         y_out = y_out.real
 
         client['model'].conv1.weight.data = y_out
@@ -251,10 +251,10 @@ def Wrapper():
         print("xTTTTTTTTTTTTx: ", yTy)
         print(yTy)
         Pk = ((K_clients)*Ps)/yTy
-        y_out = y_out*math.sqrt(Pk)/(h)
+        y_out = y_out*math.sqrt(Ps)/(h)
         noise = torch.randn(y_out.size())
         y_out = h*y_out + noise*(std/(math.sqrt(K_clients)))
-        y_out = y_out/(math.sqrt(Pk))
+        y_out = y_out/(math.sqrt(Ps))
         y_out = y_out.real
 
         client['model'].conv2.weight.data = y_out
