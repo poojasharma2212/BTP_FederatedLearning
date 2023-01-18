@@ -219,7 +219,7 @@ def Wrapper():
 
         updated = y_out - client['previousT']
 
-        print("Preout   ", pre_out)
+        # print("Preout   ", pre_out)
         print("Client Previous Value : " ,  client['previousT'])
         
         x = torch.flatten(updated)
