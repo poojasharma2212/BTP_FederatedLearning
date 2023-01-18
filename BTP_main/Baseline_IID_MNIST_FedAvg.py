@@ -238,7 +238,7 @@ def Wrapper():
         updated = updated*math.sqrt(Ps)/(h)
         noise = torch.randn(y_out.size())
 
-        y_out = h*updated + noise*(std/(math.sqrt(K_clients)))
+        y_out = h*updated + noise*(std)
 
         y_out = y_out/(math.sqrt(Ps))
         y_out = y_out.real
@@ -339,11 +339,12 @@ def Wrapper():
 
             good_channel = train(args, client, device, Ps)
             # for z in good_channel:
-            alpha = max(good_channel(client['Evalue']))
             if(good_channel == True):
                 client_good_channel.append(client)
             # idx = idx+1
             # print(client)'
+            print("Client max alpha banane wali value" , client['Evalue'])
+        alpha = max(good_channel(client['Evalue']))
         print()
         print("Clients with good channel are considered for averaging")
         for no in range(len(client_good_channel)):
