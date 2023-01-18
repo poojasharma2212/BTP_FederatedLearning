@@ -314,7 +314,7 @@ def Wrapper():
         print(fed_round)
         # number of selected clients
         client_good_channel = []
-
+        Evalue_arr = []
 
         # at least 1 client is selected for training
         m = int(max(args['C'] * args['clients'], 1))
@@ -339,12 +339,14 @@ def Wrapper():
 
             good_channel = train(args, client, device, Ps)
             # for z in good_channel:
+            
             if(good_channel == True):
                 client_good_channel.append(client)
+                Evalue_arr.append(client['Evalue'])
             # idx = idx+1
             # print(client)'
             print("Client max alpha banane wali value" , client['Evalue'])
-        alpha = max(good_channel(client['Evalue']))
+        alpha = torch.argmax(Evalue_arr)
         print()
         print("Clients with good channel are considered for averaging")
         for no in range(len(client_good_channel)):
