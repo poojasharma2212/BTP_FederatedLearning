@@ -113,6 +113,9 @@ def Wrapper():
         client['mnist_testset'] = getImage(
             mnist_testset, list(test_group[inx]), args['batch_size'])
         client['samples'] = len(trainset_id_list)/args['images']
+        client['previousT'] = 0
+        client['currentT'] = 0
+        client['Evalue'] = 0
 
     #=================Global Model===================#
     transform = transforms.Compose(
@@ -156,6 +159,7 @@ def Wrapper():
         x_dict[dict_key] = x_val
         y_dict[dict_key] = y_val
 
+    
     def train(args, client, device, Ps):
         cStatus = True
         client['model'].train()
@@ -206,24 +210,32 @@ def Wrapper():
 
         client['model'].get()
 
+        # if(args['rounds'] == 0)
+
         y_out = client['model'].conv1.weight
-        x = torch.flatten(y_out)
+
+        # Pk = ((K_clients)*(Ps))/xTx
+        
+        y_out = y_out*math.sqrt(Ps)/((h))
+        pre_out = y_out
+
+        updated = y_out - client['previousT']
+
+        x = torch.flatten(updated)
         xTx = 0
-        # # should I use here also normalise ??
         for i in range(list(x.size())[0]):
             xTx = xTx + x[i]*x[i]
-
         print('-----------')
         print("xTTTTTTTTTTTTx: ", xTx)
         print(xTx)
 
-        Pk = ((K_clients)*(Ps))/xTx
-        # if(xTx <= Ps):
-        y_out = y_out*math.sqrt(Pk)/((h))
-        # else:
-        # y_out = y_out*math.sqrt(Ps)/((h)*xTx)
+        client['Evalue'] = xTx
+        client['previousT'] = pre_out
+
         noise = torch.randn(y_out.size())
-        y_out = h*y_out+noise*(std/(math.sqrt(K_clients)))
+
+        y_out = h*updated + noise*(std/(math.sqrt(K_clients)))
+
         y_out = y_out/(math.sqrt(Pk))
         y_out = y_out.real
 
@@ -238,19 +250,14 @@ def Wrapper():
         print('-----------')
         print("xTTTTTTTTTTTTx: ", yTy)
         print(yTy)
-        # if(yTy <= Ps):
         Pk = ((K_clients)*Ps)/yTy
         y_out = y_out*math.sqrt(Pk)/(h)
-        # else:
-        # y_out = y_out*math.sqrt(Ps)/((h)*yTy)
         noise = torch.randn(y_out.size())
         y_out = h*y_out + noise*(std/(math.sqrt(K_clients)))
         y_out = y_out/(math.sqrt(Pk))
         y_out = y_out.real
 
         client['model'].conv2.weight.data = y_out
-
-        # client['model'].get()
 
         return cStatus
 
@@ -304,6 +311,7 @@ def Wrapper():
         # number of selected clients
         client_good_channel = []
 
+
         # at least 1 client is selected for training
         m = int(max(args['C'] * args['clients'], 1))
 
@@ -321,23 +329,13 @@ def Wrapper():
         active_clients = [clients[i] for i in active_clients_inds]
         print(len(active_clients_inds))
 
-        # print('=============\\\\\\\=====================')
-        idx = 0
-        power_1 = 0
-
-        # def add_noise(weights, noise):
-        #     with torch.no_grad():
-        #     weight_noise = nn.Parameter(weights + noise.to("cuda"))
-        # return weight_noise
 
         for client in active_clients:
             print("train")
-            # if fed_round == 0:
-            #     self.noise_conv1 = torch.randn(nn.Parameter(self.conv1.weight).size())*0.6 + 0
-            #     self.noise_conv2 = torch.randn(nn.Parameter(self.conv2.weight).size())*0.6 + 0
-            # client['model'].add(GaussianNoise(math.sqrt(10)))
 
             good_channel = train(args, client, device, Ps)
+            # for z in good_channel:
+            alpha = max(good_channel(client['Evalue']))
             if(good_channel == True):
                 client_good_channel.append(client)
             # idx = idx+1
