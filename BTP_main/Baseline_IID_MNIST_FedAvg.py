@@ -216,11 +216,12 @@ def Wrapper():
 
         # Pk = ((K_clients)*(Ps))/xTx
         
-        y_out = y_out*math.sqrt(Ps)/((h))
+        y_out = y_out*math.sqrt(Ps)/(h)
         pre_out = y_out
 
         updated = y_out - client['previousT']
 
+        print("Preout   ", pre_out)
         print("Client Previous Value : " ,  client['previousT'])
         
         x = torch.flatten(updated)
