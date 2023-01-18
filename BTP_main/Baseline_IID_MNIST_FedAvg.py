@@ -222,15 +222,16 @@ def Wrapper():
         updated = y_out - client['previousT']
 
         print("Client Previous Value : " ,  client['previousT'])
-        print( "Client Update value    ", updated)
         
         x = torch.flatten(updated)
         xTx = 0
         for i in range(list(x.size())[0]):
             xTx = xTx + x[i]*x[i]
+
         print('-----------')
         print("xTTTTTTTTTTTTx: ", xTx)
         print(xTx)
+        print( "Client Update value    ", xTx )
 
         client['Evalue'] = xTx
         client['previousT'] = pre_out
