@@ -201,7 +201,8 @@ def Wrapper():
                 # print("==========ye chalega kya========================")
                 if batch_idx % args['log_interval'] == 0:
                     loss = loss.get()
-                    print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}')
+                    print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+                        client['hook'].id,))
                     print("--------------------------------------------")
                     print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                         client['hook'].id,
@@ -256,7 +257,7 @@ def Wrapper():
         print('-----------')
         print("xTTTTTTTTTTTTx: ", yTy)
         print(yTy)
-        Pk = ((K_clients)*Ps)/yTyssh 
+        Pk = ((K_clients)*Ps)/yTy
         y_out = y_out*math.sqrt(Ps)/(h)
         noise = torch.randn(y_out.size())
         y_out = h*y_out + noise*(std/(math.sqrt(K_clients)))
