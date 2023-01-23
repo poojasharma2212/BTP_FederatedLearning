@@ -224,7 +224,7 @@ def Wrapper():
         print("Client Previous Value : " ,  client['previousT'])
         
         x = torch.flatten(updated)
-        print(x.size())
+        print("size:     ",y_out.size())
         xTx = 0
         for i in range(list(x.size())[0]):
             xTx = xTx + x[i]*x[i]
