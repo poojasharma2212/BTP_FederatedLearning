@@ -202,7 +202,6 @@ def Wrapper():
                 if batch_idx % args['log_interval'] == 0:
                     loss = loss.get()
                     print('Model {} Train Epoch: {}'.format(client['hook'].id,epoch))
-                    print("--------------------------------------------")
                     print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                         client['hook'].id,
                         epoch, batch_idx *
@@ -211,7 +210,7 @@ def Wrapper():
                         100. * batch_idx / len(client['mnist_trainset']), loss.item()))
 
         client['model'].get()
-
+        print("--------------------------------------------")
         # if(args['rounds'] == 0)
 
         y_out = client['model'].conv1.weight
