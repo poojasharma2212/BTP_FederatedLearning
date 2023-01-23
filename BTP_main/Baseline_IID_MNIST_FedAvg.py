@@ -201,12 +201,14 @@ def Wrapper():
                 # print("==========ye chalega kya========================")
                 if batch_idx % args['log_interval'] == 0:
                     loss = loss.get()
-                    # print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                    #     client['hook'].id,
-                    #     epoch, batch_idx *
-                    #     args['batch_size'], len(
-                    #         client['mnist_trainset']) * args['batch_size'],
-                    #     100. * batch_idx / len(client['mnist_trainset']), loss.item()))
+                    print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}')
+                    print("--------------------------------------------")
+                    print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+                        client['hook'].id,
+                        epoch, batch_idx *
+                        args['batch_size'], len(
+                            client['mnist_trainset']) * args['batch_size'],
+                        100. * batch_idx / len(client['mnist_trainset']), loss.item()))
 
         client['model'].get()
 
@@ -254,7 +256,7 @@ def Wrapper():
         print('-----------')
         print("xTTTTTTTTTTTTx: ", yTy)
         print(yTy)
-        Pk = ((K_clients)*Ps)/yTy
+        Pk = ((K_clients)*Ps)/yTyssh 
         y_out = y_out*math.sqrt(Ps)/(h)
         noise = torch.randn(y_out.size())
         y_out = h*y_out + noise*(std/(math.sqrt(K_clients)))
