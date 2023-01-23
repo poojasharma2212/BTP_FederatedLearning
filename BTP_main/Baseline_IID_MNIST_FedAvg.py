@@ -116,6 +116,7 @@ def Wrapper():
         client['previousT'] = 0
         client['currentT'] = 0
         client['Evalue'] = 0
+        print("size:     ",client['mnist_trainset'].size())
 
     #=================Global Model===================#
     transform = transforms.Compose(
