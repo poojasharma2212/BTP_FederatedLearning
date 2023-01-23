@@ -201,7 +201,7 @@ def Wrapper():
                 # print("==========ye chalega kya========================")
                 if batch_idx % args['log_interval'] == 0:
                     loss = loss.get()
-                    print('Model {} Train Epoch: {}'.format(client['hook'].id,))
+                    print('Model {} Train Epoch: {}'.format(client['hook'].id,epoch))
                     print("--------------------------------------------")
                     print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                         client['hook'].id,
