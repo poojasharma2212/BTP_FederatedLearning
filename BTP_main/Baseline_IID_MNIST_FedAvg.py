@@ -116,7 +116,7 @@ def Wrapper():
         client['previousT'] = 0
         client['currentT'] = 0
         client['Evalue'] = 0
-        print("size:     ",client['mnist_trainset'].size())
+        
 
     #=================Global Model===================#
     transform = transforms.Compose(
@@ -166,11 +166,14 @@ def Wrapper():
         client['model'].train()
         client['model'].send(client['hook'])
         # snr = random.randint(0, 40)
+        
         print("client_ID", client['hook'].id)
         snr = snr_value
         print("SNR==", snr)
         snr_val = 10**(snr/10)
         std = math.sqrt(Ps/snr_val)
+
+
         x = random.random()
         y = random.random()
         x = x_dict[client['hook'].id]
@@ -191,6 +194,7 @@ def Wrapper():
             for batch_idx, (data, target) in enumerate(client['mnist_trainset']):
                 data = data.send(client['hook'])
                 target = target.send(client['hook'])
+                print("data size:     ",data.size())
                 data, target = data.to(device), target.to(device)
                 client['optimizer'].zero_grad()
                 output = client['model'](data)
