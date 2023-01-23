@@ -194,8 +194,10 @@ def Wrapper():
             for batch_idx, (data, target) in enumerate(client['mnist_trainset']):
                 data = data.send(client['hook'])
                 target = target.send(client['hook'])
-                print("data size:     ",data.size())
+                
                 data, target = data.to(device), target.to(device)
+                print("data size:     ",data.size())
+                
                 client['optimizer'].zero_grad()
                 output = client['model'](data)
                 loss = Func.nll_loss(output, target)
