@@ -53,7 +53,7 @@ def Wrapper():
         'epochs': 3,
         'clients': 30,
         'seed': 0,
-        'rounds': 10,
+        'rounds': 2,
         'C': 1,
         'lowest_snr': 20,
         # 'highest_snr': 20,
@@ -178,7 +178,7 @@ def Wrapper():
         #y = random.random()
         h = complex(x, y)
         print("Client:", client['hook'].id)
-        # print("CSI", abs(h)/(std*std))
+        print("CSI", abs(h)/(std*std))
 
         
         K_clients = len(active_clients_inds)
@@ -224,6 +224,7 @@ def Wrapper():
         print("Client Previous Value : " ,  client['previousT'])
         
         x = torch.flatten(updated)
+        print(x.size())
         xTx = 0
         for i in range(list(x.size())[0]):
             xTx = xTx + x[i]*x[i]
