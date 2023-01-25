@@ -207,6 +207,7 @@ def Wrapper():
         client['model'].get()
 
         y_out = client['model'].conv1.weight
+        print("Model Parameters : ", y_out)
         x = torch.flatten(y_out)
         xTx = 0
         # # should I use here also normalise ??
