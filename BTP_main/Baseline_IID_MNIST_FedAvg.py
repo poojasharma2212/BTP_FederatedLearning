@@ -149,30 +149,29 @@ def Wrapper():
 
     x_dict = {}
     y_dict = {}
-
-    for c in range(args['clients']+1):
-        dict_key = "client" + str(c)
-        x_val = random.random()
-        y_val = random.random()
-        # snr_value = random.randint(args['lowest_snr'], args['highest_snr'])
-        snr_value = args['lowest_snr']
-        # snr_dict[dict_key] = snr_value
-        x_dict[dict_key] = x_val
-        y_dict[dict_key] = y_val
+    snr_value = args['lowest_snr']
+    # for c in range(args['clients']+1):
+    #     dict_key = "client" + str(c)
+    #     x_val = random.random()
+    #     y_val = random.random()
+    #     # snr_value = random.randint(args['lowest_snr'], args['highest_snr'])
+    
+    #     # snr_dict[dict_key] = snr_value
+    #     x_dict[dict_key] = x_val
+    #     y_dict[dict_key] = y_val
 
     
     def train(args, client, device, Ps):
         cStatus = True
         client['model'].train()
         client['model'].send(client['hook'])
-        # snr = random.randint(0, 40)
         
         print("client_ID", client['hook'].id)
+
         snr = snr_value
         print("SNR==", snr)
         snr_val = 10**(snr/10)
         std = math.sqrt(Ps/snr_val)
-
 
         x = random.random()
         y = random.random()
