@@ -113,8 +113,8 @@ def Wrapper():
         client['mnist_testset'] = getImage(
             mnist_testset, list(test_group[inx]), args['batch_size'])
         client['samples'] = len(trainset_id_list)/args['images']
-        client['previousT'] = 0
-        client['currentT'] = 0
+        client['previousparam'] = 0
+        client['currentparam'] = 0
         client['Evalue'] = 0
         
 
@@ -183,7 +183,6 @@ def Wrapper():
         print("Client:", client['hook'].id)
         print("CSI", abs(h)/(std*std))
 
-        
         K_clients = len(active_clients_inds)
         # wireless channel needs to be considered
         # no noise in downlink
@@ -195,6 +194,7 @@ def Wrapper():
                 target = target.send(client['hook'])
                 
                 data, target = data.to(device), target.to(device)
+
                 print("data size:     ",data.size())
                 
                 client['optimizer'].zero_grad()
@@ -239,7 +239,7 @@ def Wrapper():
         print('-----------')
         print("xTTTTTTTTTTTTx: ", xTx)
         print(xTx)
-        print( "Client Update value    ", xTx )
+        print( "Client Update value,    ", xTx )
 
         client['Evalue'] = xTx
         client['previousT'] = pre_out
@@ -300,7 +300,7 @@ def Wrapper():
 
         accu.append(100. * correct / len(test_loader.dataset))
 
-        #print('=====accu======', accu)
+    #print('=====accu======', accu)
     # model = CNN(k)
     # optimizer = optim.SGD(model.parameters(), lr=args['lr'])
 
