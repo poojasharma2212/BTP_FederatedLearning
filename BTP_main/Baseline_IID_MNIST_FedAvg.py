@@ -352,8 +352,8 @@ def Wrapper():
             # x1 = np.random.normal(loc=0, scale=sigma1, size = 10000)
             # x2 = np.random.normal(loc=0, scale=sigma2, size = 10000)
             # x = vstack((x1, x2))
-            cov = tf.identity(20, 1, 5, 5)
-            mean = np.zeros(20,1,5,5)
+            cov = tf.identity([20, 1, 5, 5])
+            mean = np.zeros([20,1,5,5])
             x = np.random.multivariate_normal(0, 5*cov)
             x.shape
             print(x.size())
