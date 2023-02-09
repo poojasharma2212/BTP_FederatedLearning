@@ -217,7 +217,7 @@ def Wrapper():
 
         client['model'].get()
 
-        print(client['model'].get())
+        # print(client['model'].get())
         
         print("--------------------------------------------")
         # if(args['rounds'] == 0)
