@@ -217,6 +217,7 @@ def Wrapper():
                         100. * batch_idx / len(client['mnist_trainset']), loss.item()))
 
         client['model'].get()
+        
         print("--------------------------------------------")
         # if(args['rounds'] == 0)
 
