@@ -149,16 +149,16 @@ def Wrapper():
 
     x_dict = {}
     y_dict = {}
-    snr_value = args['lowest_snr']
-    # for c in range(args['clients']+1):
-    #     dict_key = "client" + str(c)
-    #     x_val = random.random()
-    #     y_val = random.random()
-    #     # snr_value = random.randint(args['lowest_snr'], args['highest_snr'])
+    # snr_value = args['lowest_snr']
+    for c in range(args['clients']+1):
+        dict_key = "client" + str(c)
+        x_val = random.random()
+        y_val = random.random()
+        # snr_value = random.randint(args['lowest_snr'], args['highest_snr'])
     
-    #     # snr_dict[dict_key] = snr_value
-    #     x_dict[dict_key] = x_val
-    #     y_dict[dict_key] = y_val
+        # snr_dict[dict_key] = snr_value
+        x_dict[dict_key] = x_val
+        y_dict[dict_key] = y_val
 
     
     def train(args, client, device, Ps,curr,prev):
