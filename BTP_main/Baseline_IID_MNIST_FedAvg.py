@@ -161,7 +161,7 @@ def Wrapper():
     #     y_dict[dict_key] = y_val
 
     
-    def train(args, client, device, Ps):
+    def train(args, client, device, Ps,curr,prev):
         cStatus = True
         client['model'].train()
         client['model'].send(client['hook'])
@@ -216,6 +216,8 @@ def Wrapper():
                         100. * batch_idx / len(client['mnist_trainset']), loss.item()))
 
         client['model'].get()
+
+        print(client['model'].get())
         
         print("--------------------------------------------")
         # if(args['rounds'] == 0)
@@ -224,7 +226,6 @@ def Wrapper():
 
         # Pk = ((K_clients)*(Ps))/xTx
         pre_out = y_out
-
         updated = y_out - client['previousT']
 
         # print("Preout   ", pre_out)
@@ -321,6 +322,10 @@ def Wrapper():
     for fed_round in range(args['rounds']):
 
         print(fed_round)
+
+        curr = [0 for i in range(20)]
+        prev = [0 for i in range(20)] 
+
         # number of selected clients
         client_good_channel = []
         Evalue_arr = []
@@ -342,16 +347,20 @@ def Wrapper():
         active_clients = [clients[i] for i in active_clients_inds]
         print(len(active_clients_inds))
 
+        if(fed_round == 0):
+
+
 
         for client in active_clients:
             print("train")
 
-            good_channel = train(args, client, device, Ps)
+            good_channel = train(args, client, device, Ps,curr,prev)
             # for z in good_channel:
             
             if(good_channel == True):
                 client_good_channel.append(client)
                 Evalue_arr.append(client['Evalue'])
+
             # idx = idx+1
             # print(client)'
             print("Client max alpha banane wali value" , client['Evalue'])
@@ -363,8 +372,7 @@ def Wrapper():
             print(client_good_channel[no]['hook'].id)
         print()
         print("reached this step")
-        global_model = averageModels(
-            global_model, client_good_channel, snr_value, Ps)
+        global_model = averageModels(global_model, client_good_channel, snr_value, Ps)
 
         # Testing the average model
         test(args, global_model, device, global_test_loader, count)
