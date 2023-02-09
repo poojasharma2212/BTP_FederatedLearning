@@ -149,7 +149,7 @@ def Wrapper():
 
     x_dict = {}
     y_dict = {}
-    # snr_value = args['lowest_snr']
+    snr_value = args['lowest_snr']
     for c in range(args['clients']+1):
         dict_key = "client" + str(c)
         x_val = random.random()
@@ -195,7 +195,7 @@ def Wrapper():
                 
                 data, target = data.to(device), target.to(device)
 
-                print("data size:     ",data.size())
+                # print("data size:     ",data.size())
                 
                 client['optimizer'].zero_grad()
                 output = client['model'](data)
@@ -221,6 +221,7 @@ def Wrapper():
         
         print("--------------------------------------------")
         # if(args['rounds'] == 0)
+        print(client['model'].conv1.weight.size())
 
         y_out = client['model'].conv1.weight
 
