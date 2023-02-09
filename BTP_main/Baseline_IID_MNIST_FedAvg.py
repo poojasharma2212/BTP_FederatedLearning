@@ -347,9 +347,14 @@ def Wrapper():
         active_clients = [clients[i] for i in active_clients_inds]
         print(len(active_clients_inds))
 
-        if(fed_round == 0):
+        # if(fed_round == 0):
+        #     # x1 = np.random.normal(loc=0, scale=sigma1, size = 10000)
+        #     # x2 = np.random.normal(loc=0, scale=sigma2, size = 10000)
+        #     # x = vstack((x1, x2))
 
-
+        #     x = np.random.multivariate_normal(0, cov, (3, 3))
+        #     x.shape
+        #     prev = 0
 
         for client in active_clients:
             print("train")
