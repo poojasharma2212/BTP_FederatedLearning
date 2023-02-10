@@ -221,11 +221,10 @@ def Wrapper():
         
         print("--------------------------------------------")
         # if(args['rounds'] == 0)
-        print(client['model'].conv1.weight.size())
+        # print(client['model'].conv1.weight.size())
         
         y_out = client['model'].conv1.weight
 
-        # Pk = ((K_clients)*(Ps))/xTx
         pre_out = y_out
         updated = y_out - client['previousparam']
 
@@ -233,8 +232,8 @@ def Wrapper():
         print("Client Previous Value : " ,  client['previousparam'])
         
         x = torch.flatten(updated)
-        print("size:     ",x.size())
 
+        print("size:     ",x.size())
         print("size:     ",y_out.size())
         xTx = 0
         for i in range(list(x.size())[0]):
@@ -354,12 +353,14 @@ def Wrapper():
             # x1 = np.random.normal(loc=0, scale=sigma1, size = 10000)
             # x2 = np.random.normal(loc=0, scale=sigma2, size = 10000)
             # x = vstack((x1, x2))
+
             cov = np.eye(500)
             mean = [0]*500
-            x = np.random.multivariate_normal(mean, 5*cov)
+            xyy = np.random.multivariate_normal(mean, 5*cov)
+            x = torch.flatten(xyy)
             # x = np.random.multivariate_normal(mean, cov).T
             # x.shape
-            print(x.size())
+            print(x.size)
             prev = 0
 
         for client in active_clients:
