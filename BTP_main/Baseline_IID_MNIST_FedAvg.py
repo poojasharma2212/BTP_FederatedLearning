@@ -227,14 +227,14 @@ def Wrapper():
 
         # Pk = ((K_clients)*(Ps))/xTx
         pre_out = y_out
-        updated = y_out - client['previousT']
+        updated = y_out - client['previousparam']
 
         # print("Preout   ", pre_out)
-        print("Client Previous Value : " ,  client['previousT'])
+        print("Client Previous Value : " ,  client['previousparam'])
         
         x = torch.flatten(updated)
         print("size:     ",x.size())
-        
+
         print("size:     ",y_out.size())
         xTx = 0
         for i in range(list(x.size())[0]):
@@ -246,7 +246,7 @@ def Wrapper():
         print( "Client Update value,    ", xTx )
 
         client['Evalue'] = xTx
-        client['previousT'] = pre_out
+        client['previousparam'] = pre_out
 
         updated = updated*math.sqrt(Ps)/(h)
         noise = torch.randn(y_out.size())
