@@ -357,10 +357,10 @@ def Wrapper():
             cov = np.eye(500)
             mean = [0]*500
             xyy = np.random.multivariate_normal(mean, 5*cov)
-            x = torch.flatten(xyy)
+            # x = torch.flatten(xyy)
             # x = np.random.multivariate_normal(mean, cov).T
             # x.shape
-            print(x.size)
+            print(xyy.size)
             prev = 0
 
         for client in active_clients:
