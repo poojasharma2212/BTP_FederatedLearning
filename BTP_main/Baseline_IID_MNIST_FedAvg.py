@@ -359,10 +359,13 @@ def Wrapper():
             xyy = np.random.multivariate_normal(mean, 5*cov)
             # x = torch.flatten(xyy)
             # x = np.random.multivariate_normal(mean, cov).T
-            # x.shape
+
             print("intialise value of theta ------------->")
             print(xyy.size)
-            prev = 0
+            for client in active_clients:
+                prev[client] = xyy
+                client['previousparam'] = xyy
+
 
         for client in active_clients:
             print("train")
