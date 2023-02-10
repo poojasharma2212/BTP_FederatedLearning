@@ -360,6 +360,7 @@ def Wrapper():
             # x = torch.flatten(xyy)
             # x = np.random.multivariate_normal(mean, cov).T
             # x.shape
+            print("intialise value of theta ------------->")
             print(xyy.size)
             prev = 0
 
