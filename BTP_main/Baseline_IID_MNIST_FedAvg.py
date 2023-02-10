@@ -222,7 +222,7 @@ def Wrapper():
         print("--------------------------------------------")
         # if(args['rounds'] == 0)
         print(client['model'].conv1.weight.size())
-
+        
         y_out = client['model'].conv1.weight
 
         # Pk = ((K_clients)*(Ps))/xTx
@@ -233,6 +233,8 @@ def Wrapper():
         print("Client Previous Value : " ,  client['previousT'])
         
         x = torch.flatten(updated)
+        print("size:     ",x.size())
+        
         print("size:     ",y_out.size())
         xTx = 0
         for i in range(list(x.size())[0]):
@@ -348,16 +350,16 @@ def Wrapper():
         active_clients = [clients[i] for i in active_clients_inds]
         print(len(active_clients_inds))
 
-        if(fed_round == 0):
-            # x1 = np.random.normal(loc=0, scale=sigma1, size = 10000)
-            # x2 = np.random.normal(loc=0, scale=sigma2, size = 10000)
-            # x = vstack((x1, x2))
-            cov = tf.identity([20, 1, 5, 5])
-            mean = tf.zeros(20,1,5,5)
-            x = np.random.multivariate_normal(0, 5*cov)
-            x.shape
-            print(x.size())
-            prev = 0
+        # if(fed_round == 0):
+        #     # x1 = np.random.normal(loc=0, scale=sigma1, size = 10000)
+        #     # x2 = np.random.normal(loc=0, scale=sigma2, size = 10000)
+        #     # x = vstack((x1, x2))
+        #     cov = tf.identity([20, 1, 5, 5])
+        #     mean = tf.zeros(20,1,5,5)
+        #     x = np.random.multivariate_normal(0, 5*cov)
+        #     x.shape
+        #     print(x.size())
+        #     prev = 0
 
         for client in active_clients:
             print("train")
