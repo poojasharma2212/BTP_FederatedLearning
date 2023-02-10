@@ -356,9 +356,9 @@ def Wrapper():
             # x = vstack((x1, x2))
             cov = np.eye(500)
             mean = [0]*500
-            x = np.random.multivariate_normal(mean, cov)
+            x = np.random.multivariate_normal(mean, 5*cov)
             # x = np.random.multivariate_normal(mean, cov).T
-            x.shape
+            # x.shape
             print(x.size())
             prev = 0
 
