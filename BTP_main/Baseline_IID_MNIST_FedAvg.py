@@ -114,7 +114,7 @@ def Wrapper():
             mnist_testset, list(test_group[inx]), args['batch_size'])
         client['samples'] = len(trainset_id_list)/args['images']
         client['previousparam'] = 0
-        client['currentparam'] = 0
+        client['curr'] = 0
         client['Evalue'] = 0
         
 
