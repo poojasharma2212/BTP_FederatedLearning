@@ -219,9 +219,9 @@ def Wrapper():
         client['model'].get()
         y_out = client['model'].conv1.weight
 
-        x = torch.flatten(y_out)
-        xx = x - client['previousparam']
-        
+        # x = torch.flatten(y_out)
+        xx = y_out - client['previousparam']
+        xx = torch.flatten(y_out)
         # print("Client Previous Value : " ,  client['previousparam'])
         print("size:     ",xx.size())
         # print("size:     ",y_out.size())
@@ -349,9 +349,9 @@ def Wrapper():
             # x1 = np.random.normal(loc=0, scale=sigma1, size = 10000)
             # x2 = np.random.normal(loc=0, scale=sigma2, size = 10000)
             # x = vstack((x1, x2))
-
-            cov = np.eye([20,1,5,5])
-            mean = [0]*[20,1,5,5]
+            cov = nn.Identity([20,1,5,5])
+            # cov = np.eye([20,1,5,5])
+            mean = nn.zeros([20,1,5,5])
             xyy = np.random.multivariate_normal(mean, 5*cov)
             # x = torch.flatten(xyy)
             # x = np.random.multivariate_normal(mean, cov).T
