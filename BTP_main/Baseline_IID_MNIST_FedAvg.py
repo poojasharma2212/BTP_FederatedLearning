@@ -320,8 +320,8 @@ def Wrapper():
             client['model'].parameters(), lr=args['lr'])
 
     # print(client)
-    curr = [0 for i in range(20)]
-    prev = [0 for i in range(20)] 
+    curr = [0 for i in range(30)]
+    prev = [0 for i in range(30)] 
     for fed_round in range(args['rounds']):
 
         print(fed_round)
