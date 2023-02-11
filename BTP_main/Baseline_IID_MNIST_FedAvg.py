@@ -245,7 +245,7 @@ def Wrapper():
         client['model'].conv1.weight.data = y_out
 
         y_out = client['model'].conv2.weight
-        
+
         pre_out = y_out
         yy = torch.flatten(y_out)
 
@@ -360,7 +360,7 @@ def Wrapper():
             print(xyy.size)
             for client in active_clients:
                 # print('client',client)
-                print(client['hook'].id)
+                # print(client['hook'].id)
                 # prev[client['hook'].id] = xyy
                 # curr[client['hook'].id] = 0
                 
@@ -382,6 +382,7 @@ def Wrapper():
             # print(client)'
             print("Client max alpha banane wali value" , client['Evalue'])
         print('Evalue', Evalue_arr)
+
         alpha = max(Evalue_arr)
         print('alpha value', alpha)
         print("Clients with good channel are considered for averaging")
@@ -434,7 +435,7 @@ def Wrapper():
 # accuracy1 = Wrapper(64, 0.007, 3, 20, 10, key, key_array, Ps)
 accuracy1 = Wrapper()
 print(accuracy1)
-print("second result with P = sum(root(Pk))")
+# print("second result with P = sum(root(Pk))")
 # accuracy2 = Wrapper(64,0.02,2,20,5,hook)
 # print(accuracy2)
 # accuracy3 = Wrapper(64,0.02,2,20,5,hook)
