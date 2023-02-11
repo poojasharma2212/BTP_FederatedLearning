@@ -223,7 +223,7 @@ def Wrapper():
         xx = x - client['previousparam']
         
         # print("Client Previous Value : " ,  client['previousparam'])
-        # print("size:     ",x.size())
+        print("size:     ",xx.size())
         # print("size:     ",y_out.size())
         
         xTx = 0
