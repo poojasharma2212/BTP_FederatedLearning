@@ -224,17 +224,17 @@ def Wrapper():
         # print(client['model'].conv1.weight.size())
         
         y_out = client['model'].conv1.weight
-
-        pre_out = y_out
-        updated = y_out - client['previousparam']
-
-        # print("Preout   ", pre_out)
-        print("Client Previous Value : " ,  client['previousparam'])
         
         x = torch.flatten(updated)
 
+        pre_out = x
+        updated = x - client['previousparam']
+        # print("Preout   ", pre_out)
+        print("Client Previous Value : " ,  client['previousparam'])
+
         print("size:     ",x.size())
         print("size:     ",y_out.size())
+        
         xTx = 0
         for i in range(list(x.size())[0]):
             xTx = xTx + x[i]*x[i]
