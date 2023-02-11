@@ -360,10 +360,11 @@ def Wrapper():
 
             print("intialise value of theta ------------->")
             print(xyy.size)
-            for cli in active_clients:
-                print('client',cli)
-                prev[cli] = xyy
-                curr[cli] = 0
+            for client in active_clients:
+                print('client',client)
+                print(client['hook'].id)
+                prev[client['hook'].id] = xyy
+                curr[client['hook'].id] = 0
                 client['previousparam'] = xyy
         
 
