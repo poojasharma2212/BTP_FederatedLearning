@@ -349,7 +349,8 @@ def Wrapper():
             # x1 = np.random.normal(loc=0, scale=sigma1, size = 10000)
             # x2 = np.random.normal(loc=0, scale=sigma2, size = 10000)
             # x = vstack((x1, x2))
-            cov = nn.Identity([20,1,5,5])
+            # cov = nn.Identity([20,1,5,5])
+            cov = torch.eye((20,1,5,5))
             # cov = np.eye([20,1,5,5])
             # mean = nn.zeros([20,1,5,5])
             mean = torch.zeros((20,1,5,5))
@@ -365,7 +366,7 @@ def Wrapper():
                 # prev[client['hook'].id] = xyy
                 # curr[client['hook'].id] = 0
                 
-                t = torch.from_numpy(xyy)
+                # t = torch.from_numpy(xyy)
                 client['previousparam'] = t
             print(type(client['previousparam']))
                 
