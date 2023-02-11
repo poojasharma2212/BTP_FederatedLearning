@@ -215,8 +215,7 @@ def Wrapper():
                             client['mnist_trainset']) * args['batch_size'],
                         100. * batch_idx / len(client['mnist_trainset']), loss.item()))
 
-        client['model'].get()
-        
+
         y_out = client['model'].conv1.weight
 
         x = torch.flatten(y_out)
@@ -246,12 +245,11 @@ def Wrapper():
 
         y_out = client['model'].conv2.weight
 
-
         pre_out = y_out
         yy = torch.flatten(y_out)
         print(yy.size())
         client['curr'] = yy
-        y_out = yy - client['previousparam']
+        # y_out = yy - client['previousparam']
         yTy = 0
         for i in range(list(yy.size())[0]):
             yTy = yTy + yy[i]*yy[i]
@@ -393,6 +391,8 @@ def Wrapper():
         print("reached this step")
         global_model = averageModels(global_model, client_good_channel, snr_value, Ps)
 
+        globl = global_model
+        print('global average model', globl.size())
         # Testing the average model
         test(args, global_model, device, global_test_loader, count)
 
