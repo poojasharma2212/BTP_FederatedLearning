@@ -219,7 +219,7 @@ def Wrapper():
         y_out = client['model'].conv1.weight
 
         x = torch.flatten(y_out)
-        y_out = x - client['previousparam']
+        xx = x - client['previousparam']
         
         # print("Client Previous Value : " ,  client['previousparam'])
         # print("size:     ",x.size())
@@ -227,7 +227,7 @@ def Wrapper():
         
         xTx = 0
         for i in range(list(y_out.size())[0]):
-            xTx = xTx + y_out[i]*y_out[i]
+            xTx = xTx + xx[i]*xx[i]
 
         print('-----------')
         print("xTTTTTTTTTTTTx: ", xTx)
@@ -237,7 +237,7 @@ def Wrapper():
 
         # noise = torch.randn(y_out.size())
         # y_out = h*y_out + noise*(std)
-        y_out = y_out/(h)
+        y_out = xx/(h)
         y_out = y_out*h
         y_out = y_out.real
 
@@ -265,10 +265,10 @@ def Wrapper():
         # y_out = y_out*math.sqrt(Ps)/(h)
         # noise = torch.randn(y_out.size())
         # y_out = h*y_out + noise*(std/(math.sqrt(K_clients)))
-        y_out = y_out/(h)
-        y_out = h*y_out
+        # y_out = y_out/(h)
+        # y_out = h*y_out
         # y_out = y_out/(math.sqrt(Ps))
-        y_out = y_out.real
+        # y_out = y_out.real
 
         client['model'].conv2.weight.data = y_out
 
@@ -317,8 +317,8 @@ def Wrapper():
             client['model'].parameters(), lr=args['lr'])
 
     # print(client)
-    curr = [0 for i in range(30)]
-    prev = [0 for i in range(30)] 
+    # curr = [0 for i in range(30)]
+    # prev = [0 for i in range(30)] 
     for fed_round in range(args['rounds']):
 
         print(fed_round)
@@ -370,7 +370,7 @@ def Wrapper():
         for client in active_clients:
             print("train")
 
-            good_channel = train(args, client, device, Ps,curr,prev)
+            good_channel = train(args, client, device, Ps)
             # for z in good_channel:
             
             if(good_channel == True):
