@@ -18,7 +18,9 @@ def averageModels(global_model, clients, snr_value, Ps):
         ) * samples[i] for i in range(len(client_models))], 0).sum(0)
 
     # print(global_dict)
+    torch.flatten(global_model)
     global_model.load_state_dict(global_dict)
+
 
     y_out = global_model.conv1.weight
     x = torch.flatten(y_out)
