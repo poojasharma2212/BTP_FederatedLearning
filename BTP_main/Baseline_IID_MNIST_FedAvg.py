@@ -216,49 +216,41 @@ def Wrapper():
                         100. * batch_idx / len(client['mnist_trainset']), loss.item()))
 
         client['model'].get()
-
-        # print(client['model'].get())
-        
-        print("--------------------------------------------")
-        # if(args['rounds'] == 0)
-        # print(client['model'].conv1.weight.size())
         
         y_out = client['model'].conv1.weight
-        
+
         x = torch.flatten(y_out)
-
-        pre_out = x
-        updated = x - client['previousparam']
-        # print("Preout   ", pre_out)
-        print("Client Previous Value : " ,  client['previousparam'])
-
-        print("size:     ",x.size())
-        print("size:     ",y_out.size())
+        y_out = x - client['previousparam']
+        
+        # print("Client Previous Value : " ,  client['previousparam'])
+        # print("size:     ",x.size())
+        # print("size:     ",y_out.size())
         
         xTx = 0
-        for i in range(list(x.size())[0]):
-            xTx = xTx + x[i]*x[i]
+        for i in range(list(y_out.size())[0]):
+            xTx = xTx + y_out[i]*y_out[i]
 
         print('-----------')
         print("xTTTTTTTTTTTTx: ", xTx)
-        print(xTx)
         print( "Client Update value,    ", xTx )
 
-        client['Evalue'] = xTx
-        client['previousparam'] = pre_out
+        # y_out = y_out*math.sqrt(Ps)/(h)
 
-        updated = updated*math.sqrt(Ps)/(h)
-        noise = torch.randn(y_out.size())
-
-        y_out = h*y_out + noise*(std)
-
-        y_out = y_out/(math.sqrt(Ps))
+        # noise = torch.randn(y_out.size())
+        # y_out = h*y_out + noise*(std)
+        y_out = y_out/(h)
+        y_out = y_out*h
         y_out = y_out.real
 
         client['model'].conv1.weight.data = y_out
 
         y_out = client['model'].conv2.weight
+        
+        pre_out = y_out
         yy = torch.flatten(y_out)
+
+        client['curr'] = yy
+        yy = yy - client['previousparam']
         yTy = 0
         for i in range(list(yy.size())[0]):
             yTy = yTy + yy[i]*yy[i]
@@ -266,11 +258,17 @@ def Wrapper():
         print('-----------')
         print("xTTTTTTTTTTTTx: ", yTy)
         print(yTy)
-        Pk = ((K_clients)*Ps)/yTy
-        y_out = y_out*math.sqrt(Ps)/(h)
-        noise = torch.randn(y_out.size())
-        y_out = h*y_out + noise*(std/(math.sqrt(K_clients)))
-        y_out = y_out/(math.sqrt(Ps))
+
+        client['Evalue'] = yTy
+        client['previousparam'] = pre_out
+        # Pk = ((K_clients)*Ps)/yTy
+
+        # y_out = y_out*math.sqrt(Ps)/(h)
+        # noise = torch.randn(y_out.size())
+        # y_out = h*y_out + noise*(std/(math.sqrt(K_clients)))
+        y_out = y_out/(h)
+        y_out = h*y_out
+        # y_out = y_out/(math.sqrt(Ps))
         y_out = y_out.real
 
         client['model'].conv2.weight.data = y_out
