@@ -162,6 +162,7 @@ def Wrapper():
 
     
     def train(args, client, device, Ps):
+
         cStatus = True
         client['model'].train()
         client['model'].send(client['hook'])
@@ -215,7 +216,7 @@ def Wrapper():
                             client['mnist_trainset']) * args['batch_size'],
                         100. * batch_idx / len(client['mnist_trainset']), loss.item()))
 
-
+        client['model'].get()
         y_out = client['model'].conv1.weight
 
         x = torch.flatten(y_out)
