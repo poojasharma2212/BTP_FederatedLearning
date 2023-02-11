@@ -384,7 +384,7 @@ def Wrapper():
         print('Evalue', Evalue_arr)
 
         alpha = max(Evalue_arr)
-        print('alpha value', alpha)
+        print('alpha value', Ps/alpha)
         print("Clients with good channel are considered for averaging")
         for no in range(len(client_good_channel)):
             print(client_good_channel[no]['hook'].id)
