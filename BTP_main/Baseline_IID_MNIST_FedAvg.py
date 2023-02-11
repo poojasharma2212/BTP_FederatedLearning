@@ -259,7 +259,7 @@ def Wrapper():
         print(yTy)
 
         client['Evalue'] = yTy
-        client['previousparam'] = pre_out
+        # client['previousparam'] = pre_out
         # Pk = ((K_clients)*Ps)/yTy
 
         # y_out = y_out*math.sqrt(Ps)/(h)
