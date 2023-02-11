@@ -350,7 +350,7 @@ def Wrapper():
             # x2 = np.random.normal(loc=0, scale=sigma2, size = 10000)
             # x = vstack((x1, x2))
             # cov = nn.Identity([20,1,5,5])
-            cov = torch.eye((20,1,5,5))
+            cov = torch.eye((500))
             # cov = np.eye([20,1,5,5])
             # mean = nn.zeros([20,1,5,5])
             mean = torch.zeros((20,1,5,5))
