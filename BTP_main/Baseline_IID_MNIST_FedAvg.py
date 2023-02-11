@@ -161,7 +161,7 @@ def Wrapper():
         y_dict[dict_key] = y_val
 
     
-    def train(args, client, device, Ps,curr,prev):
+    def train(args, client, device, Ps):
         cStatus = True
         client['model'].train()
         client['model'].send(client['hook'])
