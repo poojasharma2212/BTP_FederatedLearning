@@ -320,14 +320,12 @@ def Wrapper():
             client['model'].parameters(), lr=args['lr'])
 
     # print(client)
-
+    curr = [0 for i in range(20)]
+    prev = [0 for i in range(20)] 
     for fed_round in range(args['rounds']):
 
         print(fed_round)
-
-        curr = [0 for i in range(20)]
-        prev = [0 for i in range(20)] 
-
+        
         # number of selected clients
         client_good_channel = []
         Evalue_arr = []
@@ -365,8 +363,9 @@ def Wrapper():
             for cli in active_clients:
                 print('client',cli)
                 prev[cli] = xyy
+                curr[cli] = 0
                 client['previousparam'] = xyy
-
+        
 
         for client in active_clients:
             print("train")
