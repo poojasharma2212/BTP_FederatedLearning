@@ -350,8 +350,8 @@ def Wrapper():
             # x2 = np.random.normal(loc=0, scale=sigma2, size = 10000)
             # x = vstack((x1, x2))
 
-            cov = np.eye(500)
-            mean = [0]*500
+            cov = np.eye([20,1,5,5])
+            mean = [0]*[20,1,5,5]
             xyy = np.random.multivariate_normal(mean, 5*cov)
             # x = torch.flatten(xyy)
             # x = np.random.multivariate_normal(mean, cov).T
