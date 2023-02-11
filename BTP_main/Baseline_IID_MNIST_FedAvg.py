@@ -366,6 +366,7 @@ def Wrapper():
                 # prev[client['hook'].id] = xyy
                 # curr[client['hook'].id] = 0
                 client['previousparam'] = xyy
+            print(type(client['previousparam']))
                 
         for client in active_clients:
             print("train")
