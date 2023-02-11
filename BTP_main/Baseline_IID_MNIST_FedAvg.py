@@ -225,7 +225,7 @@ def Wrapper():
         
         y_out = client['model'].conv1.weight
         
-        x = torch.flatten(updated)
+        x = torch.flatten(y_out)
 
         pre_out = x
         updated = x - client['previousparam']
