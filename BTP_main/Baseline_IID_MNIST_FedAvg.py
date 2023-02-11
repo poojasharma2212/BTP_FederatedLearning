@@ -352,7 +352,7 @@ def Wrapper():
             cov = nn.Identity([20,1,5,5])
             # cov = np.eye([20,1,5,5])
             # mean = nn.zeros([20,1,5,5])
-            mean = tf.zeros(shape=[20,1,5,5])
+            mean = torch.zeros((20,1,5,5))
             xyy = np.random.multivariate_normal(mean, 5*cov)
             # x = torch.flatten(xyy)
             # x = np.random.multivariate_normal(mean, cov).T
