@@ -221,11 +221,12 @@ def Wrapper():
         y_out = client['model'].conv1.weight
 
         # x = torch.flatten(y_out)
-        xx = torch.flatten(y_out)
-        # xx = xx - client['previousparam']
+        # xx = torch.flatten(y_out)
+        xx = xx - client['previousparam']
         # print("Client Previous Value : " ,  client['previousparam'])
         # print("size:     ",xx.size())
         
+        xx = torch.flatten(xx)
         client['model'].conv1.weight.data = xx
 
         y_out = client['model'].conv2.weight
@@ -343,15 +344,16 @@ def Wrapper():
 
             print("intialise value of theta ------------->")
             print(xyy.size)
+            t = torch.from_numpy(xyy)
+            t.reshape([20,1,5,5])
             for client in active_clients:
                 # print('client',client)
                 # print(client['hook'].id)
                 # prev[client['hook'].id] = xyy
                 # curr[client['hook'].id] = 0
-                
-                t = torch.from_numpy(xyy)
                 client['previousparam'] = t
             print(type(client['previousparam']))
+            print(t.size())
                 
         for client in active_clients:
             print("train")
