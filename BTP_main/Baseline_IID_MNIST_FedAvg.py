@@ -218,33 +218,33 @@ def Wrapper():
 
         client['model'].get()
 
-        y_out = client['model'].conv1.weight
+        data = client['model'].conv1.weight
 
         # x = torch.flatten(y_out)
         
         xx = torch.flatten(y_out)
-        xx = xx - client['previousparam']
+        # xx = xx - client['previousparam']
         # print("Client Previous Value : " ,  client['previousparam'])
         print("size:     ",xx.size())
         # print("size:     ",y_out.size())
         
-        xTx = 0
-        for i in range(list(y_out.size())[0]):
-            xTx = xTx + xx[i]*xx[i]
+        # xTx = 0
+        # for i in range(list(y_out.size())[0]):
+        #     xTx = xTx + xx[i]*xx[i]
 
-        print('-----------')
-        print("xTTTTTTTTTTTTx: ", xTx)
-        print( "Client Update value,    ", xTx )
+        # print('-----------')
+        # print("xTTTTTTTTTTTTx: ", xTx)
+        # print( "Client Update value,    ", xTx )
 
         # y_out = y_out*math.sqrt(Ps)/(h)
 
         # noise = torch.randn(y_out.size())
         # y_out = h*y_out + noise*(std)
-        y_out = xx/(h)
-        y_out = y_out*h
-        y_out = y_out.real
+        # y_out = xx/(h)
+        # y_out = y_out*h
+        # y_out = y_out.real
 
-        client['model'].conv1.weight.data = y_out
+        client['model'].conv1.weight.data = data
 
         y_out = client['model'].conv2.weight
 
@@ -252,7 +252,7 @@ def Wrapper():
         yy = torch.flatten(y_out)
         # print(yy.size())
         # client['curr'] = yy
-        # y_out = yy - client['previousparam']
+        y_out = yy - client['previousparam']
         yTy = 0
         for i in range(list(yy.size())[0]):
             yTy = yTy + yy[i]*yy[i]
@@ -352,10 +352,10 @@ def Wrapper():
             # x2 = np.random.normal(loc=0, scale=sigma2, size = 10000)
             # x = vstack((x1, x2))
             # cov = nn.Identity([20,1,5,5])
-            cov = torch.eye((500))
+            cov = torch.eye((500*500))
             # cov = np.eye([20,1,5,5])
             # mean = nn.zeros([20,1,5,5])
-            mean = torch.zeros((500))
+            mean = torch.zeros((250000))
             xyy = np.random.multivariate_normal(mean, 5*cov)
             # x = torch.flatten(xyy)
             # x = np.random.multivariate_normal(mean, cov).T
@@ -396,7 +396,7 @@ def Wrapper():
         print()
         print("reached this step")
 
-        
+
         global_model = averageModels(global_model, client_good_channel, snr_value, Ps,alpha)
 
         globl = global_model
