@@ -382,19 +382,22 @@ def Wrapper():
                 client_good_channel.append(client)
                 Evalue_arr.append(client['Evalue'])
 
-            # idx = idx+1
-            # print(client)'
-            print("Client max alpha banane wali value" , client['Evalue'])
+            # print("Client max alpha banane wali value" , client['Evalue'])
         print('Evalue', Evalue_arr)
 
-        alpha = max(Evalue_arr)
-        print('alpha value', Ps/alpha)
+        E_max = max(Evalue_arr)
+        alpha = Ps/E_max
+        print('alpha value', alpha)
+
         print("Clients with good channel are considered for averaging")
+
         for no in range(len(client_good_channel)):
             print(client_good_channel[no]['hook'].id)
         print()
         print("reached this step")
-        global_model = averageModels(global_model, client_good_channel, snr_value, Ps)
+
+        
+        global_model = averageModels(global_model, client_good_channel, snr_value, Ps,alpha)
 
         globl = global_model
         print('global average model', globl.size())
@@ -414,35 +417,6 @@ def Wrapper():
     # print(accu)
     return accu
 
-
-# final_acc = []
-# sum = []
-# weight = []
-
-# hook = sy.TorchHook(torch)
-
-# for i in range(4):
-#     accuracy1 = Wrapper(64,0.02,2,20,4,hook)
-#     print(accuracy1)
-#     if(len(sum)==0):
-#         sum = accuracy1
-#     for j in range(len(accuracy1)):
-#         sum[j] = sum[j] + accuracy1[j]
-#     # final_acc[i] = accuracy1
-# for i in range(len(sum)):
-#     sum[i] = sum[i]/10
-# weight = sum/10
-
-# # print(final_acc)
-
-
-# print("====================final ans")
-# # print(sum)
-# accuracy1 = Wrapper(64, 0.007, 3, 20, 10, key, key_array, Ps)
 accuracy1 = Wrapper()
 print(accuracy1)
-# print("second result with P = sum(root(Pk))")
-# accuracy2 = Wrapper(64,0.02,2,20,5,hook)
-# print(accuracy2)
-# accuracy3 = Wrapper(64,0.02,2,20,5,hook)
-# print(accuracy3)
+
