@@ -219,21 +219,21 @@ def Wrapper():
         client['model'].get()
 
         y_out = client['model'].conv1.weight
-
         client['model'].conv1.weight.data = y_out
 
         y_out = client['model'].conv2.weight
-
         print("size of 2nd layer", y_out.size())
         pre_out = y_out
         
         # print(yy.size())
         # client['curr'] = yy
         yy = y_out - client['previousparam']
-        yy = torch.flatten(yy)
+
+        y1 = torch.flatten(yy)
+
         yTy = 0
-        for i in range(list(yy.size())[0]):
-            yTy = yTy + yy[i]*yy[i]
+        for i in range(list(y1.size())[0]):
+            yTy = yTy + y1[i]*y1[i]
 
         print('-----------')
         print("xTTTTTTTTTTTTx: ", yTy)
@@ -380,6 +380,15 @@ def Wrapper():
 
         for no in range(len(client_good_channel)):
             print(client_good_channel[no]['hook'].id)
+            y_out = client['model'].conv2.weight
+
+            # y_out = client['model'].conv2.weight
+            print("size of 2nd layer", y_out.size())
+            y_out = y_out*math.sqrt(alpha)
+        
+        print(y_out)
+
+
         print()
         print("reached this step")
 
@@ -387,7 +396,7 @@ def Wrapper():
         global_model = averageModels(global_model, client_good_channel, snr_value, Ps,alpha)
 
         globl = global_model
-        # print('global average model', globl.size())
+        print('global average model', globl.parameters())
         # Testing the average model
         test(args, global_model, device, global_test_loader, count)
 
