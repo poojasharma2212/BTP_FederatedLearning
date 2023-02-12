@@ -237,8 +237,8 @@ def Wrapper():
         yy = torch.flatten(y_out)
         # print(yy.size())
         # client['curr'] = yy
-        yy = yy - client['previousparam']
-        yTy = 0
+        # yy = yy - client['previousparam']
+        # yTy = 0
         for i in range(list(yy.size())[0]):
             yTy = yTy + yy[i]*yy[i]
 
@@ -335,20 +335,21 @@ def Wrapper():
         if(fed_round == 0):
 
             # cov = nn.Identity([20,1,5,5])
-            cov = torch.eye(500)
+            # cov = torch.eye(500)
             # cov = np.eye([20,1,5,5])
             # mean = nn.zeros([20,1,5,5])
-            mean = torch.zeros(500)
-            xyy = np.random.multivariate_normal(mean, 5*cov)
+            # mean = torch.zeros(500)
+            # xyy = np.random.multivariate_normal(mean, 5*cov)
             # x = torch.flatten(xyy)
             # x = np.random.multivariate_normal(mean, cov).T
 
-            print("intialise value of theta ------------->")
-            print(xyy.size)
-            t = torch.from_numpy(xyy)
+            # print("intialise value of theta ------------->")
+            # print(xyy.size)
+            # t = torch.from_numpy(xyy)
             # t.reshape((20,1,5,5))
-            print(t.shape)
-            print('tesnor size reshaped')
+            # print(t.shape)
+            # print('tesnor size reshaped')
+            t = torch.nn.init.normal_(m.weight,0,0.5)
             for client in active_clients:
                 # print('client',client)
                 # print(client['hook'].id)
