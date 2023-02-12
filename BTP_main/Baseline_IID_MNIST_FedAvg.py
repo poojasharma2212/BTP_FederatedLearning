@@ -226,25 +226,8 @@ def Wrapper():
         # xx = xx - client['previousparam']
         # print("Client Previous Value : " ,  client['previousparam'])
         print("size:     ",xx.size())
-        # print("size:     ",y_out.size())
         
-        # xTx = 0
-        # for i in range(list(y_out.size())[0]):
-        #     xTx = xTx + xx[i]*xx[i]
-
-        # print('-----------')
-        # print("xTTTTTTTTTTTTx: ", xTx)
-        # print( "Client Update value,    ", xTx )
-
-        # y_out = y_out*math.sqrt(Ps)/(h)
-
-        # noise = torch.randn(y_out.size())
-        # y_out = h*y_out + noise*(std)
-        # y_out = xx/(h)
-        # y_out = y_out*h
-        # y_out = y_out.real
-
-        client['model'].conv1.weight.data = data
+        client['model'].conv1.weight.data = y_out
 
         y_out = client['model'].conv2.weight
 
@@ -252,7 +235,7 @@ def Wrapper():
         yy = torch.flatten(y_out)
         # print(yy.size())
         # client['curr'] = yy
-        y_out = yy - client['previousparam']
+        yy = yy - client['previousparam']
         yTy = 0
         for i in range(list(yy.size())[0]):
             yTy = yTy + yy[i]*yy[i]
@@ -350,10 +333,10 @@ def Wrapper():
         if(fed_round == 0):
 
             # cov = nn.Identity([20,1,5,5])
-            cov = torch.eye((25000))
+            cov = torch.eye(500)
             # cov = np.eye([20,1,5,5])
             # mean = nn.zeros([20,1,5,5])
-            mean = torch.zeros((25000))
+            mean = torch.zeros(500)
             xyy = np.random.multivariate_normal(mean, 5*cov)
             # x = torch.flatten(xyy)
             # x = np.random.multivariate_normal(mean, cov).T
