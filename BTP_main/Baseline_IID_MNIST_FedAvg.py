@@ -238,7 +238,7 @@ def Wrapper():
         # print(yy.size())
         # client['curr'] = yy
         # yy = yy - client['previousparam']
-        # yTy = 0
+        yTy = 0
         for i in range(list(yy.size())[0]):
             yTy = yTy + yy[i]*yy[i]
 
