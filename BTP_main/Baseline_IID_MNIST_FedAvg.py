@@ -349,7 +349,7 @@ def Wrapper():
             # t.reshape((20,1,5,5))
             # print(t.shape)
             # print('tesnor size reshaped')
-            t = torch.nn.init.normal_(m.weight,0,0.5)
+            t = torch.nn.init.normal_(client['model'].conv1.weight,0,0.5)
             for client in active_clients:
                 # print('client',client)
                 # print(client['hook'].id)
