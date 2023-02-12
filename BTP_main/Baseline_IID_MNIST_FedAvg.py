@@ -226,10 +226,11 @@ def Wrapper():
 
         print("size of 2nd layer", y_out.size())
         pre_out = y_out
-        yy = torch.flatten(y_out)
+        
         # print(yy.size())
         # client['curr'] = yy
-        yy = yy - client['previousparam']
+        yy = y_out - client['previousparam']
+        yy = torch.flatten(yy)
         yTy = 0
         for i in range(list(yy.size())[0]):
             yTy = yTy + yy[i]*yy[i]
@@ -355,6 +356,7 @@ def Wrapper():
                 # curr[client['hook'].id] = 0
                 client['previousparam'] = t
             print(type(client['previousparam']))
+            print('previous param size')
             print(t.size())
                 
         for client in active_clients:
