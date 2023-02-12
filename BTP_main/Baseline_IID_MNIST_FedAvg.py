@@ -348,11 +348,9 @@ def Wrapper():
         print(len(active_clients_inds))
 
         if(fed_round == 0):
-            # x1 = np.random.normal(loc=0, scale=sigma1, size = 10000)
-            # x2 = np.random.normal(loc=0, scale=sigma2, size = 10000)
-            # x = vstack((x1, x2))
+            
             # cov = nn.Identity([20,1,5,5])
-            cov = torch.eye((500*500))
+            cov = torch.eye((250000))
             # cov = np.eye([20,1,5,5])
             # mean = nn.zeros([20,1,5,5])
             mean = torch.zeros((250000))
