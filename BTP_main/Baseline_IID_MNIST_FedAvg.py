@@ -220,24 +220,16 @@ def Wrapper():
 
         y_out = client['model'].conv1.weight
 
-        # x = torch.flatten(y_out)
-        xx = torch.flatten(y_out)
-        xx = y_out - client['previousparam']
-        # print("Client Previous Value : " ,  client['previousparam'])
-        # print("size:     ",xx.size())
-        
-        xx = torch.flatten(xx)
-
-        client['model'].conv1.weight.data = xx
+        client['model'].conv1.weight.data = y_out
 
         y_out = client['model'].conv2.weight
 
         print("size of 2nd layer", y_out.size())
-        # pre_out = y_out
+        pre_out = y_out
         yy = torch.flatten(y_out)
         # print(yy.size())
         # client['curr'] = yy
-        # yy = yy - client['previousparam']
+        yy = yy - client['previousparam']
         yTy = 0
         for i in range(list(yy.size())[0]):
             yTy = yTy + yy[i]*yy[i]
@@ -247,7 +239,7 @@ def Wrapper():
         print(yTy)
 
         client['Evalue'] = yTy
-        # client['previousparam'] = pre_out
+        client['previousparam'] = pre_out
         # Pk = ((K_clients)*Ps)/yTy
 
         # y_out = y_out*math.sqrt(Ps)/(h)
@@ -332,6 +324,11 @@ def Wrapper():
         active_clients = [clients[i] for i in active_clients_inds]
         print(len(active_clients_inds))
 
+        snr = snr_value
+        print("SNR==", snr)
+        snr_val = 10**(snr/10)
+        std = math.sqrt(Ps/snr_val)
+
         if(fed_round == 0):
 
             # cov = nn.Identity([20,1,5,5])
@@ -349,7 +346,7 @@ def Wrapper():
             # t.reshape((20,1,5,5))
             # print(t.shape)
             # print('tesnor size reshaped')
-            t = torch.nn.init.normal_(client['model'].conv1.weight,0,0.5)
+            t = torch.nn.init.normal_(client['model'].conv2.weight,0,std)
             print(t.shape)
             for client in active_clients:
                 # print('client',client)
