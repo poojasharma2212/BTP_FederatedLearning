@@ -348,12 +348,12 @@ def Wrapper():
         print(len(active_clients_inds))
 
         if(fed_round == 0):
-            
+
             # cov = nn.Identity([20,1,5,5])
-            cov = torch.eye((250000))
+            cov = torch.eye((25000))
             # cov = np.eye([20,1,5,5])
             # mean = nn.zeros([20,1,5,5])
-            mean = torch.zeros((250000))
+            mean = torch.zeros((25000))
             xyy = np.random.multivariate_normal(mean, 5*cov)
             # x = torch.flatten(xyy)
             # x = np.random.multivariate_normal(mean, cov).T
