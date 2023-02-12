@@ -221,7 +221,7 @@ def Wrapper():
         y_out = client['model'].conv1.weight
 
         # x = torch.flatten(y_out)
-        # xx = torch.flatten(y_out)
+        xx = torch.flatten(y_out)
         xx = y_out - client['previousparam']
         # print("Client Previous Value : " ,  client['previousparam'])
         # print("size:     ",xx.size())
@@ -335,10 +335,10 @@ def Wrapper():
         if(fed_round == 0):
 
             # cov = nn.Identity([20,1,5,5])
-            cov = torch.eye(500)
+            cov = torch.eye([(20,1),5,5])
             # cov = np.eye([20,1,5,5])
             # mean = nn.zeros([20,1,5,5])
-            mean = torch.zeros(500)
+            mean = torch.zeros([(20,1),5,5])
             xyy = np.random.multivariate_normal(mean, 5*cov)
             # x = torch.flatten(xyy)
             # x = np.random.multivariate_normal(mean, cov).T
@@ -346,7 +346,7 @@ def Wrapper():
             print("intialise value of theta ------------->")
             print(xyy.size)
             t = torch.from_numpy(xyy)
-            t.reshape((20,1,5,5))
+            # t.reshape((20,1,5,5))
             print(t.shape)
             print('tesnor size reshaped')
             for client in active_clients:
