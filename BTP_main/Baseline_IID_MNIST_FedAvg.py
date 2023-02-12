@@ -387,7 +387,7 @@ def Wrapper():
         global_model = averageModels(global_model, client_good_channel, snr_value, Ps,alpha)
 
         globl = global_model
-        print('global average model', globl.size())
+        # print('global average model', globl.size())
         # Testing the average model
         test(args, global_model, device, global_test_loader, count)
 
