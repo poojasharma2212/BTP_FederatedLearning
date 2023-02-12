@@ -217,11 +217,13 @@ def Wrapper():
                         100. * batch_idx / len(client['mnist_trainset']), loss.item()))
 
         client['model'].get()
+
         y_out = client['model'].conv1.weight
 
         # x = torch.flatten(y_out)
-        xx = y_out - client['previousparam']
+        
         xx = torch.flatten(y_out)
+        xx = xx - client['previousparam']
         # print("Client Previous Value : " ,  client['previousparam'])
         print("size:     ",xx.size())
         # print("size:     ",y_out.size())
@@ -246,10 +248,10 @@ def Wrapper():
 
         y_out = client['model'].conv2.weight
 
-        pre_out = y_out
+        # pre_out = y_out
         yy = torch.flatten(y_out)
-        print(yy.size())
-        client['curr'] = yy
+        # print(yy.size())
+        # client['curr'] = yy
         # y_out = yy - client['previousparam']
         yTy = 0
         for i in range(list(yy.size())[0]):
@@ -353,7 +355,7 @@ def Wrapper():
             cov = torch.eye((500))
             # cov = np.eye([20,1,5,5])
             # mean = nn.zeros([20,1,5,5])
-            mean = torch.zeros((20,1,5,5))
+            mean = torch.zeros((500))
             xyy = np.random.multivariate_normal(mean, 5*cov)
             # x = torch.flatten(xyy)
             # x = np.random.multivariate_normal(mean, cov).T
@@ -367,7 +369,7 @@ def Wrapper():
                 # curr[client['hook'].id] = 0
                 
                 # t = torch.from_numpy(xyy)
-                client['previousparam'] = t
+                client['previousparam'] = xyy
             print(type(client['previousparam']))
                 
         for client in active_clients:
