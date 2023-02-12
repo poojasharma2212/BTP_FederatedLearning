@@ -346,8 +346,8 @@ def Wrapper():
             print("intialise value of theta ------------->")
             print(xyy.size)
             t = torch.from_numpy(xyy)
-            t.reshape([20,1,5,5])
-            print(t.size())
+            t.reshape((20,1,5,5))
+            print(t.shape())
             print('tesnor size reshaped')
             for client in active_clients:
                 # print('client',client)
