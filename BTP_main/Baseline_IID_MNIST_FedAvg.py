@@ -368,8 +368,8 @@ def Wrapper():
                 # prev[client['hook'].id] = xyy
                 # curr[client['hook'].id] = 0
                 
-                # t = torch.from_numpy(xyy)
-                client['previousparam'] = xyy
+                t = torch.from_numpy(xyy)
+                client['previousparam'] = t
             print(type(client['previousparam']))
                 
         for client in active_clients:
