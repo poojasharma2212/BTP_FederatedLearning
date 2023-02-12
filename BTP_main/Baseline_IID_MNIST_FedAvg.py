@@ -222,11 +222,12 @@ def Wrapper():
 
         # x = torch.flatten(y_out)
         # xx = torch.flatten(y_out)
-        xx = xx - client['previousparam']
+        xx = y_out - client['previousparam']
         # print("Client Previous Value : " ,  client['previousparam'])
         # print("size:     ",xx.size())
         
         xx = torch.flatten(xx)
+
         client['model'].conv1.weight.data = xx
 
         y_out = client['model'].conv2.weight
