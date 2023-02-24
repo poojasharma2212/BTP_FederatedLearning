@@ -161,7 +161,7 @@ def Wrapper():
         y_dict[dict_key] = y_val
 
 
-    K_clients = len(active_clients_inds)
+   
 
     def train(args, client, device, Ps,snr_value):
 
@@ -333,6 +333,8 @@ def Wrapper():
         snr_val = 10**(snr/10)
         std = math.sqrt(Ps/snr_val)
 
+        K_clients = len(active_clients_inds)
+        
         if(fed_round == 0):
 
             # cov = nn.Identity([20,1,5,5])
