@@ -48,7 +48,7 @@ def Wrapper():
     args = {
         'batch_size': 64,
         'test_batch_size': 1000,
-        'lr': 0.01 ,
+        'lr': 0.001 ,
         'log_interval': 10,
         'epochs': 3,
         'clients': 30,
@@ -114,6 +114,7 @@ def Wrapper():
             mnist_testset, list(test_group[inx]), args['batch_size'])
         client['samples'] = len(trainset_id_list)/args['images']
         client['previousparam'] = 0
+        client['globalparam'] = 0
         client['curr'] = 0
         client['Evalue'] = 0
         
@@ -242,6 +243,7 @@ def Wrapper():
         client['Evalue'] = yTy
         # client['previousparam'] = pre_out
         client['curr'] = yy
+        client['previousparam'] = y_out
         client['model'].conv2.weight.data = yy
         
         return cStatus
@@ -380,33 +382,25 @@ def Wrapper():
             print(client_good_channel[no]['hook'].id)
 
             # client['model'].get()
-
-            y_out = client['model'].conv1.weight
-            client['model'].conv1.weight.data = y_out
-
-            y_out = client['model'].conv2.weight
-            # y_out = client['model'].conv2.weight
-
-            y_out_flat = torch.flatten(y_out)
-            yTensor = 0
-            for i in range(list(y_out_flat.size())[0]):
-                yTensor = yTensor + y_out_flat[i]*y_out_flat[i]
-
-            print('------%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-----')
-            print("xTTTTTTTTTTTTx: ", yTensor)
-            # print(yTensor)
-
+            # y_out = client['model'].conv1.weight
+            # client['model'].conv1.weight.data = y_out
+            # # y_out = client['model'].conv2.weight
+            # y_out_flat = torch.flatten(y_out)
+            # yTensor = 0
+            # for i in range(list(y_out_flat.size())[0]):
+            #     yTensor = yTensor + y_out_flat[i]*y_out_flat[i]
+            # print('------%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-----')
+            # print("xTTTTTTTTTTTTx: ", yTensor)
+            # # print(yTensor)
             # Pk = ((K_clients)*Ps)/yTensor
-
             # y_out = y_out*math.sqrt(Pk)/(h)
             
             noise = torch.randn(y_out.size())
             # y_out = y_out + noise*(std/(math.sqrt(K_clients)))
 
+            y_out = client['model'].conv2.weight
             y_out = y_out*(math.sqrt(alpha))
             # y_out = y_out.real
-
-
             # y_out = client['model'].conv2.weight
             # print("size of 2nd layer", y_out.size())
             # print("Output of model - ------------------------------------------------------" ,client['model'])
@@ -422,18 +416,26 @@ def Wrapper():
 
         global_model = averageModels(global_model, client_good_channel, snr_value, Ps,alpha)
 
+        globalparam = global_model.conv2.weight
+        
+        # for i in  active_clients:
+        #     client['previousparam'] = global_model.conv2.weight
+            
+
         globl = global_model
         
         y_out = global_model.conv2.weight
         y_out = y_out/(K_clients*math.sqrt(alpha))
+        y_out_flat = torch.flatten(y_out)
+        yTensor = 0
+        for i in range(list(y_out_flat.size())[0]):
+            yTensor = yTensor + y_out_flat[i]*y_out_flat[i]
+        print('------%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-----')
+        print("xTTTTTTTTTTTTx: ", yTensor)
+            # print(yTensor)        
 
-        y_out = y_out + client['previousparam']
-
-
-        for i in  active_clients:
-            client['previousparam'] = globl.conv2.weight
-
-        global_model.conv2.weight.data = y_out
+        current = y_out + globalparam
+        global_model.conv2.weight.data = current
 
         print('global average model', globl.parameters())
         # Testing the average model
