@@ -225,11 +225,9 @@ def Wrapper():
         print("size of 2nd layer", y_out.size())
         pre_out = y_out
         
-        # print(yy.size())
-        # client['curr'] = yy
-        yy = y_out - client['previousparam']
+        y_out = y_out - client['previousparam']
 
-        y1 = torch.flatten(yy)
+        y1 = torch.flatten(y_out)
 
         yTy = 0
         for i in range(list(y1.size())[0]):
@@ -360,6 +358,8 @@ def Wrapper():
 
         for no in range(len(client_good_channel)):
             print(client_good_channel[no]['hook'].id)
+
+            
             y_out = client['model'].conv2.weight
 
             # y_out = client['model'].conv2.weight
