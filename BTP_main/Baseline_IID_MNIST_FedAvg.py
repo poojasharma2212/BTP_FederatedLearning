@@ -230,13 +230,11 @@ def Wrapper():
 
         print("=====================================================================")
         print(yy)
-
         y1 = torch.flatten(yy)
 
         yTy = 0
         for i in range(list(y1.size())[0]):
             yTy = yTy + y1[i]*y1[i]
-
         print('-----------')
         print("xTTTTTTTTTTTTx: ", yTy)
         print(yTy)
@@ -245,7 +243,6 @@ def Wrapper():
         # client['previousparam'] = pre_out
 
         client['model'].conv2.weight.data = yy
-
         
         return cStatus
 
@@ -381,11 +378,11 @@ def Wrapper():
 
         for no in range(len(client_good_channel)):
             print(client_good_channel[no]['hook'].id)
-            
-            client['model'].get()
 
-            y_out = client['model'].conv1.weight
-            client['model'].conv1.weight.data = y_out
+            # client['model'].get()
+
+            # y_out = client['model'].conv1.weight
+            # client['model'].conv1.weight.data = y_out
 
             # y_out = client['model'].conv2.weight
             y_out = client['model'].conv2.weight
