@@ -241,7 +241,7 @@ def Wrapper():
 
         client['Evalue'] = yTy
         # client['previousparam'] = pre_out
-
+        client['curr'] = yy
         client['model'].conv2.weight.data = yy
         
         return cStatus
@@ -381,11 +381,11 @@ def Wrapper():
 
             # client['model'].get()
 
-            # y_out = client['model'].conv1.weight
-            # client['model'].conv1.weight.data = y_out
+            y_out = client['model'].conv1.weight
+            client['model'].conv1.weight.data = y_out
 
-            # y_out = client['model'].conv2.weight
             y_out = client['model'].conv2.weight
+            # y_out = client['model'].conv2.weight
 
             y_out_flat = torch.flatten(y_out)
             yTensor = 0
@@ -424,8 +424,19 @@ def Wrapper():
         global_model = averageModels(global_model, client_good_channel, snr_value, Ps,alpha)
 
         globl = global_model
+        
+        
+        y_out = global_model.conv2.weight
+        y_out = y_out/(K_clients*math.sqrt(alpha))
+
+        y_out = y_out + client['previousparam']
+
+
         for i in  active_clients:
             client['previousparam'] = globl.conv2.weight
+
+        global_model.conv2.weight.data = y_out
+
         print('global average model', globl.parameters())
         # Testing the average model
         test(args, global_model, device, global_test_loader, count)
