@@ -410,7 +410,9 @@ def Wrapper():
             # y_out = client['model'].conv2.weight
             # print("size of 2nd layer", y_out.size())
             # print("Output of model - ------------------------------------------------------" ,client['model'])
-            y_out = y_out*math.sqrt(alpha)
+            # y_out = y_out*math.sqrt(alpha)
+            
+            client['model'].conv2.weight.data = y_out
         
         print(y_out)
 
@@ -422,6 +424,8 @@ def Wrapper():
         global_model = averageModels(global_model, client_good_channel, snr_value, Ps,alpha)
 
         globl = global_model
+        for i in  active_clients:
+            client['previousparam'] = globl.conv2.weight
         print('global average model', globl.parameters())
         # Testing the average model
         test(args, global_model, device, global_test_loader, count)
