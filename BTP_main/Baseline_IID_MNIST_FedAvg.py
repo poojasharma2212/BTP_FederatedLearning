@@ -366,7 +366,7 @@ def Wrapper():
         for client in active_clients:
             print("train")
 
-            good_channel = train(args, client, device, Ps)
+            good_channel = train(args, client, device, Ps,snr_value)
             # for z in good_channel:
             
             if(good_channel == True):
