@@ -365,7 +365,7 @@ def Wrapper():
                 client_good_channel.append(client)
                 Evalue_arr.append(client['Evalue'])
                 
-                print("Output of model - -------------" ,client['model'])
+                # print("Output of model - -------------" ,client['model'])
 
             # print("Client max alpha banane wali value" , client['Evalue'])
         print('Evalue', Evalue_arr)
