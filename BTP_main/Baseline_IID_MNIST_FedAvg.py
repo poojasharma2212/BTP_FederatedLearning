@@ -394,7 +394,7 @@ def Wrapper():
 
             print('------%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-----')
             print("xTTTTTTTTTTTTx: ", yTensor)
-            print(yTensor)
+            # print(yTensor)
 
             # Pk = ((K_clients)*Ps)/yTensor
 
@@ -420,11 +420,9 @@ def Wrapper():
         print()
         print("reached this step")
 
-
         global_model = averageModels(global_model, client_good_channel, snr_value, Ps,alpha)
 
         globl = global_model
-        
         
         y_out = global_model.conv2.weight
         y_out = y_out/(K_clients*math.sqrt(alpha))
