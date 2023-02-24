@@ -53,7 +53,7 @@ def Wrapper():
         'epochs': 3,
         'clients': 30,
         'seed': 0,
-        'rounds': 10,
+        'rounds': 5,
         'C': 1,
         'lowest_snr': 20,
         # 'highest_snr': 20,
@@ -229,7 +229,7 @@ def Wrapper():
         yy = y_out - client['previousparam']
 
         print("=====================================================================")
-        print(yy)
+        # print(yy)
         y1 = torch.flatten(yy)
 
         yTy = 0
@@ -414,7 +414,7 @@ def Wrapper():
             
             client['model'].conv2.weight.data = y_out
         
-        print(y_out)
+        # print(y_out)
 
 
         print()
