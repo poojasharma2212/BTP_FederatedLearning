@@ -225,11 +225,11 @@ def Wrapper():
 
         y_out = client['model'].conv2.weight
         print("size of 2nd layer", y_out.size())
-        pre_out = y_out
-        
-        # print(yy.size())
-        # client['curr'] = yy
+
         yy = y_out - client['previousparam']
+
+        print("=====================================================================")
+        print(yy)
 
         y1 = torch.flatten(yy)
 
@@ -243,15 +243,6 @@ def Wrapper():
 
         client['Evalue'] = yTy
         # client['previousparam'] = pre_out
-        # Pk = ((K_clients)*Ps)/yTy
-
-        # y_out = y_out*math.sqrt(Ps)/(h)
-        # noise = torch.randn(y_out.size())
-        # y_out = h*y_out + noise*(std/(math.sqrt(K_clients)))
-        # y_out = y_out/(h)
-        # y_out = h*y_out
-        # y_out = y_out/(math.sqrt(Ps))
-        # y_out = y_out.real
 
         client['model'].conv2.weight.data = yy
 
@@ -377,7 +368,7 @@ def Wrapper():
                 client_good_channel.append(client)
                 Evalue_arr.append(client['Evalue'])
                 
-                print("Output of model - -------------" ,client['model'])
+                print("Output of model - -------------" ,client['model'].parameters())
 
             # print("Client max alpha banane wali value" , client['Evalue'])
         print('Evalue', Evalue_arr)
