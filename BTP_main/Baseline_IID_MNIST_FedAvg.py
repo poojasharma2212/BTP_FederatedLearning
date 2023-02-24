@@ -361,6 +361,24 @@ def Wrapper():
 
             
             y_out = client['model'].conv2.weight
+            yy = torch.flatten(y_out)
+            yTy = 0
+            for i in range(list(yy.size())[0]):
+                yTy = yTy + yy[i]*yy[i]
+
+            print('------------------------------- to verify ------------------------------------------')
+            print("xTTTTTTTTTTTTx: ", yTy)
+            print(yTy)
+            # if(yTy <= Ps):
+            # Pk = ((K_clients)*Ps)/yTy
+            # y_out = y_out*math.sqrt(Pk)/(h)
+            # else:
+            # y_out = y_out*math.sqrt(Ps)/((h)*yTy)
+            noise = torch.randn(y_out.size())
+            # y_out = h*y_out + noise*(std/(math.sqrt(K_clients)))
+            # y_out = y_out/(math.sqrt(Pk))
+            y_out = y_out.real
+
 
             # y_out = client['model'].conv2.weight
             print("size of 2nd layer", y_out.size())
