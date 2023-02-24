@@ -395,7 +395,7 @@ def Wrapper():
             # Pk = ((K_clients)*Ps)/yTensor
             # y_out = y_out*math.sqrt(Pk)/(h)
             
-            noise = torch.randn(y_out.size())
+            # noise = torch.randn(y_out.size())
             # y_out = y_out + noise*(std/(math.sqrt(K_clients)))
 
             y_out = client['model'].conv2.weight
