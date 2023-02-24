@@ -160,7 +160,9 @@ def Wrapper():
         x_dict[dict_key] = x_val
         y_dict[dict_key] = y_val
 
-    
+
+    K_clients = len(active_clients_inds)
+
     def train(args, client, device, Ps,snr_value):
 
         cStatus = True
@@ -184,7 +186,7 @@ def Wrapper():
         print("Client:", client['hook'].id)
         print("CSI", abs(h)/(std*std))
 
-        K_clients = len(active_clients_inds)
+        
         # wireless channel needs to be considered
         # no noise in downlink
   
@@ -372,6 +374,8 @@ def Wrapper():
             if(good_channel == True):
                 client_good_channel.append(client)
                 Evalue_arr.append(client['Evalue'])
+                
+                print("Output of model - -------------" ,client['model'])
 
             # print("Client max alpha banane wali value" , client['Evalue'])
         print('Evalue', Evalue_arr)
@@ -386,8 +390,29 @@ def Wrapper():
             print(client_good_channel[no]['hook'].id)
             y_out = client['model'].conv2.weight
 
+            y_out_flat = torch.flatten(y_out)
+            yTensor = 0
+            for i in range(list(y_out_flat.size())[0]):
+                yTensor = yTensor + y_out_flat[i]*y_out_flat[i]
+
+            print('-----------')
+            print("xTTTTTTTTTTTTx: ", yTensor)
+            print(yTensor)
+
+            Pk = ((K_clients)*Ps)/yTensor
+
+            # y_out = y_out*math.sqrt(Pk)/(h)
+            
+            noise = torch.randn(y_out.size())
+            # y_out = y_out + noise*(std/(math.sqrt(K_clients)))
+
+            y_out = y_out*(math.sqrt(alpha))
+            # y_out = y_out.real
+
+
             # y_out = client['model'].conv2.weight
             print("size of 2nd layer", y_out.size())
+            print("Output of model - -------------" ,client['model'])
             y_out = y_out*math.sqrt(alpha)
         
         print(y_out)
