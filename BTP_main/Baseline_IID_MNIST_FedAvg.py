@@ -405,7 +405,7 @@ def Wrapper():
 
             # y_out = client['model'].conv2.weight
             print("size of 2nd layer", y_out.size())
-            print("Output of model - -------------" ,client['model'])
+            print("Output of model - -------------" ,client['model'].parameters())
             y_out = y_out*math.sqrt(alpha)
         
         print(y_out)
