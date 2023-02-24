@@ -161,7 +161,7 @@ def Wrapper():
         y_dict[dict_key] = y_val
 
     
-    def train(args, client, device, Ps,snr):
+    def train(args, client, device, Ps,snr_value):
 
         cStatus = True
         client['model'].train()
@@ -170,8 +170,8 @@ def Wrapper():
         print("client_ID", client['hook'].id)
 
         # snr = snr_value
-        # print("SNR==", snr)
-        snr_val = 10**(snr/10)
+        print("SNR==", snr_value)
+        snr_val = 10**(snr_value/10)
         std = math.sqrt(Ps/snr_val)
 
         x = random.random()
@@ -182,7 +182,7 @@ def Wrapper():
         #y = random.random()
         h = complex(x, y)
         print("Client:", client['hook'].id)
-        # print("CSI", abs(h)/(std*std))
+        print("CSI", abs(h)/(std*std))
 
         K_clients = len(active_clients_inds)
         # wireless channel needs to be considered
@@ -219,25 +219,17 @@ def Wrapper():
         client['model'].get()
 
         y_out = client['model'].conv1.weight
-        x1 = torch.flatten(y_out)
-
-        xTx = 0
-        for i in range(list(x1.size())[0]):
-            xTx = xTx + x1[i]*x1[i]
-
-        print('-----------')
-        print("xTTTTTTTTTTTTx: ", xTx)
-        print("-----------------------------------------------------------------")
-
         client['model'].conv1.weight.data = y_out
 
         y_out = client['model'].conv2.weight
         print("size of 2nd layer", y_out.size())
         pre_out = y_out
         
-        y_t = pre_out - client['previousparam']
+        # print(yy.size())
+        # client['curr'] = yy
+        yy = y_out - client['previousparam']
 
-        y1 = torch.flatten(y_t)
+        y1 = torch.flatten(yy)
 
         yTy = 0
         for i in range(list(y1.size())[0]):
@@ -248,7 +240,7 @@ def Wrapper():
         print(yTy)
 
         client['Evalue'] = yTy
-        client['previousparam'] = pre_out
+        # client['previousparam'] = pre_out
         # Pk = ((K_clients)*Ps)/yTy
 
         # y_out = y_out*math.sqrt(Ps)/(h)
@@ -259,8 +251,9 @@ def Wrapper():
         # y_out = y_out/(math.sqrt(Ps))
         # y_out = y_out.real
 
-        client['model'].conv2.weight.data = y_t
+        client['model'].conv2.weight.data = yy
 
+        
         return cStatus
 
     def test(args, model, device, test_loader, count):
@@ -339,10 +332,33 @@ def Wrapper():
         std = math.sqrt(Ps/snr_val)
 
         if(fed_round == 0):
+
+            # cov = nn.Identity([20,1,5,5])
+            # cov = torch.eye(500)
+            # cov = np.eye([20,1,5,5])
+            # mean = nn.zeros([20,1,5,5])
+            # mean = torch.zeros(500)
+            # xyy = np.random.multivariate_normal(mean, 5*cov)
+            # x = torch.flatten(xyy)
+            # x = np.random.multivariate_normal(mean, cov).T
+
+            # print("intialise value of theta ------------->")
+            # print(xyy.size)
+            # t = torch.from_numpy(xyy)
+            # t.reshape((20,1,5,5))
+            # print(t.shape)
+            # print('tesnor size reshaped')
             t = torch.nn.init.normal_(client['model'].conv2.weight,0,std)
             print(t.shape)
+            count = 0
             for client in active_clients:
+                # print('client',client)
+                # print(client['hook'].id)
+                # prev[client['hook'].id] = xyy
+                # curr[client['hook'].id] = 0
                 client['previousparam'] = t
+                count = count+1
+                print(count)
             print(type(client['previousparam']))
             print('previous param size')
             print(t.size())
@@ -350,7 +366,7 @@ def Wrapper():
         for client in active_clients:
             print("train")
 
-            good_channel = train(args, client, device, Ps,snr_value)
+            good_channel = train(args, client, device, Ps)
             # for z in good_channel:
             
             if(good_channel == True):
@@ -368,30 +384,10 @@ def Wrapper():
 
         for no in range(len(client_good_channel)):
             print(client_good_channel[no]['hook'].id)
-
-            
             y_out = client['model'].conv2.weight
-            yy = torch.flatten(y_out)
-            yTy = 0
-            for i in range(list(yy.size())[0]):
-                yTy = yTy + yy[i]*yy[i]
-
-            print('------------------------------- to verify ------------------------------------------')
-            print("xTTTTTTTTTTTTx: ", yTy)
-            print(yTy)
-            # if(yTy <= Ps):
-            # Pk = ((K_clients)*Ps)/yTy
-            # y_out = y_out*math.sqrt(Pk)/(h)
-            # else:
-            # y_out = y_out*math.sqrt(Ps)/((h)*yTy)
-            noise = torch.randn(y_out.size())
-            # y_out = h*y_out + noise*(std/(math.sqrt(K_clients)))
-            # y_out = y_out/(math.sqrt(Pk))
-            # y_out = y_out.real
-
 
             # y_out = client['model'].conv2.weight
-            # print("size of 2nd layer", y_out.size())
+            print("size of 2nd layer", y_out.size())
             y_out = y_out*math.sqrt(alpha)
         
         print(y_out)
@@ -399,6 +395,7 @@ def Wrapper():
 
         print()
         print("reached this step")
+
 
         global_model = averageModels(global_model, client_good_channel, snr_value, Ps,alpha)
 
