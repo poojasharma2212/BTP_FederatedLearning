@@ -161,7 +161,7 @@ def Wrapper():
         y_dict[dict_key] = y_val
 
     
-    def train(args, client, device, Ps):
+    def train(args, client, device, Ps,snr):
 
         cStatus = True
         client['model'].train()
@@ -169,8 +169,8 @@ def Wrapper():
         
         print("client_ID", client['hook'].id)
 
-        snr = snr_value
-        print("SNR==", snr)
+        # snr = snr_value
+        # print("SNR==", snr)
         snr_val = 10**(snr/10)
         std = math.sqrt(Ps/snr_val)
 
@@ -182,7 +182,7 @@ def Wrapper():
         #y = random.random()
         h = complex(x, y)
         print("Client:", client['hook'].id)
-        print("CSI", abs(h)/(std*std))
+        # print("CSI", abs(h)/(std*std))
 
         K_clients = len(active_clients_inds)
         # wireless channel needs to be considered
@@ -331,29 +331,9 @@ def Wrapper():
         std = math.sqrt(Ps/snr_val)
 
         if(fed_round == 0):
-
-            # cov = nn.Identity([20,1,5,5])
-            # cov = torch.eye(500)
-            # cov = np.eye([20,1,5,5])
-            # mean = nn.zeros([20,1,5,5])
-            # mean = torch.zeros(500)
-            # xyy = np.random.multivariate_normal(mean, 5*cov)
-            # x = torch.flatten(xyy)
-            # x = np.random.multivariate_normal(mean, cov).T
-
-            # print("intialise value of theta ------------->")
-            # print(xyy.size)
-            # t = torch.from_numpy(xyy)
-            # t.reshape((20,1,5,5))
-            # print(t.shape)
-            # print('tesnor size reshaped')
             t = torch.nn.init.normal_(client['model'].conv2.weight,0,std)
             print(t.shape)
             for client in active_clients:
-                # print('client',client)
-                # print(client['hook'].id)
-                # prev[client['hook'].id] = xyy
-                # curr[client['hook'].id] = 0
                 client['previousparam'] = t
             print(type(client['previousparam']))
             print('previous param size')
@@ -362,7 +342,7 @@ def Wrapper():
         for client in active_clients:
             print("train")
 
-            good_channel = train(args, client, device, Ps)
+            good_channel = train(args, client, device, Ps,snr_value)
             # for z in good_channel:
             
             if(good_channel == True):
@@ -391,7 +371,6 @@ def Wrapper():
 
         print()
         print("reached this step")
-
 
         global_model = averageModels(global_model, client_good_channel, snr_value, Ps,alpha)
 
