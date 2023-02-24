@@ -397,11 +397,11 @@ def Wrapper():
             for i in range(list(y_out_flat.size())[0]):
                 yTensor = yTensor + y_out_flat[i]*y_out_flat[i]
 
-            print('-----------')
+            print('------%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-----')
             print("xTTTTTTTTTTTTx: ", yTensor)
             print(yTensor)
 
-            Pk = ((K_clients)*Ps)/yTensor
+            # Pk = ((K_clients)*Ps)/yTensor
 
             # y_out = y_out*math.sqrt(Pk)/(h)
             
