@@ -243,7 +243,7 @@ def Wrapper():
         client['Evalue'] = yTy
         # client['previousparam'] = pre_out
         client['curr'] = yy
-        client['previousparam'] = y_out
+        # client['previousparam'] = y_out
         client['model'].conv2.weight.data = yy
         
         return cStatus
@@ -414,7 +414,7 @@ def Wrapper():
         print()
         print("reached this step")
 
-        global_model = averageModels(global_model, client_good_channel, snr_value, Ps,alpha)
+        global_model = averageModels(global_model, client_good_channel, snr_value, Ps,alpha,K_clients)
 
         globalparam = global_model.conv2.weight
         
