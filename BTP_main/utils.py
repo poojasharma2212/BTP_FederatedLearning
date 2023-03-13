@@ -2,8 +2,9 @@ import torch
 import math
 
 
-def averageModels(global_model, clients, snr_value, Ps,alpha):
+def averageModels(global_model, clients, snr_value, Ps,alpha,K_clients):
     client_models = [clients[i]['model'] for i in range(len(clients))]
+    
     samples = [clients[i]['samples'] for i in range(len(clients))]
 
     global_dict = global_model.state_dict()
@@ -15,8 +16,8 @@ def averageModels(global_model, clients, snr_value, Ps,alpha):
         # print("SNR==", snr)
         snr_val = 10**(snr/10)
         std = math.sqrt(Ps/snr_val)
-        global_dict[k] = torch.stack([client_models[i].state_dict()[k].float(
-        ) * samples[i] for i in range(len(client_models))], 0).sum(0)
+
+        global_dict[k] = torch.stack([client_models[i].state_dict()[k].float()/(K_clients*math.sqrt(alpha)) * samples[i] for i in range(len(client_models))], 0).sum(0)
 
     # print(global_dict)
     # torch.flatten(global_model)
