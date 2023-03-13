@@ -437,7 +437,7 @@ def Wrapper():
         current = y_out + globalparam
         global_model.conv2.weight.data = current
 
-        print('global average model', globl.parameters())
+        # print('global average model', globl.parameters())
         # Testing the average model
         test(args, global_model, device, global_test_loader, count)
 
