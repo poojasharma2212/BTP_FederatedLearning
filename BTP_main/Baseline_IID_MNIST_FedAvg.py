@@ -353,9 +353,9 @@ def Wrapper():
                 client['previousparam'] = t
                 count = count+1
                 print(count)
-            print(type(client['previousparam']))
-            print('previous param size')
-            print(t.size())
+            # print(type(client['previousparam']))
+            # print('previous param size')
+            # print(t.size())
                 
         for client in active_clients:
             print("train")
