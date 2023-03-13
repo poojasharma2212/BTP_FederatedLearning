@@ -431,7 +431,7 @@ def Wrapper():
         for i in range(list(y_out_flat.size())[0]):
             yTensor = yTensor + y_out_flat[i]*y_out_flat[i]
         print('------%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-----')
-        print("xTTTTTTTTTTTTx: ", yTensor)
+        # print("xTTTTTTTTTTTTx: ", yTensor)
             # print(yTensor)        
 
         current = y_out + globalparam
