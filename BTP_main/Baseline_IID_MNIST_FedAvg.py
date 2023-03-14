@@ -231,14 +231,15 @@ def Wrapper():
 
         print("=====================================================================")
         # print(yy)
+        
         y1 = torch.flatten(yy)
 
         yTy = client['previousparam']
         for i in range(list(y1.size())[0]):
             yTy = yTy + y1[i]*y1[i]
         print('-----------')
-        print("xTTTTTTTTTTTTx: ", yTy)
-        print(yTy)
+        # print("xTTTTTTTTTTTTx: ", yTy)
+        # print(yTy)
 
         client['Evalue'] = yTy
         # client['previousparam'] = yy
