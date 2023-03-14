@@ -225,16 +225,17 @@ def Wrapper():
         client['model'].conv1.weight.data = y_out
 
         y_out = client['model'].conv2.weight
-        print("size of 2nd layer", y_out.size())
+        # print("size of 2nd layer", y_out.size())
 
         yy = y_out - client['previousparam']
 
         print("=====================================================================")
         # print(yy)
-        
+
         y1 = torch.flatten(yy)
 
-        yTy = client['previousparam']
+        # yTy = client['previousparam']
+        yTy = 0
         for i in range(list(y1.size())[0]):
             yTy = yTy + y1[i]*y1[i]
         print('-----------')
@@ -243,7 +244,7 @@ def Wrapper():
 
         client['Evalue'] = yTy
         # client['previousparam'] = yy
-        # client['curr'] = yy
+        client['curr'] = yy
         # client['previousparam'] = y_out
         client['model'].conv2.weight.data = yy
         
