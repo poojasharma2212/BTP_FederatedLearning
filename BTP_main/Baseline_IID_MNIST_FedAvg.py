@@ -369,7 +369,7 @@ def Wrapper():
                 
                 # print("Output of model - -------------" ,client['model'])
 
-        print("Client max alpha banane wali value" , client['Evalue'])
+        # print("Client max alpha banane wali value" , client['Evalue'])
         print('Evalue', Evalue_arr)
 
         E_max = max(Evalue_arr)
