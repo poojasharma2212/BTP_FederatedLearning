@@ -352,7 +352,7 @@ def Wrapper():
                 # curr[client['hook'].id] = 0
                 client['previousparam'] = t
                 count = count+1
-                print(count)
+                # print(count)
             # print(type(client['previousparam']))
             # print('previous param size')
             # print(t.size())
@@ -369,7 +369,7 @@ def Wrapper():
                 
                 # print("Output of model - -------------" ,client['model'])
 
-            # print("Client max alpha banane wali value" , client['Evalue'])
+        print("Client max alpha banane wali value" , client['Evalue'])
         print('Evalue', Evalue_arr)
 
         E_max = max(Evalue_arr)
@@ -419,13 +419,13 @@ def Wrapper():
         globalparam = global_model.conv2.weight
         
         # for i in  active_clients:
-        client['previousparam'] = global_model.conv2.weight
+        # client['previousparam'] = globalparam
             
 
         globl = global_model
         
         y_out = global_model.conv2.weight
-        y_out = y_out/(K_clients*math.sqrt(alpha))
+        y_out = y_out/(math.sqrt(alpha))
         y_out_flat = torch.flatten(y_out)
         yTensor = 0
         for i in range(list(y_out_flat.size())[0]):
@@ -434,9 +434,11 @@ def Wrapper():
         # print("xTTTTTTTTTTTTx: ", yTensor)
             # print(yTensor)        
 
-        current = y_out + globalparam
+        current = y_out + client['previousparam']
         global_model.conv2.weight.data = current
 
+        
+        client['previousparam'] = globalparam
         # print('global average model', globl.parameters())
         # Testing the average model
         test(args, global_model, device, global_test_loader, count)
