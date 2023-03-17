@@ -433,14 +433,14 @@ def Wrapper():
         for i in range(list(y_out_flat.size())[0]):
             yTensor = yTensor + y_out_flat[i]*y_out_flat[i]
         print('------%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-----')
-        # print("xTTTTTTTTTTTTx: ", yTensor)
+        print("xTTTTTTTTTTTTx: ", yTensor)
             # print(yTensor)        
 
         current = y_out + client['previousparam']
         global_model.conv2.weight.data = current
 
         
-        client['previousparam'] = globalparam
+        client['previousparam'] = current
         # print('global average model', globl.parameters())
         # Testing the average model
         test(args, global_model, device, global_test_loader, count)
