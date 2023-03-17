@@ -428,6 +428,7 @@ def Wrapper():
         
         y_out = global_model.conv2.weight
         y_out = y_out/(math.sqrt(alpha)*K_clients)
+
         y_out_flat = torch.flatten(y_out)
         yTensor = 0
         for i in range(list(y_out_flat.size())[0]):
@@ -437,7 +438,7 @@ def Wrapper():
             # print(yTensor)        
 
         current = y_out + client['previousparam']
-        global_model.conv2.weight.data = current
+        # global_model.conv2.weight.data = current
 
         
         client['previousparam'] = current
