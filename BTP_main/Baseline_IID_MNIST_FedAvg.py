@@ -48,12 +48,12 @@ def Wrapper():
     args = {
         'batch_size': 64,
         'test_batch_size': 1000,
-        'lr': 0.01 ,
+        'lr': 0.003 ,
         'log_interval': 10,
         'epochs': 3,
         'clients': 30,
         'seed': 0,
-        'rounds': 10,
+        'rounds': 100,
         'C': 1,
         'lowest_snr': 20,
         # 'highest_snr': 20,
@@ -428,7 +428,7 @@ def Wrapper():
         
         y_out = global_model.conv2.weight
         # y_out = y_out/(math.sqrt(alpha)*K_clients)
-        y_out = y_out/(math.sqrt(alpha))
+        y_out = y_out/(math.sqrt(alpha)*K_clients)
         y_out_flat = torch.flatten(y_out)
         yTensor = 0
         for i in range(list(y_out_flat.size())[0]):
