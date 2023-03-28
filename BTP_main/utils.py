@@ -24,7 +24,7 @@ def averageModels(global_model, clients, snr_value, Ps,alpha,K_clients):
         global_dict[k] = torch.stack([client_models[i].state_dict()[k].float() * samples[i]  + torch.randn(client_models[0].state_dict()[k].float().size())*std for i in range(len(client_models))], 0).sum(0)
         # global_dict[k] = torch.stack([client_models[i].state_dict()[k].float() * samples[i]+   torch.randn(client_models[0].state_dict()[k].float().size())*std for i in range(len(client_models))], 0).sum(0) 
         # #take a weighted average and not average because the clients may not have the same amount of data to train upon
-        # print(client_models[0].state_dict())
+        print(client_models[0].state_dict()[k].float().size())
     # print(global_dict)
     # torch.flatten(global_model)
     global_model.load_state_dict(global_dict)
