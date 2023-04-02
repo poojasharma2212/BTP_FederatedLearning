@@ -30,8 +30,9 @@ def averageModels(global_model, clients, snr_value, Ps,alpha,K_clients):
         # + torch.randn(client_models[0].state_dict[k]().float().size())*std 
         # print(k)
         print("hello hello ")
-        noise = torch.randn(client_models[0].state_dict[k]().float().size())
-        print(noise.shap)
+        noise = torch.randn(client_models[0].state_dict()[k].float().size())
+        print(noise.size())
+        print(noise.shape)
 
         
     # print(global_dict.size())
