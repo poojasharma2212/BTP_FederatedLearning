@@ -53,7 +53,7 @@ def Wrapper():
         'epochs': 3,
         'clients': 30,
         'seed': 0,
-        'rounds': 15,
+        'rounds': 100,
         'C': 1,
         'lowest_snr': 20,
         # 'highest_snr': 20,
@@ -328,22 +328,6 @@ def Wrapper():
         K_clients = len(active_clients_inds)
         
         if(fed_round == 0):
-
-            # cov = nn.Identity([20,1,5,5])
-            # cov = torch.eye(500)
-            # cov = np.eye([20,1,5,5])
-            # mean = nn.zeros([20,1,5,5])
-            # mean = torch.zeros(500)
-            # xyy = np.random.multivariate_normal(mean, 5*cov)
-            # x = torch.flatten(xyy)
-            # x = np.random.multivariate_normal(mean, cov).T
-
-            # print("intialise value of theta ------------->")
-            # print(xyy.size)
-            # t = torch.from_numpy(xyy)
-            # t.reshape((20,1,5,5))
-            # print(t.shape)
-            # print('tesnor size reshaped')
             t = torch.nn.init.normal_(client['model'].conv2.weight,0,std)
             # print(t.shape)
             count = 0
