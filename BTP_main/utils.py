@@ -14,30 +14,31 @@ def averageModels(global_model, clients, snr_value, Ps,alpha,K_clients):
     snr_val = 10**(snr/10)
     std = math.sqrt(Ps/snr_val)
 
+    for k in global_dict.keys():  
+        client_weights = [client_models[i].state_dict()[k].float() * samples[i] for i in range(len(client_models))]
+        weighted_sum = torch.stack(client_weights, dim=0).sum(dim=0)
+        global_dict[k] = weighted_sum
 
-    #  for k in global_dict.keys(): #key is CNN layer index and value is layer parameters
-    #     global_dict[k] = torch.stack([client_models[i].state_dict()[k].float() * samples[i]+torch.randn(client_models[0].state_dict()[k].float().size())*std for i in range(len(client_models))], 0).sum(0) #take a weighted average and not average because the clients may not have the same amount of data to train upon
-    #     # print(client_models[0].state_dict()[k])
-    #     #print(len(client_models))
-    # print('global_dict', global_dict)
-    for k in global_dict.keys():  # key is CNN layer index and value is layer parameters
-        # take a weighted average and not average because the clients may not have the same amount of data to train upon
+        # Add Gaussian noise to the global model's parameters
+        noise = torch.randn(global_dict[k].shape) * std
+        global_dict[k] += noise
+
+    # global_model.load_state_dict(global_dict)
+
+
+    # for k in global_dict.keys():  # key is CNN layer index and value is layer parameters
+    #     # take a weighted average and not average because the clients may not have the same amount of data to train upon
         
-        global_dict[k] = torch.stack([client_models[i].state_dict()[k].float() * samples[i]  for i in range(len(client_models))], 0).sum(0)
-        # global_dict[k] = torch.stack([client_models[i].state_dict()[k].float() * samples[i]+   torch.randn(client_models[0].state_dict()[k].float().size())*std for i in range(len(client_models))], 0).sum(0) 
+    #     global_dict[k] = torch.stack([client_models[i].state_dict()[k].float() * samples[i]  for i in range(len(client_models))], 0).sum(0)
+        
+    #     # global_dict[k] = torch.stack([client_models[i].state_dict()[k].float() * samples[i]+   torch.randn(client_models[0].state_dict()[k].float().size())*std for i in range(len(client_models))], 0).sum(0) 
         # #take a weighted average and not average because the clients may not have the same amount of data to train upon
-        # print(client_models[0].state_dict()[k].float().size())
-        # + torch.randn(client_models[0].state_dict[k]().float().size())*std 
-        # print(k)
-        # print("hello hello ")
-        noise = torch.randn(client_models[0].state_dict()[k].float().size())
-        # print(noise.size())
-        # print(noise.shape)
 
-        
     # print(global_dict.size())
     # torch.flatten(global_model)
     global_model.load_state_dict(global_dict)
+
+    return global_model
 
 
     # y_out = global_model.conv1.weight
@@ -66,4 +67,3 @@ def averageModels(global_model, clients, snr_value, Ps,alpha,K_clients):
     # global_model.conv2.weight.data = y_out
 
     # print(global_model)
-    return global_model
