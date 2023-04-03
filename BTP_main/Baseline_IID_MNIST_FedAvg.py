@@ -8,8 +8,8 @@ import tensorflow as tf
 from torch.utils.data.dataset import Dataset
 import numpy as np
 from datetime import datetime
-import torchvision
-print(torchvision.__version__)
+# import torchvision
+# print(torchvision.__version__)
 from torchvision import transforms, datasets
 from torch.utils.data import DataLoader, Dataset
 import logging
