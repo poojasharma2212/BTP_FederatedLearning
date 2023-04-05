@@ -175,7 +175,9 @@ def Wrapper():
 
         # snr = snr_value
         print("SNR==", snr_value)
+
         snr_val = 10**(snr_value/10)
+
         std = math.sqrt(Ps/snr_val)
 
         x = random.random()
@@ -415,30 +417,33 @@ def Wrapper():
 
         noise = torch.randn(y_out.size())
 
-        # impulsive noise is added here
-        y_out = h*y_out + noise*std
-
         n1 = torch.randn(y_out.size())
 
-        if(round == 0):
+        if(round == 5): #randomise round -- adding impulsive noise in random round
             a0 = 0
             a1 = 1
         else:
             a0 = 1
             a1 = 0
 
+        # std1 = math.sqrt(Ps/(snr_val*(a0+50*a1))) 
 
-        std1 = math.sqrt(Ps/(snr_val*(a0+50*a1)))
+        std1 = math.sqrt(Ps/(snr_val)) 
+
         std2 = 50*std1
 
         #std1 = math.sqrt(0.02/(a0+50*a1))
-        print(Ps/(snr_val*(a0+50*a1)))
+        # print(Ps/(snr_val*(a0+50*a1)))
 
         print("std1",std1)
         n2 = torch.randn(y_out.size())
         noise = a0*n1*std1 + a1*n2*std2
 
         # y_out = y_out/(math.sqrt(alpha)*K_clients)
+        
+        # impulsive noise is added here
+        y_out = h*y_out + noise*std
+
         y_out = y_out/(math.sqrt(alpha)*K_clients)
 
         y_out_flat = torch.flatten(y_out)
