@@ -426,9 +426,9 @@ def Wrapper():
             a0 = 1
             a1 = 0
 
-        # std1 = math.sqrt(Ps/(snr_val*(a0+50*a1))) 
+        std1 = math.sqrt(Ps/(snr_val*(a0+50*a1))) 
 
-        std1 = math.sqrt(Ps/(snr_val)) 
+        # std1 = math.sqrt(Ps/(snr_val)) 
 
         std2 = 50*std1
 
