@@ -427,7 +427,7 @@ def Wrapper():
             a1 = 0
 
         # std1 = math.sqrt(Ps/(snr_val*(a0+50*a1))) 
-
+        print("Guassian value : ", a0)
         std1 = math.sqrt(Ps/(snr_val)) 
 
         std2 = 50*std1
