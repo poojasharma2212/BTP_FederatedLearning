@@ -20,7 +20,7 @@ def averageModels(global_model, clients, snr_value, Ps,alpha,K_clients):
         global_dict[k] = weighted_sum
 
         # Add Gaussian noise to the global model's parameters
-        noise = torch.randn(global_dict[k].shape) * (std)
+        noise = torch.randn(global_dict[k].shape) * (std/(K_clients))
         print(noise.size())
         global_dict[k] += noise
 
