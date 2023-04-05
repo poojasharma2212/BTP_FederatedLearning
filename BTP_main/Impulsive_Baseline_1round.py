@@ -426,9 +426,9 @@ def Wrapper():
             a0 = 1
             a1 = 0
 
-        std1 = math.sqrt(Ps/(snr_val*(a0+50*a1))) 
+        # std1 = math.sqrt(Ps/(snr_val*(a0+50*a1))) 
 
-        # std1 = math.sqrt(Ps/(snr_val)) 
+        std1 = math.sqrt(Ps/(snr_val)) 
 
         std2 = 50*std1
 
@@ -442,7 +442,7 @@ def Wrapper():
         # y_out = y_out/(math.sqrt(alpha)*K_clients)
         
         # impulsive noise is added here
-        y_out = h*y_out + noise*std
+        y_out = h*y_out + noise
 
         y_out = y_out/(math.sqrt(alpha)*K_clients)
 
