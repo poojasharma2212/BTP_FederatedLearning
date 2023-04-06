@@ -418,7 +418,7 @@ def Wrapper():
 
         n1 = torch.randn(y_out.size())
 
-        if(fed_round == 5): #randomise round -- adding impulsive noise in random round
+        if(fed_round == 10): #randomise round -- adding impulsive noise in random round
             a0 = 0
             a1 = 1
         else:
@@ -428,7 +428,6 @@ def Wrapper():
         # std1 = math.sqrt(Ps/(snr_val*(a0+50*a1))) 
         print("Guassian value : ", a0)
         std1 = math.sqrt(Ps/(snr_val)) 
-
         std2 = 50*std1
 
         #std1 = math.sqrt(0.02/(a0+50*a1))
