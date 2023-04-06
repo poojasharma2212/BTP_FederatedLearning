@@ -54,7 +54,7 @@ def Wrapper():
         'epochs': 3,
         'clients': 30,
         'seed': 0,
-        'rounds': 45,
+        'rounds': 50,
         'C': 1,
         'lowest_snr': 20,
         # 'highest_snr': 20,
@@ -162,8 +162,6 @@ def Wrapper():
         x_dict[dict_key] = x_val
         y_dict[dict_key] = y_val
 
-
-   
 
     def train(args, client, device, Ps,snr_value):
 
@@ -418,7 +416,7 @@ def Wrapper():
 
         n1 = torch.randn(y_out.size())
 
-        if(fed_round == 10): #randomise round -- adding impulsive noise in random round
+        if(fed_round == 20): #randomise round -- adding impulsive noise in random round
             a0 = 0
             a1 = 1
         else:
