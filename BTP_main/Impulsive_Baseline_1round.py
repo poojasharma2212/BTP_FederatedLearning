@@ -410,7 +410,6 @@ def Wrapper():
         # for i in  active_clients:
         # client['previousparam'] = globalparam
             
-
         globl = global_model
         h = 1
         y_out = global_model.conv2.weight
@@ -419,7 +418,7 @@ def Wrapper():
 
         n1 = torch.randn(y_out.size())
 
-        if(round == 5): #randomise round -- adding impulsive noise in random round
+        if(fed_round == 5): #randomise round -- adding impulsive noise in random round
             a0 = 0
             a1 = 1
         else:
