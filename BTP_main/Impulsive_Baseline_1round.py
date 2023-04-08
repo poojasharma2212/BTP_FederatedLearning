@@ -409,37 +409,48 @@ def Wrapper():
         # client['previousparam'] = globalparam
             
         # globl = global_model
-        # h = 1
-        y_out = global_model.conv2.weight
+        h = 1
+
+        y_out = global_model.conv1.weight
+
+        x = torch.flatten(y_out)
+        xTx = 0
+        # # should I use here also normalise ??
+        for i in range(list(x.size())[0]):
+            xTx = xTx + x[i]*x[i]
+
+        print('-----------')
+        # print("xTTTTTTTTTTTTx: ", xTx)
+        print(xTx)
 
         # noise = torch.randn(y_out.size())
 
-        # if(fed_round == 20): #randomise round -- adding impulsive noise in random round
-        #     a0 = 0
-        #     a1 = 1
+        if(fed_round == 20): #randomise round -- adding impulsive noise in random round
+            a0 = 0
+            a1 = 1
             
-        # else:
-        #     a0 = 1
-        #     a1 = 0
+        else:
+            a0 = 1
+            a1 = 0
 
         # # std1 = math.sqrt(Ps/(snr_val*(a0+50*a1))) 
         # print("Guassian value : ", a0)
-        # std1 = math.sqrt(Ps/(snr_val)) 
-        # std2 = 50*std1
+        std1 = math.sqrt(Ps/(snr_val)) 
+        std2 = 50*std1
 
         # #std1 = math.sqrt(0.02/(a0+50*a1))
         # # print(Ps/(snr_val*(a0+50*a1)))
 
         # print("std1",std1)
         
-        # n1 = torch.randn(y_out.size())
-        # n2 = torch.randn(y_out.size())
-        # noise = a0*n1*std1 + a1*n2*std2
+        n1 = torch.randn(y_out.size())
+        n2 = torch.randn(y_out.size())
+        noise = a0*n1*std1 + a1*n2*std2
 
-        # # y_out = y_out/(math.sqrt(alpha)*K_clients)
+        # y_out = y_out/(math.sqrt(alpha)*K_clients)
         
         # # impulsive noise is added here
-        # y_out = h*y_out + noise
+        y_out = h*y_out + noise
 
         y_out = y_out/(math.sqrt(alpha)*K_clients)
 
@@ -449,7 +460,20 @@ def Wrapper():
             yTensor = yTensor + y_out_flat[i]*y_out_flat[i]
         print('------%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-----')
         print("xTTTTTTTTTTTTx: ", yTensor)
-            # print(yTensor)        
+
+          
+        global_model.conv1.weight.data = y_out
+
+        y_out = global_model.conv2.weight
+        
+        yy = torch.flatten(y_out)
+        yTy = 0
+        for i in range(list(yy.size())[0]):
+            yTy = yTy + yy[i]*yy[i]
+
+        # print('-----------')
+        # print("xTTTTTTTTTTTTx: ", yTy)
+        print(yTy)
 
         current = y_out + client['previousparam']
         # global_model.conv2.weight.data = current
