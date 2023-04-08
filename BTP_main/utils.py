@@ -12,7 +12,7 @@ def averageModels(global_model, clients, snr_value, Ps,alpha,K_clients,fed_round
     snr = snr_value
     # print("SNR==", snr)
     snr_val = 10**(snr/10)
-    std = math.sqrt(1/snr_val)
+    std = math.sqrt(Ps/snr_val)
 
     for k in global_dict.keys():  
         client_weights = [client_models[i].state_dict()[k].float() * samples[i] for i in range(len(client_models))]
