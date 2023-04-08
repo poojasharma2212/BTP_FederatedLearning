@@ -401,7 +401,7 @@ def Wrapper():
         print()
         print("reached this step")
 
-        global_model = averageModels(global_model, client_good_channel, snr_value, Ps,alpha,K_clients)
+        global_model = averageModels(global_model, client_good_channel, snr_value, Ps,alpha,K_clients,fed_round)
 
         globalparam = global_model.conv2.weight
         
