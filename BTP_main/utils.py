@@ -23,7 +23,7 @@ def averageModels(global_model, clients, snr_value, Ps,alpha,K_clients,fed_round
         # noise = torch.randn(global_dict[k].shape) * (std/(K_clients))
         # noise = 0
         
-        if(fed_round == 20): #randomise round -- adding impulsive noise in random round
+        if(fed_round == 10): #randomise round -- adding impulsive noise in random round
             a0 = 0
             a1 = 1
             
