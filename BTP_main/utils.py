@@ -2,7 +2,7 @@ import torch
 import math
 
 
-def averageModels(global_model, clients, snr_value, Ps,alpha,K_clients):
+def averageModels(global_model, clients, snr_value, Ps,alpha,K_clients,fed_round):
     client_models = [clients[i]['model'] for i in range(len(clients))]
     
     samples = [clients[i]['samples'] for i in range(len(clients))]
@@ -21,21 +21,46 @@ def averageModels(global_model, clients, snr_value, Ps,alpha,K_clients):
 
         # Add Gaussian noise to the global model's parameters
         # noise = torch.randn(global_dict[k].shape) * (std/(K_clients))
-        noise = 0
+        # noise = 0
+        
+        if(fed_round == 20): #randomise round -- adding impulsive noise in random round
+            a0 = 0
+            a1 = 1
+            
+        else:
+            a0 = 1
+            a1 = 0
+
+        print("Guassian value : ", a0)
+        std1 = math.sqrt(Ps/(snr_val)) 
+        std2 = 50*std1
+
+        #std1 = math.sqrt(0.02/(a0+50*a1))
+        # print(Ps/(snr_val*(a0+50*a1)))
+
+        print("std1",std1)
+        
+        n1 = torch.randn(y_out.size())
+        n2 = torch.randn(y_out.size())
+        noise = a0*n1*std1 + a1*n2*std2
+
         # print(noise.size())
         global_dict[k] += noise
+    
+        # h = 1
+        # y_out = global_model.conv2.weight
 
-    # global_model.load_state_dict(global_dict)
-    # for k in global_dict.keys():  # key is CNN layer index and value is layer parameters
-    #     # take a weighted average and not average because the clients may not have the same amount of data to train upon
-        
-    #     global_dict[k] = torch.stack([client_models[i].state_dict()[k].float() * samples[i]  for i in range(len(client_models))], 0).sum(0)
-        
-    #     # global_dict[k] = torch.stack([client_models[i].state_dict()[k].float() * samples[i]+   torch.randn(client_models[0].state_dict()[k].float().size())*std for i in range(len(client_models))], 0).sum(0) 
-        # #take a weighted average and not average because the clients may not have the same amount of data to train upon
+        # noise = torch.randn(y_out.size())
 
-    # print(global_dict.size())
-    # torch.flatten(global_model)
+
+        # std1 = math.sqrt(Ps/(snr_val*(a0+50*a1))) 
+        
+
+        # y_out = y_out/(math.sqrt(alpha)*K_clients)
+        
+        # impulsive noise is added here
+        # y_out = h*y_out + noise
+
     global_model.load_state_dict(global_dict)
 
     return global_model
