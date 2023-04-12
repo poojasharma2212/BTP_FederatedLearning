@@ -411,7 +411,7 @@ def Wrapper():
         # globl = global_model
         h = 1
 
-        y_out = global_model.conv1.weight
+        y_out = global_model.conv2.weight
 
         x = torch.flatten(y_out)
         xTx = 0
@@ -425,7 +425,7 @@ def Wrapper():
 
         # noise = torch.randn(y_out.size())
 
-        if(fed_round == 20): #randomise round -- adding impulsive noise in random round
+        if(fed_round == 5): #randomise round -- adding impulsive noise in random round
             a0 = 0
             a1 = 1
             
@@ -462,9 +462,10 @@ def Wrapper():
         print("xTTTTTTTTTTTTx: ", yTensor)
 
           
-        global_model.conv1.weight.data = y_out
+        # global_model.conv1.weight.data = y_out
+    
 
-        y_out = global_model.conv2.weight
+        # y_out = global_model.conv2.weight
         
         yy = torch.flatten(y_out)
         yTy = 0
