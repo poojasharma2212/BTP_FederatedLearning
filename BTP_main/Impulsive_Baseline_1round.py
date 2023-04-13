@@ -411,17 +411,17 @@ def Wrapper():
         # globl = global_model
         h = 1
 
-        y_out = global_model.conv2.weight
+        
 
         x = torch.flatten(y_out)
         xTx = 0
         # # should I use here also normalise ??
-        for i in range(list(x.size())[0]):
-            xTx = xTx + x[i]*x[i]
+        # for i in range(list(x.size())[0]):
+        #     xTx = xTx + x[i]*x[i]
 
-        print('-----------')
-        # print("xTTTTTTTTTTTTx: ", xTx)
-        print(xTx)
+        # print('-----------')
+        # # print("xTTTTTTTTTTTTx: ", xTx)
+        # print(xTx)
 
         # noise = torch.randn(y_out.size())
 
@@ -434,7 +434,7 @@ def Wrapper():
             a1 = 0
 
         # # std1 = math.sqrt(Ps/(snr_val*(a0+50*a1))) 
-        # print("Guassian value : ", a0)
+        print("Guassian value : ", a0)
         std1 = math.sqrt(Ps/(snr_val)) 
         std2 = 50*std1
 
@@ -449,6 +449,8 @@ def Wrapper():
 
         # y_out = y_out/(math.sqrt(alpha)*K_clients)
         
+        y_out = global_model.conv2.weight
+
         # # impulsive noise is added here
         y_out = h*y_out + noise
 
@@ -479,7 +481,7 @@ def Wrapper():
         current = y_out + client['previousparam']
         # global_model.conv2.weight.data = current
 
-        
+        # global_model.conv2.weight = current
         client['previousparam'] = current
         # print('global average model', globl.parameters())
         # Testing the average model
