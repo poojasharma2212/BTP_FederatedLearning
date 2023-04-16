@@ -456,7 +456,7 @@ def Wrapper():
 
 
         current = y_out + client['previousparam']
-        # global_model.conv2.weight.data = y_out
+        global_model.conv2.weight.data = y_out
 
         # global_model.conv2.weight = current
         client['previousparam'] = current
