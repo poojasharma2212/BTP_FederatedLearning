@@ -54,7 +54,7 @@ def Wrapper():
         'epochs': 3,
         'clients': 30,
         'seed': 0,
-        'rounds': 40,
+        'rounds': 30,
         'C': 1,
         'lowest_snr': 20,
         # 'highest_snr': 20,
@@ -415,15 +415,6 @@ def Wrapper():
 
         x = torch.flatten(y_out)
         xTx = 0
-        # # should I use here also normalise ??
-        # for i in range(list(x.size())[0]):
-        #     xTx = xTx + x[i]*x[i]
-
-        # print('-----------')
-        # # print("xTTTTTTTTTTTTx: ", xTx)
-        # print(xTx)
-
-        # noise = torch.randn(y_out.size())
 
         if(fed_round == 5): #randomise round -- adding impulsive noise in random round
             a0 = 0
@@ -463,29 +454,16 @@ def Wrapper():
         print('------%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-----')
         print("xTTTTTTTTTTTTx: ", yTensor)
 
-          
-        # global_model.conv1.weight.data = y_out
-    
-
-        # y_out = global_model.conv2.weight
-        
-        yy = torch.flatten(y_out)
-        yTy = 0
-        for i in range(list(yy.size())[0]):
-            yTy = yTy + yy[i]*yy[i]
-
-        # print('-----------')
-        # print("xTTTTTTTTTTTTx: ", yTy)
-        print(yTy)
 
         current = y_out + client['previousparam']
-        # global_model.conv2.weight.data = current
+        # global_model.conv2.weight.data = y_out
 
         # global_model.conv2.weight = current
         client['previousparam'] = current
         # print('global average model', globl.parameters())
         # Testing the average model
-        test(args, global_model, device, global_test_loader, count)
+        test(args, global_model, device, global_test_loader, count)                             
+
 
         #print("Total Power =", power_1)
         print()
