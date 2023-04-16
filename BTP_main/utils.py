@@ -21,7 +21,7 @@ def averageModels(global_model, clients, snr_value, Ps,alpha,K_clients,fed_round
 
         # Add Gaussian noise to the global model's parameters
         # noise = torch.randn(global_dict[k].shape) * (std/(K_clients))
-        # noise = 0
+        noise = 0
         
         # if(fed_round == 10): #randomise round -- adding impulsive noise in random round
         #     a0 = 0
