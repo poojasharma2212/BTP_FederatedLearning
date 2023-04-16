@@ -443,7 +443,7 @@ def Wrapper():
         y_out = global_model.conv2.weight
 
         # # impulsive noise is added here
-        y_out = h*y_out + noise
+        # y_out = h*y_out + noise
 
         y_out = y_out/(math.sqrt(alpha)*K_clients)
 
@@ -456,7 +456,7 @@ def Wrapper():
 
 
         current = y_out + client['previousparam']
-        global_model.conv2.weight.data = y_out
+        # global_model.conv2.weight.data = y_out
 
         # global_model.conv2.weight = current
         client['previousparam'] = current
