@@ -57,14 +57,18 @@ def averageModels(global_model, clients, snr_value, Ps,alpha,K_clients,fed_round
         # #std1 = math.sqrt(0.02/(a0+50*a1))
         # # print(Ps/(snr_val*(a0+50*a1)))
 
-        # print("std1",std1)
-        
-    n1 = torch.randn(global_dict.shape)*std1
-    n2 = torch.randn(global_dict.shape)*std2
+        # printx("std1",std1)
+    
+# std1 = 0.1
+    n1 = torch.randn(torch.tensor(list(global_dict.values())).shape) * std1        
+    # n1 = torch.randn(global_dict.shape)*std1
+    # n2 = torch.randn(global_dict.shape)*std2
+    
+    n2 = torch.randn(torch.tensor(list(global_dict.values())).shape) * std2  
     noise = a0*n1 + a1*n2
 
     global_dict += noise
-    
+
     global_model.load_state_dict(global_dict)
 
 
