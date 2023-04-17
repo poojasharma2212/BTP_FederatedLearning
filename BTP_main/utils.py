@@ -61,8 +61,8 @@ def averageModels(global_model, clients, snr_value, Ps,alpha,K_clients,fed_round
     
 # std1 = 0.1
     # n1 = torch.randn(torch.tensor(list(global_dict.values())).shape) * std1        
-    n1 = torch.randn(global_dict.size())*std1
-    n2 = torch.randn(global_dict.size())*std2
+    n1 = torch.randn(global_dict.keys.size())*std1
+    n2 = torch.randn(global_dict.keys.size())*std2
     
     # n2 = torch.randn(torch.tensor(list(global_dict.values())).shape) * std2  
     noise = a0*n1 + a1*n2
