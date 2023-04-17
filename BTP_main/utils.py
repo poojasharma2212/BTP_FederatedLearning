@@ -21,31 +21,10 @@ def averageModels(global_model, clients, snr_value, Ps,alpha,K_clients,fed_round
 
         # Add Gaussian noise to the global model's parameters
         # noise = torch.randn(global_dict[k].shape) * (std/(K_clients))
-        noise = 0
         
-        if(fed_round == 5): #randomise round -- adding impulsive noise in random round
-            a0 = 0
-            a1 = 1
-            
-        else:
-            a0 = 1
-            a1 = 0
-
-        # print("Guassian value : ", a0)
-        std1 = math.sqrt(Ps/(snr_val)) 
-        std2 = 50*std1
-
-        # #std1 = math.sqrt(0.02/(a0+50*a1))
-        # # print(Ps/(snr_val*(a0+50*a1)))
-
-        # print("std1",std1)
-        
-        n1 = torch.randn(global_dict[k].shape)
-        n2 = torch.randn(global_dict[k].shape)
-        noise = a0*n1*std1 + a1*n2*std2
 
         # print(noise.size())
-        global_dict[k] += noise/(K_clients)
+        # global_dict[k] += noise/(K_clients)
     
         # h = 1
         # y_out = global_model.conv2.weight
@@ -61,6 +40,30 @@ def averageModels(global_model, clients, snr_value, Ps,alpha,K_clients,fed_round
         # impulsive noise is added here
         # y_out = h*y_out + noise
 
+    noise = 0
+        
+    if(fed_round == 5): #randomise round -- adding impulsive noise in random round
+        a0 = 0
+        a1 = 1
+            
+    else:
+        a0 = 1
+        a1 = 0
+
+    # print("Guassian value : ", a0)
+    std1 = math.sqrt(Ps/(snr_val)) 
+    std2 = 50*std1
+
+        # #std1 = math.sqrt(0.02/(a0+50*a1))
+        # # print(Ps/(snr_val*(a0+50*a1)))
+
+        # print("std1",std1)
+        
+    n1 = torch.randn(global_dict.shape)*std1
+    n2 = torch.randn(global_dict.shape)*std2
+    noise = a0*n1 + a1*n2
+
     global_model.load_state_dict(global_dict)
+
 
     return global_model
