@@ -64,6 +64,7 @@ def averageModels(global_model, clients, snr_value, Ps,alpha,K_clients,fed_round
     noise = a0*n1 + a1*n2
 
     global_dict += noise
+    
     global_model.load_state_dict(global_dict)
 
 
