@@ -465,7 +465,6 @@ def Wrapper():
         # Testing the average model
         test(args, global_model, device, global_test_loader, count)                             
 
-
         #print("Total Power =", power_1)
         print()
 
