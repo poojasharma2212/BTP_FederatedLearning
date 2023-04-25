@@ -81,7 +81,7 @@ def averageModels(global_model, clients, snr_value, Ps,alpha,K_clients,fed_round
     y_out = y_out + noise
 
     print("noise")
-    print(noise)
+    print(noise.size())
 
     global_model.conv2.weight.data = y_out
 
