@@ -51,7 +51,7 @@ def averageModels(global_model, clients, snr_value, Ps,alpha,K_clients,fed_round
 
         # global_dict += noise
         # print(noise.size())
-        global_dict[k] += noise/(K_clients)
+        global_dict[k] += noise/(math.sqrt(K_clients))
     
         # h = 1
         # y_out = global_model.conv2.weight
@@ -66,7 +66,6 @@ def averageModels(global_model, clients, snr_value, Ps,alpha,K_clients,fed_round
         
         # impulsive noise is added here
         # y_out = h*y_out + noise
-
 
 
     global_model.load_state_dict(global_dict)
