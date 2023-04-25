@@ -17,6 +17,9 @@ def averageModels(global_model, clients, snr_value, Ps,alpha,K_clients,fed_round
     n2 = 0
     noise = 0
 
+    std1 = math.sqrt(Ps/(snr_val)) 
+    std2 = 50*std1
+
     for k in global_dict.keys():  
         client_weights = [client_models[i].state_dict()[k].float() * samples[i] for i in range(len(client_models))]
         weighted_sum = torch.stack(client_weights, dim=0).sum(dim=0)
@@ -36,8 +39,7 @@ def averageModels(global_model, clients, snr_value, Ps,alpha,K_clients,fed_round
             a1 = 0
 
         # print("Guassian value : ", a0)
-        std1 = math.sqrt(Ps/(snr_val)) 
-        std2 = 50*std1
+
 
             # #std1 = math.sqrt(0.02/(a0+50*a1))
             # # print(Ps/(snr_val*(a0+50*a1)))
@@ -46,17 +48,17 @@ def averageModels(global_model, clients, snr_value, Ps,alpha,K_clients,fed_round
         
     # std1 = 0.1
         # n1 = torch.randn(torch.tensor(list(global_dict[k].values())).shape) 
-        n1 = torch.randn(global_dict[k].shape)* std1        
-        # n1 = torch.randn(global_dict.keys.size())*std1
-        # n2 = torch.randn(global_dict.keys.size())*std2
+        # n1 = torch.randn(global_dict[k].shape)* std1        
+        # # n1 = torch.randn(global_dict.keys.size())*std1
+        # # n2 = torch.randn(global_dict.keys.size())*std2
         
-        # n2 = torch.randn(torch.tensor(list(global_dict[k].values())).shape) 
-        n2 = torch.randn(global_dict[k].shape) *std2
-        noise = a0*n1 + a1*n2
+        # # n2 = torch.randn(torch.tensor(list(global_dict[k].values())).shape) 
+        # n2 = torch.randn(global_dict[k].shape) *std2
+        # noise = a0*n1 + a1*n2
 
         # global_dict += noise
         # print(noise.size())
-        global_dict[k] += noise/(math.sqrt(K_clients))
+        # global_dict[k] += noise/(math.sqrt(K_clients))
     
     print("noise")
     print(noise)
@@ -76,6 +78,10 @@ def averageModels(global_model, clients, snr_value, Ps,alpha,K_clients,fed_round
         a0 = 1
         a1 = 0
     
-    
+    n1 = torch.randn(y_out.shape)* std1        
+    n2 = torch.randn(y_out.shape) *std2
+    noise = a0*n1 + a1*n2
 
-    return global_model
+    y_out = y_out + noise
+
+    return y_out
