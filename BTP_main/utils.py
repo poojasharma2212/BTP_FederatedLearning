@@ -13,6 +13,9 @@ def averageModels(global_model, clients, snr_value, Ps,alpha,K_clients,fed_round
     # print("SNR==", snr)
     snr_val = 10**(snr/10)
     std = math.sqrt(Ps/snr_val)
+    n1 = 0
+    n2 = 0
+    noise = 0
 
     for k in global_dict.keys():  
         client_weights = [client_models[i].state_dict()[k].float() * samples[i] for i in range(len(client_models))]
@@ -66,8 +69,9 @@ def averageModels(global_model, clients, snr_value, Ps,alpha,K_clients,fed_round
         
         # impulsive noise is added here
         # y_out = h*y_out + noise
-
-
+    print("noise")
+    print(noise)
+    
     global_model.load_state_dict(global_dict)
 
 
