@@ -222,7 +222,7 @@ def Wrapper():
                     #     100. * batch_idx / len(client['mnist_trainset']), loss.item()))
 
         print(client['model'])
-        print(client['model'].shape())
+        # print(client['model'].shape())
         client['model'].get()
 
         y_out = client['model'].conv1.weight
