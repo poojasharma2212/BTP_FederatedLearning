@@ -19,7 +19,7 @@ def averageModels(global_model, clients, snr_value, Ps,alpha,K_clients,fed_round
 
     std1 = math.sqrt(Ps/(snr_val)) 
     std2 = 50*std1
-    print(global_dict)
+    # print(global_dict)
     for k in global_dict.keys():  
         client_weights = [client_models[i].state_dict()[k].float() * samples[i] for i in range(len(client_models))]
         weighted_sum = torch.stack(client_weights, dim=0).sum(dim=0)
@@ -56,28 +56,28 @@ def averageModels(global_model, clients, snr_value, Ps,alpha,K_clients,fed_round
         # noise = a0*n1 + a1*n2
 
         # global_dict += noise
-        # print(noise.size())
+        print(noise.size())
         # global_dict[k] += noise/(math.sqrt(K_clients))
 
     global_model.load_state_dict(global_dict)
 
     y_out = global_model.conv1.weight
-    if(fed_round == 5): #randomise round -- adding impulsive noise in random round
-        a0 = 0
-        a1 = 1
+    # if(fed_round == 5): #randomise round -- adding impulsive noise in random round
+    #     a0 = 0
+    #     a1 = 1
                 
-    else:
-        a0 = 1
-        a1 = 0
+    # else:
+    #     a0 = 1
+    #     a1 = 0
     
-    n1 = torch.randn(y_out.shape)* std1        
-    n2 = torch.randn(y_out.shape) *std2
-    noise = a0*n1 + a1*n2
+    # n1 = torch.randn(y_out.shape)* std1        
+    # n2 = torch.randn(y_out.shape) *std2
+    # noise = a0*n1 + a1*n2
 
-    y_out = y_out + noise
+    # y_out = y_out + noise
 
-    print("noise")
-    print(noise.size())
+    # print("noise")
+    # print(noise.size())
 
     global_model.conv1.weight.data = y_out
 
