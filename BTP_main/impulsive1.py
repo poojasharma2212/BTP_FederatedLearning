@@ -369,30 +369,8 @@ def Wrapper():
         for no in range(len(client_good_channel)):
             print(client_good_channel[no]['hook'].id)
 
-            # client['model'].get()
-            # y_out = client['model'].conv1.weight
-            # client['model'].conv1.weight.data = y_out
-            # # y_out = client['model'].conv2.weight
-            # y_out_flat = torch.flatten(y_out)
-            # yTensor = 0
-            # for i in range(list(y_out_flat.size())[0]):
-            #     yTensor = yTensor + y_out_flat[i]*y_out_flat[i]
-            # print('------%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-----')
-            # print("xTTTTTTTTTTTTx: ", yTensor)
-            # # print(yTensor)
-            # Pk = ((K_clients)*Ps)/yTensor
-            # y_out = y_out*math.sqrt(Pk)/(h)
-            
-            # noise = torch.randn(y_out.size())
-            # y_out = y_out + noise*(std/(math.sqrt(K_clients)))
-
             y_out = client['model'].conv2.weight
             y_out = y_out*(math.sqrt(alpha))
-            # y_out = y_out.real
-            # y_out = client['model'].conv2.weight
-            # print("size of 2nd layer", y_out.size())
-            # print("Output of model - ------------------------------------------------------" ,client['model'])
-            # y_out = y_out*math.sqrt(alpha)
             
             client['model'].conv2.weight.data = y_out
         
@@ -483,5 +461,3 @@ accuracy1 = Wrapper()
 print(accuracy1)
 print("alpha_list")
 print(alpha_list)
-Impulsive1.py
-Displaying utils1.py.
