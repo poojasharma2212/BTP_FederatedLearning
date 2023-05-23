@@ -346,6 +346,9 @@ def Wrapper():
 
         E_max = max(Evalue_arr)
         alpha = Ps/E_max
+        value = alpha.item()
+
+        print(value) 
         alpha_list.append(alpha)
         print('alpha value', alpha)
 
@@ -363,43 +366,6 @@ def Wrapper():
         print("reached this step")
 
         global_model = averageModels(global_model, client_good_channel, snr_value, Ps,alpha,K_clients,fed_round)
-
-        globalparam = global_model.conv2.weight
-        
-        # for i in  active_clients:
-        # client['previousparam'] = globalparam
-            
-        # globl = global_model
-        h = 1
-
-        
-
-        x = torch.flatten(y_out)
-        xTx = 0
-
-        if(fed_round == 50): #randomise round -- adding impulsive noise in random round
-            a0 = 0
-            a1 = 1
-            
-        else:
-            a0 = 1
-            a1 = 0
-
-        # # std1 = math.sqrt(Ps/(snr_val*(a0+50*a1))) 
-        print("Guassian value : ", a0)
-        std1 = math.sqrt(Ps/(snr_val)) 
-        std2 = 50*std1
-
-        # #std1 = math.sqrt(0.02/(a0+50*a1))
-        # # print(Ps/(snr_val*(a0+50*a1)))
-
-        # print("std1",std1)
-        
-        n1 = torch.randn(y_out.size())
-        n2 = torch.randn(y_out.size())
-        noise = a0*n1*std1 + a1*n2*std2
-
-        # y_out = y_out/(math.sqrt(alpha)*K_clients)
         
         y_out = global_model.conv2.weight
 
@@ -417,6 +383,7 @@ def Wrapper():
 
 
         current = y_out + client['previousparam']
+
         # global_model.conv2.weight.data = y_out
 
         # global_model.conv2.weight = current
