@@ -64,5 +64,3 @@ def averageModels(global_model, clients, snr_value, Ps,alpha,K_clients,fed_round
     global_model.load_state_dict(global_dict)
 
     return global_model
-utils1.py
-Displaying utils1.py.
