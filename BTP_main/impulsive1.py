@@ -136,9 +136,6 @@ def Wrapper():
             self.fc1 = nn.Linear(4*4*50, 500)
             self.fc2 = nn.Linear(500, 10)
 
-            # self.noise_conv1 = torch.randn(nn.Parameter(self.conv1.weight).size())*std + 0
-            # self.noise_conv2 = torch.randn(nn.Parameter(self.conv2.weight).size())*std + 0
-
         def forward(self, x):
             x = Func.relu(self.conv1(x))
             x = Func.max_pool2d(x, 2, 2)
@@ -234,12 +231,12 @@ def Wrapper():
         # print(yy)
 
         y1 = torch.flatten(yy)
-
-        # yTy = client['previousparam']
+        
         yTy = 0
         for i in range(list(y1.size())[0]):
             yTy = yTy + y1[i]*y1[i]
-        print('-----------')
+
+        # print('-----------')
         # print("xTTTTTTTTTTTTx: ", yTy)
         # print(yTy)
 
@@ -276,10 +273,6 @@ def Wrapper():
             100. * correct / len(test_loader.dataset)))
 
         accu.append(100. * correct / len(test_loader.dataset))
-
-    #print('=====accu======', accu)
-    # model = CNN(k)
-    # optimizer = optim.SGD(model.parameters(), lr=args['lr'])
 
     logging.info("Starting training !!")
 
@@ -333,22 +326,14 @@ def Wrapper():
             # print(t.shape)
             count = 0
             for client in active_clients:
-                # print('client',client)
-                # print(client['hook'].id)
-                # prev[client['hook'].id] = xyy
-                # curr[client['hook'].id] = 0
                 client['previousparam'] = t
                 count = count+1
                 # print(count)
-            # print(type(client['previousparam']))
-            # print('previous param size')
-            # print(t.size())
                 
         for client in active_clients:
             print("train")
 
             good_channel = train(args, client, device, Ps,snr_value)
-            # for z in good_channel:
             
             if(good_channel == True):
                 client_good_channel.append(client)
@@ -374,9 +359,6 @@ def Wrapper():
             
             client['model'].conv2.weight.data = y_out
         
-        # print(y_out)
-
-
         print()
         print("reached this step")
 
