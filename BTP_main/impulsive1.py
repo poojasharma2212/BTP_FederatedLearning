@@ -346,10 +346,11 @@ def Wrapper():
 
         E_max = max(Evalue_arr)
         alpha = Ps/E_max
+        
         value = alpha.item()
 
         print(value) 
-        alpha_list.append(alpha)
+        alpha_list.append(value)
         print('alpha value', alpha)
 
         print("Clients with good channel are considered for averaging")
