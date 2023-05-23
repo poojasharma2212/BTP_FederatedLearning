@@ -1,25 +1,3 @@
-
-Conversation opened. 1 read message.
-
-Skip to content
-Using IIIT Delhi Mail with screen readers
-
-Impulsive Code
-
-Zubair Shaban
-Attachments
-May 22, 2023, 3:13 PM (23 hours ago)
-to me
-
-Fix this for alpha values
-
---
-Zubair Shaban
-PhD21120
-2
- Attachments
-  •  Scanned by Gmail
-Done.Got it, thanks!Ok, I will do it.
 from operator import length_hint
 import torch
 import torch.nn as nn
