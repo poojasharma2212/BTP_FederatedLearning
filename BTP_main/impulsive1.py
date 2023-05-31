@@ -52,9 +52,9 @@ def Wrapper():
         'lr': 0.003,
         'log_interval': 10,
         'epochs': 3,
-        'clients': 30,
+        'clients': 50,
         'seed':4,
-        'rounds': 100,
+        'rounds': 20,
         'C': 1,
         'lowest_snr': 20,
         # 'highest_snr': 20,
@@ -82,7 +82,7 @@ def Wrapper():
 
     # print(clients)
     # os.chdir("/content/drive/MyDrive/FL_ZaaPoo/data/MNIST/raw")
-    nUsers = 30
+    nUsers = 50
     transform = transforms.Compose(
         [transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
     # transform=transforms.ToTensor()
