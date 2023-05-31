@@ -18,7 +18,7 @@ import random
 import math
 import syft as sy
 from functions import mnistIID, mnistnon_IID, FedDataset, getImage
-from utils import averageModels
+from utils1 import averageModels
 
 Ps = 2 # signal power
 key = []
@@ -35,7 +35,7 @@ for i in range(len(key)):  # bpsk modulation
         key_n[i] = math.sqrt(Ps)
 
 # print(key)
-
+alpha_list=[]
 key_array = np.array(key_n)
 
 accu = []
@@ -52,9 +52,9 @@ def Wrapper():
         'lr': 0.003,
         'log_interval': 10,
         'epochs': 3,
-        'clients': 30,
-        'seed': 0,
-        'rounds': 30,
+        'clients': 50,
+        'seed':4,
+        'rounds': 20,
         'C': 1,
         'lowest_snr': 20,
         # 'highest_snr': 20,
@@ -82,7 +82,7 @@ def Wrapper():
 
     # print(clients)
     # os.chdir("/content/drive/MyDrive/FL_ZaaPoo/data/MNIST/raw")
-    nUsers = 30
+    nUsers = 50
     transform = transforms.Compose(
         [transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
     # transform=transforms.ToTensor()
@@ -135,9 +135,6 @@ def Wrapper():
             self.conv2 = nn.Conv2d(20, 50, 5, 1)
             self.fc1 = nn.Linear(4*4*50, 500)
             self.fc2 = nn.Linear(500, 10)
-
-            # self.noise_conv1 = torch.randn(nn.Parameter(self.conv1.weight).size())*std + 0
-            # self.noise_conv2 = torch.randn(nn.Parameter(self.conv2.weight).size())*std + 0
 
         def forward(self, x):
             x = Func.relu(self.conv1(x))
@@ -213,16 +210,13 @@ def Wrapper():
                 if batch_idx % args['log_interval'] == 0:
                     loss = loss.get()
                     # print('Model {} Train Epoch: {}'.format(client['hook'].id,epoch))
+                    print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+                        client['hook'].id,
+                        epoch, batch_idx *
+                        args['batch_size'], len(
+                            client['mnist_trainset']) * args['batch_size'],
+                        100. * batch_idx / len(client['mnist_trainset']), loss.item()))
 
-                    # print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                    #     client['hook'].id,
-                    #     epoch, batch_idx *
-                    #     args['batch_size'], len(
-                    #         client['mnist_trainset']) * args['batch_size'],
-                    #     100. * batch_idx / len(client['mnist_trainset']), loss.item()))
-
-        print(client['model'])
-        # print(client['model'].shape())
         client['model'].get()
 
         y_out = client['model'].conv1.weight
@@ -237,12 +231,12 @@ def Wrapper():
         # print(yy)
 
         y1 = torch.flatten(yy)
-
-        # yTy = client['previousparam']
+        
         yTy = 0
         for i in range(list(y1.size())[0]):
             yTy = yTy + y1[i]*y1[i]
-        print('-----------')
+
+        # print('-----------')
         # print("xTTTTTTTTTTTTx: ", yTy)
         # print(yTy)
 
@@ -279,10 +273,6 @@ def Wrapper():
             100. * correct / len(test_loader.dataset)))
 
         accu.append(100. * correct / len(test_loader.dataset))
-
-    #print('=====accu======', accu)
-    # model = CNN(k)
-    # optimizer = optim.SGD(model.parameters(), lr=args['lr'])
 
     logging.info("Starting training !!")
 
@@ -336,22 +326,14 @@ def Wrapper():
             # print(t.shape)
             count = 0
             for client in active_clients:
-                # print('client',client)
-                # print(client['hook'].id)
-                # prev[client['hook'].id] = xyy
-                # curr[client['hook'].id] = 0
                 client['previousparam'] = t
                 count = count+1
                 # print(count)
-            # print(type(client['previousparam']))
-            # print('previous param size')
-            # print(t.size())
                 
         for client in active_clients:
             print("train")
 
             good_channel = train(args, client, device, Ps,snr_value)
-            # for z in good_channel:
             
             if(good_channel == True):
                 client_good_channel.append(client)
@@ -364,6 +346,11 @@ def Wrapper():
 
         E_max = max(Evalue_arr)
         alpha = Ps/E_max
+        
+        value = alpha.item()
+
+        print(value) 
+        alpha_list.append(value)
         print('alpha value', alpha)
 
         print("Clients with good channel are considered for averaging")
@@ -371,36 +358,11 @@ def Wrapper():
         for no in range(len(client_good_channel)):
             print(client_good_channel[no]['hook'].id)
 
-            # client['model'].get()
-            # y_out = client['model'].conv1.weight
-            # client['model'].conv1.weight.data = y_out
-            # # y_out = client['model'].conv2.weight
-            # y_out_flat = torch.flatten(y_out)
-            # yTensor = 0
-            # for i in range(list(y_out_flat.size())[0]):
-            #     yTensor = yTensor + y_out_flat[i]*y_out_flat[i]
-            # print('------%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-----')
-            # print("xTTTTTTTTTTTTx: ", yTensor)
-            # # print(yTensor)
-            # Pk = ((K_clients)*Ps)/yTensor
-            # y_out = y_out*math.sqrt(Pk)/(h)
-            
-            # noise = torch.randn(y_out.size())
-            # y_out = y_out + noise*(std/(math.sqrt(K_clients)))
-
             y_out = client['model'].conv2.weight
             y_out = y_out*(math.sqrt(alpha))
-            # y_out = y_out.real
-            # y_out = client['model'].conv2.weight
-            # print("size of 2nd layer", y_out.size())
-            # print("Output of model - ------------------------------------------------------" ,client['model'])
-            # y_out = y_out*math.sqrt(alpha)
             
             client['model'].conv2.weight.data = y_out
         
-        # print(y_out)
-
-
         print()
         print("reached this step")
 
@@ -422,6 +384,7 @@ def Wrapper():
 
 
         current = y_out + client['previousparam']
+
         # global_model.conv2.weight.data = y_out
 
         # global_model.conv2.weight = current
@@ -429,6 +392,7 @@ def Wrapper():
         # print('global average model', globl.parameters())
         # Testing the average model
         test(args, global_model, device, global_test_loader, count)                             
+
 
         #print("Total Power =", power_1)
         print()
@@ -445,4 +409,5 @@ def Wrapper():
 
 accuracy1 = Wrapper()
 print(accuracy1)
-
+print("alpha_list")
+print(alpha_list)
