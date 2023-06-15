@@ -21,22 +21,22 @@ from functions import mnistIID, mnistnon_IID, FedDataset, getImage
 from utils1 import averageModels
 
 Ps = 2 # signal power
-key = []
-for i in range(60000):  # generating a random password to activate training (Pilot signal)
-    temp = random.randint(0, 1)
-    key.append(temp)
+# key = []
+# for i in range(60000):  # generating a random password to activate training (Pilot signal)
+#     temp = random.randint(0, 1)
+#     key.append(temp)
 
-key_n = [0]*len(key)
-for i in range(len(key)):  # bpsk modulation
-    if(key[i] == 1):
-        # print("yay")
-        key_n[i] = -math.sqrt(Ps)
-    else:
-        key_n[i] = math.sqrt(Ps)
+# key_n = [0]*len(key)
+# for i in range(len(key)):  # bpsk modulation
+#     if(key[i] == 1):
+#         # print("yay")
+#         key_n[i] = -math.sqrt(Ps)
+#     else:
+#         key_n[i] = math.sqrt(Ps)
 
-# print(key)
-alpha_list=[]
-key_array = np.array(key_n)
+# # print(key)
+# alpha_list=[]
+# key_array = np.array(key_n)
 
 accu = []
 
@@ -389,8 +389,13 @@ def Wrapper():
         # global_model.conv2.weight.data = y_out
 
         # global_model.conv2.weight = current
-        client['previous2'] = current
+        if(fed_round == 1):
+            client['previous2'] = current
+        
         client['previousparam'] = current
+
+
+        
         # print('global average model', globl.parameters())
         # Testing the average model
         test(args, global_model, device, global_test_loader, count)                             
