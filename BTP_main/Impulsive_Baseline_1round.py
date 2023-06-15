@@ -118,7 +118,7 @@ def Wrapper():
         client['globalparam'] = 0
         client['curr'] = 0
         client['Evalue'] = 0
-        
+        client['previous2'] = 0
 
     #=================Global Model===================#
     transform = transforms.Compose(
@@ -183,7 +183,7 @@ def Wrapper():
         #y = random.random()
         h = complex(x, y)
         print("Client:", client['hook'].id)
-        print("CSI", abs(h)/(std*std))
+        # print("CSI", abs(h)/(std*std))
 
         
         # wireless channel needs to be considered
@@ -328,6 +328,7 @@ def Wrapper():
             for client in active_clients:
                 client['previousparam'] = t
                 count = count+1
+                client['previou2'] = t
                 # print(count)
                 
         for client in active_clients:
@@ -388,6 +389,7 @@ def Wrapper():
         # global_model.conv2.weight.data = y_out
 
         # global_model.conv2.weight = current
+        client['previous2'] = current
         client['previousparam'] = current
         # print('global average model', globl.parameters())
         # Testing the average model
