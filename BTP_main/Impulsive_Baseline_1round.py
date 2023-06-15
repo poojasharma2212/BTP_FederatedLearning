@@ -116,7 +116,7 @@ def Wrapper():
         client['samples'] = len(trainset_id_list)/args['images']
         client['previousparam'] = 0
         client['globalparam'] = 0
-        client['curr'] = 0
+        # client['curr'] = 0
         client['Evalue'] = 0
         client['previous2'] = 0
 
@@ -242,7 +242,7 @@ def Wrapper():
 
         client['Evalue'] = yTy
         # client['previousparam'] = yy
-        client['curr'] = yy
+        # client['curr'] = yy
         # client['previousparam'] = y_out
         client['model'].conv2.weight.data = yy
         
@@ -328,7 +328,7 @@ def Wrapper():
             for client in active_clients:
                 client['previousparam'] = t
                 count = count+1
-                client['previou2'] = t
+                client['previous2'] = t
                 # print(count)
                 
         for client in active_clients:
