@@ -391,7 +391,8 @@ def Wrapper():
         # global_model.conv2.weight = current
         if(fed_round == 1):
             client['previous2'] = current
-        
+
+        client['previous2']  = client['previousparam']
         client['previousparam'] = current
 
 
