@@ -54,7 +54,7 @@ def Wrapper():
         'epochs': 3,
         'clients': 30,
         'seed':4,
-        'rounds': 20,
+        'rounds': 50,
         'C': 1,
         'lowest_snr': 20,
         # 'highest_snr': 20,
@@ -330,7 +330,12 @@ def Wrapper():
                 count = count+1
                 client['previous2'] = t
                 # print(count)
-                
+        
+        if(fed_round == 5): #randomise round -- adding impulsive noise in random round
+            a0 = 0
+            a1 = 1
+            client['previousparam'] = client['previous2']
+
         for client in active_clients:
             print("train")
 
@@ -395,10 +400,6 @@ def Wrapper():
         client['previous2']  = client['previousparam']
         client['previousparam'] = current
 
-        if(fed_round == 5): #randomise round -- adding impulsive noise in random round
-            a0 = 0
-            a1 = 1
-            client['previousparam'] = client['previous2']
 
 
         # print('global average model', globl.parameters())
