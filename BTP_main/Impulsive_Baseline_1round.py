@@ -54,7 +54,7 @@ def Wrapper():
         'epochs': 3,
         'clients': 30,
         'seed':4,
-        'rounds': 50,
+        'rounds': 30,
         'C': 1,
         'lowest_snr': 20,
         # 'highest_snr': 20,
