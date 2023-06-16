@@ -35,7 +35,7 @@ Ps = 2 # signal power
 #         key_n[i] = math.sqrt(Ps)
 
 # # print(key)
-# alpha_list=[]
+alpha_list=[]
 # key_array = np.array(key_n)
 
 accu = []
