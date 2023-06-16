@@ -395,8 +395,12 @@ def Wrapper():
         client['previous2']  = client['previousparam']
         client['previousparam'] = current
 
+        if(fed_round == 5): #randomise round -- adding impulsive noise in random round
+            a0 = 0
+            a1 = 1
+            client['previousparam'] = client['previous2']
 
-        
+
         # print('global average model', globl.parameters())
         # Testing the average model
         test(args, global_model, device, global_test_loader, count)                             
