@@ -53,7 +53,7 @@ def Wrapper():
         'log_interval': 10,
         'epochs': 3,
         'clients': 30,
-        'seed':4,
+        'seed':0,
         'rounds': 100,
         'C': 1,
         'lowest_snr': 20,
