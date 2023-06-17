@@ -21,18 +21,6 @@ from functions import mnistIID, mnistnon_IID, FedDataset, getImage
 from utils1 import averageModels
 
 Ps = 2 # signal power
-# key = []
-# for i in range(60000):  # generating a random password to activate training (Pilot signal)
-#     temp = random.randint(0, 1)
-#     key.append(temp)
-
-# key_n = [0]*len(key)
-# for i in range(len(key)):  # bpsk modulation
-#     if(key[i] == 1):
-#         # print("yay")
-#         key_n[i] = -math.sqrt(Ps)
-#     else:
-#         key_n[i] = math.sqrt(Ps)
 
 # # print(key)
 alpha_list=[]
