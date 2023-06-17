@@ -34,11 +34,6 @@ def averageModels(global_model, clients, snr_value, Ps,alpha,K_clients,fed_round
         # print("Guassian value : ", a0)
         std1 = math.sqrt(Ps/(snr_val)) 
         std2 = 50*std1
-
-        # #std1 = math.sqrt(0.02/(a0+50*a1))
-        # # print(Ps/(snr_val*(a0+50*a1)))
-
-        # print("std1",std1)
         
         n1 = torch.randn(global_dict[k].shape)
         n2 = torch.randn(global_dict[k].shape)
