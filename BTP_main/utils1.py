@@ -45,8 +45,8 @@ def averageModels(global_model, clients, snr_value, Ps,alpha,K_clients,fed_round
         global_dict[k] += noise/(K_clients)
         
     if(fed_round == 5):
-        global_model.load_state_dict(global_prev)
-
-    global_model.load_state_dict(global_dict)
+        global_model = global_model
+    else:
+        global_model.load_state_dict(global_dict)
 
     return global_model
