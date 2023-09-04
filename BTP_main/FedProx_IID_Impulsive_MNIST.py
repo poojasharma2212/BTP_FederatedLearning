@@ -283,6 +283,7 @@ def Wrapper():
     logging.info("Starting training !!")
 
     torch.manual_seed(args['seed'])
+    
     global_model = CNN()
 
     for client in clients:
@@ -435,33 +436,6 @@ def Wrapper():
     print("============ Accuracy ===========")
     # print(accu)
     return accu
-
-        
-        
-       
-     
-
-    
-
-
-
-# final_acc = []
-# sum = []
-# weight = []
-
-# hook = sy.TorchHook(torch)
-
-
-# print("====================final ans")
-# # print(sum)
-# accuracy1 = Wrapper(64, 0.007, 3, 20, 10, key, key_array, Ps)
-accuracy1 = Wrapper()
-print(accuracy1)
-print("second result with P = sum(root(Pk))")
-# accuracy2 = Wrapper(64,0.02,2,20,5,hook)
-# print(accuracy2)
-# accuracy3 = Wrapper(64,0.02,2,20,5,hook)
-# print(accuracy3)
 
 
 # class FedProxOptim(optim.Optimizer):
