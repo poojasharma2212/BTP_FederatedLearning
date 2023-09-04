@@ -189,7 +189,9 @@ def Wrapper():
                 loss = Func.nll_loss(output, target)
                 loss.backward()
                 # print(loss.grad)
-                client['optimizer'].step(global_model.send(client['hook']))
+                client['optimizer'].step()
+
+                # client['optimizer'].step(global_model.send(client['hook']))
                 client['model'].get() 
                 global_model.get()
                 # print("==========ye chalega kya========================")
