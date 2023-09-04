@@ -20,22 +20,6 @@ from functions import mnistIID, mnistnon_IID, FedDataset, getImage
 from utils import averageModels
 
 Ps = 2 # signal power
-key = []
-for i in range(60000):  # generating a random password to activate training (Pilot signal)
-    temp = random.randint(0, 1)
-    key.append(temp)
-
-key_n = [0]*len(key)
-for i in range(len(key)):  # bpsk modulation
-    if(key[i] == 1):
-        # print("yay")
-        key_n[i] = -math.sqrt(Ps)
-    else:
-        key_n[i] = math.sqrt(Ps)
-
-# print(key)
-
-key_array = np.array(key_n)
 
 accu = []
 
@@ -114,6 +98,11 @@ def Wrapper():
         client['mnist_testset'] = getImage(
             mnist_testset, list(test_group[inx]), args['batch_size'])
         client['samples'] = len(trainset_id_list)/args['images']
+        client['previousparam'] = 0
+        client['globalparam'] = 0
+        # client['curr'] = 0
+        client['Evalue'] = 0
+        client['previous2'] = 0
 
     #=================Global Model===================#
     transform = transforms.Compose(
