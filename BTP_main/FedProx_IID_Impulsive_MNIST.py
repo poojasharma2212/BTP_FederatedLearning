@@ -428,6 +428,10 @@ def Wrapper():
         # for client in rest_clients:
         #     train(args, client, device,global_model, Ps,True)
         
+        snr = snr_value
+        print("SNR==", snr)
+        snr_val = 10**(snr/10)
+        std = math.sqrt(Ps/snr_val)
         
         K_clients = len(active_clients_inds)
 
