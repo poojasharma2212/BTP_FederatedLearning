@@ -38,7 +38,7 @@ def Wrapper():
         'clients': 30,
         'seed': 0,
         'rounds': 70 ,
-        'C': 0.9,
+        'C': 1,
         'mu':0.1,
         'lowest_snr': 20,
         # 'highest_snr': 20,
@@ -191,8 +191,8 @@ def Wrapper():
                 # print(loss.grad)
                 client['optimizer'].step()
 
-                # client['optimizer'].step(global_model.send(client['hook']))
-                client['model'].get() 
+                client['optimizer'].step(global_model.send(client['hook']))
+                # client['model'].get() 
                 global_model.get()
                 # print("==========ye chalega kya========================")
                 if batch_idx % args['log_interval'] == 0:
@@ -229,7 +229,7 @@ def Wrapper():
         # client['previousparam'] = y_out
         client['model'].conv2.weight.data = yy
         
-        return cStatus
+        # return cStatus
 
 
         # x = torch.flatten(yy)
