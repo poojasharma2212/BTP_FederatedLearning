@@ -37,7 +37,7 @@ def Wrapper():
         'epochs': 3,
         'clients': 30,
         'seed': 0,
-        'rounds': 30 ,
+        'rounds': 70 ,
         'C': 0.9,
         'mu':0.1,
         'lowest_snr': 20,
@@ -393,6 +393,7 @@ def Wrapper():
         print(fed_round)
         # number of selected clients
         client_good_channel = []
+        Evalue_arr = []
 
         # at least 1 client is selected for training
         m = int(max(args['C'] * args['clients'], 1))
@@ -419,34 +420,118 @@ def Wrapper():
         # power_1 = 0
 
             # Training the active devices
+        # for client in active_clients:
+        #     train(args, client, device, global_model,Ps)
+        
+
+        # # Training the rest with less number of epochs
+        # for client in rest_clients:
+        #     train(args, client, device,global_model, Ps,True)
+        
+        
+        K_clients = len(active_clients_inds)
+
+        if(fed_round == 0):
+            t = torch.nn.init.normal_(client['model'].conv2.weight,0,std)
+            # print(t.shape)
+            count = 0
+            for client in active_clients:
+                client['previousparam'] = t
+                count = count+1
+                client['previous2'] = t
+                # print(count)
+        
+        if(fed_round == 50): #randomise round -- adding impulsive noise in random round
+            a0 = 0
+            a1 = 1
+            client['previousparam'] = client['previous2']
+
         for client in active_clients:
-            train(args, client, device, global_model,Ps)
-        
+            print("train")
 
-        # Training the rest with less number of epochs
-        for client in rest_clients:
-            train(args, client, device,global_model, Ps,True)
+            good_channel = train(args, client, device, Ps,snr_value)
+            
+            if(good_channel == True):
+                client_good_channel.append(client)
+                Evalue_arr.append(client['Evalue'])
+                
+                # print("Output of model - -------------" ,client['model'])
+
+        # print("Client max alpha banane wali value" , client['Evalue'])
+        print('Evalue', Evalue_arr)
+
+        E_max = max(Evalue_arr)
+        alpha = Ps/E_max
+        
+        value = alpha.item()
+
+        print(value) 
+        alpha_list.append(value)
+        print('alpha value', alpha)
+
+        print("Clients with good channel are considered for averaging")
+
+        for no in range(len(client_good_channel)):
+            print(client_good_channel[no]['hook'].id)
+
+            y_out = client['model'].conv2.weight
+            y_out = y_out*(math.sqrt(alpha))
+            
+            client['model'].conv2.weight.data = y_out
+        
+        print()
+        print("reached this step")
+
+        global_model = averageModels(global_model, client_good_channel, snr_value, Ps,alpha,K_clients,fed_round)
+        
+        y_out = global_model.conv2.weight
 
 
-        global_model = averageModels(global_model, selected_clients,snr_value, Ps)
-        
-        test(args, global_model, device, global_test_loader, count)
-        
+        y_out = y_out/(math.sqrt(alpha)*K_clients)
+
+        y_out_flat = torch.flatten(y_out)
+        yTensor = 0
+        for i in range(list(y_out_flat.size())[0]):
+            yTensor = yTensor + y_out_flat[i]*y_out_flat[i]
+        print('------%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-----')
+        print("xTTTTTTTTTTTTx: ", yTensor)
+
+
+        current = y_out + client['previousparam']
+
+        if(fed_round == 1):
+            client['previous2'] = current
+
+        client['previous2']  = client['previousparam']
+        client['previousparam'] = current
+
+        # print('global average model', globl.parameters())
+        # Testing the average model
+        test(args, global_model, device, global_test_loader, count)                             
+
+
+        #print("Total Power =", power_1)
+        print()
+
         for client in clients:
             client['model'].load_state_dict(global_model.state_dict())
 
-     
-
+    
        
     if (args['save_model']):
         torch.save(global_model.state_dict(), "FedProx.pt")
-    
-    # if (args['save_model']):
-    #     torch.save(global_model.state_dict(), "FederatedLearning.pt")
-
+        
     print("============ Accuracy ===========")
     # print(accu)
     return accu
+
+        
+        
+       
+     
+
+    
+
 
 
 # final_acc = []
