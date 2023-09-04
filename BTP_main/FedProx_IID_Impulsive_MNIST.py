@@ -455,11 +455,11 @@ def Wrapper():
         for client in active_clients:
             print("train")
 
-            good_channel = train(args, client, device, Ps,snr_value)
+            train(args, client, device, Ps,snr_value)
             
-            if(good_channel == True):
-                client_good_channel.append(client)
-                Evalue_arr.append(client['Evalue'])
+            # if(good_channel == True):
+            client_good_channel.append(client)
+            Evalue_arr.append(client['Evalue'])
                 
                 # print("Output of model - -------------" ,client['model'])
 
