@@ -197,12 +197,12 @@ def Wrapper():
                 # print("==========ye chalega kya========================")
                 if batch_idx % args['log_interval'] == 0:
                     loss = loss.get()
-                    # print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                    #     client['hook'].id,
-                    #     epoch, batch_idx *
-                    #     args['batch_size'], len(
-                    #         client['mnist_trainset']) * args['batch_size'],
-                    #     100. * batch_idx / len(client['mnist_trainset']), loss.item()))
+                    print('Model {} Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+                        client['hook'].id,
+                        epoch, batch_idx *
+                        args['batch_size'], len(
+                            client['mnist_trainset']) * args['batch_size'],
+                        100. * batch_idx / len(client['mnist_trainset']), loss.item()))
 
         # client['model'].get()
         y_out = client['model'].conv1.weight
@@ -228,101 +228,6 @@ def Wrapper():
         # client['curr'] = yy
         # client['previousparam'] = y_out
         client['model'].conv2.weight.data = yy
-        
-        # return cStatus
-
-
-        # x = torch.flatten(yy)
-        # xTx = 0
-        # # # should I use here also normalise ??
-        # for i in range(list(x.size())[0]):
-        #     xTx = xTx + x[i]*x[i]
-
-        # print('-----------')
-        # print("xTTTTTTTTTTTTx: ", xTx)
-        # # print(xTx)
-
-        # Pk = ((K_clients)*(Ps))/xTx
-    
-        # y_out = y_out*math.sqrt(Pk)/((h))
-
-        # # noise = torch.randn(y_out.size())
-
-        # n1 = torch.randn(y_out.size())
-
-        # # a0 = 0.740740741
-        # # a1 = 0.259259259
-        
-        # # a0 = 0.99990001
-        # # a1 = 0.00009999
-
-        # a0 = 0.90909090
-        # a1 = 0.09090909
-
-        # # a0 = 0.999000999
-        # # a1 = 0.000999001
-
-        # # a0 = 0.997008973
-        # # a1 = 0.0029910269
-
-        # # a0 = 0.9708737864
-        # # a1 = 0.029126214
-
-        # std1 = math.sqrt(Ps/(snr_val*(a0+50*a1)))
-        # std2 = 50*std1
-        # #std1 = math.sqrt(0.02/(a0+50*a1))
-        # print(Ps/(snr_val*(a0+50*a1)))
-        # print("std1",std1)
-        # n2 = torch.randn(y_out.size())
-        # noise = a0*n1*std1 + a1*n2*std2
-
-        # y_out = h*y_out + noise
-        # y_out = y_out/(math.sqrt(Pk))
-        # y_out = y_out.real
-
-        # # y_out = h*y_out+noise*(std/(math.sqrt(K_clients)))
-        # # y_out = y_out/(math.sqrt(Pk))
-        # # y_out = y_out.real
-
-        # client['model'].conv1.weight.data = y_out
-
-        # y_out = client['model'].conv2.weight
-        # yy = torch.flatten(y_out)
-        # yTy = 0
-        # for i in range(list(yy.size())[0]):
-        #     yTy = yTy + yy[i]*yy[i]
-
-        # print('-----------')
-        # print("xTTTTTTTTTTTTx: ", yTy)
-        # print(yTy)
-       
-        # Pk = ((K_clients)*Ps)/yTy
-        # # y_out = h*y_out + noise
-
-        # y_out = y_out*math.sqrt(Pk)/(h)
-        # # else:
-        # # y_out = y_out*math.sqrt(Ps)/((h)*yTy)
-        # n1 = torch.randn(y_out.size())
-
-
-        # # a0 = 0.99990001
-        # # a1 = 0.00009999
-        
-        # std1 = math.sqrt(Ps/(snr_val*(a0+50*a1)))
-        # std2 = 50*std1
-        # print(std1)
-        # print(std2)
-        
-        # n2 = torch.randn(y_out.size())
-        # noise = a0*n1*std1 + a1*n2*std2
-
-        # y_out = h*y_out + noise
-        # y_out = y_out/(math.sqrt(Pk))
-        # y_out = y_out.real
-
-        # client['model'].conv2.weight.data = y_out
-
-        # client['model'].get()
 
         # return cStatus
 
