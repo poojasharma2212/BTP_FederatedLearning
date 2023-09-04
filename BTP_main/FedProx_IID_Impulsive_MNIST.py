@@ -191,7 +191,8 @@ def Wrapper():
                 loss.backward()
                 # print(loss.grad)
                 # client['optimizer'].step()
-                
+                print(global_model)
+                print("=======================")
                 client['optimizer'].step(global_model.send(client['hook']))
                 client['model'].get() 
                 global_model.get()
