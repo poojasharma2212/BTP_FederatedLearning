@@ -135,13 +135,14 @@ def Wrapper():
 
     x_dict = {}
     y_dict = {}
+    snr_value = args['lowest_snr']
 
     for c in range(args['clients']+1):
         dict_key = "client" + str(c)
         x_val = random.random()
         y_val = random.random()
         # snr_value = random.randint(args['lowest_snr'], args['highest_snr'])
-        snr_value = args['lowest_snr']
+        #snr_value = args['lowest_snr']
         # snr_dict[dict_key] = snr_value
         x_dict[dict_key] = x_val
         y_dict[dict_key] = y_val
@@ -182,6 +183,7 @@ def Wrapper():
                 client['model'].send(data.location)
 
                 data, target = data.to(device), target.to(device)
+                
                 client['optimizer'].zero_grad()
                 output = client['model'](data)
                 loss = Func.nll_loss(output, target)
@@ -201,97 +203,122 @@ def Wrapper():
                     #     100. * batch_idx / len(client['mnist_trainset']), loss.item()))
 
         # client['model'].get()
-
         y_out = client['model'].conv1.weight
-        x = torch.flatten(y_out)
-        xTx = 0
-        # # should I use here also normalise ??
-        for i in range(list(x.size())[0]):
-            xTx = xTx + x[i]*x[i]
-
-        print('-----------')
-        print("xTTTTTTTTTTTTx: ", xTx)
-        # print(xTx)
-
-        Pk = ((K_clients)*(Ps))/xTx
-    
-        y_out = y_out*math.sqrt(Pk)/((h))
-
-        # noise = torch.randn(y_out.size())
-
-        n1 = torch.randn(y_out.size())
-
-        # a0 = 0.740740741
-        # a1 = 0.259259259
-        
-        # a0 = 0.99990001
-        # a1 = 0.00009999
-
-        a0 = 0.90909090
-        a1 = 0.09090909
-
-        # a0 = 0.999000999
-        # a1 = 0.000999001
-
-        # a0 = 0.997008973
-        # a1 = 0.0029910269
-
-        # a0 = 0.9708737864
-        # a1 = 0.029126214
-
-        std1 = math.sqrt(Ps/(snr_val*(a0+50*a1)))
-        std2 = 50*std1
-        #std1 = math.sqrt(0.02/(a0+50*a1))
-        print(Ps/(snr_val*(a0+50*a1)))
-        print("std1",std1)
-        n2 = torch.randn(y_out.size())
-        noise = a0*n1*std1 + a1*n2*std2
-
-        y_out = h*y_out + noise
-        y_out = y_out/(math.sqrt(Pk))
-        y_out = y_out.real
-
-        # y_out = h*y_out+noise*(std/(math.sqrt(K_clients)))
-        # y_out = y_out/(math.sqrt(Pk))
-        # y_out = y_out.real
-
         client['model'].conv1.weight.data = y_out
 
         y_out = client['model'].conv2.weight
-        yy = torch.flatten(y_out)
+        # print("size of 2nd layer", y_out.size())
+
+        yy = y_out - client['previousparam']
+
+        y1 = torch.flatten(yy)
+        
         yTy = 0
-        for i in range(list(yy.size())[0]):
-            yTy = yTy + yy[i]*yy[i]
+        for i in range(list(y1.size())[0]):
+            yTy = yTy + y1[i]*y1[i]
 
-        print('-----------')
-        print("xTTTTTTTTTTTTx: ", yTy)
-        print(yTy)
-       
-        Pk = ((K_clients)*Ps)/yTy
+        # print('-----------')
+        # print("xTTTTTTTTTTTTx: ", yTy)
+        # print(yTy)
+
+        client['Evalue'] = yTy
+        # client['previousparam'] = yy
+        # client['curr'] = yy
+        # client['previousparam'] = y_out
+        client['model'].conv2.weight.data = yy
+        
+        return cStatus
+
+
+        # x = torch.flatten(yy)
+        # xTx = 0
+        # # # should I use here also normalise ??
+        # for i in range(list(x.size())[0]):
+        #     xTx = xTx + x[i]*x[i]
+
+        # print('-----------')
+        # print("xTTTTTTTTTTTTx: ", xTx)
+        # # print(xTx)
+
+        # Pk = ((K_clients)*(Ps))/xTx
+    
+        # y_out = y_out*math.sqrt(Pk)/((h))
+
+        # # noise = torch.randn(y_out.size())
+
+        # n1 = torch.randn(y_out.size())
+
+        # # a0 = 0.740740741
+        # # a1 = 0.259259259
+        
+        # # a0 = 0.99990001
+        # # a1 = 0.00009999
+
+        # a0 = 0.90909090
+        # a1 = 0.09090909
+
+        # # a0 = 0.999000999
+        # # a1 = 0.000999001
+
+        # # a0 = 0.997008973
+        # # a1 = 0.0029910269
+
+        # # a0 = 0.9708737864
+        # # a1 = 0.029126214
+
+        # std1 = math.sqrt(Ps/(snr_val*(a0+50*a1)))
+        # std2 = 50*std1
+        # #std1 = math.sqrt(0.02/(a0+50*a1))
+        # print(Ps/(snr_val*(a0+50*a1)))
+        # print("std1",std1)
+        # n2 = torch.randn(y_out.size())
+        # noise = a0*n1*std1 + a1*n2*std2
+
         # y_out = h*y_out + noise
+        # y_out = y_out/(math.sqrt(Pk))
+        # y_out = y_out.real
 
-        y_out = y_out*math.sqrt(Pk)/(h)
-        # else:
-        # y_out = y_out*math.sqrt(Ps)/((h)*yTy)
-        n1 = torch.randn(y_out.size())
+        # # y_out = h*y_out+noise*(std/(math.sqrt(K_clients)))
+        # # y_out = y_out/(math.sqrt(Pk))
+        # # y_out = y_out.real
+
+        # client['model'].conv1.weight.data = y_out
+
+        # y_out = client['model'].conv2.weight
+        # yy = torch.flatten(y_out)
+        # yTy = 0
+        # for i in range(list(yy.size())[0]):
+        #     yTy = yTy + yy[i]*yy[i]
+
+        # print('-----------')
+        # print("xTTTTTTTTTTTTx: ", yTy)
+        # print(yTy)
+       
+        # Pk = ((K_clients)*Ps)/yTy
+        # # y_out = h*y_out + noise
+
+        # y_out = y_out*math.sqrt(Pk)/(h)
+        # # else:
+        # # y_out = y_out*math.sqrt(Ps)/((h)*yTy)
+        # n1 = torch.randn(y_out.size())
 
 
-        # a0 = 0.99990001
-        # a1 = 0.00009999
+        # # a0 = 0.99990001
+        # # a1 = 0.00009999
         
-        std1 = math.sqrt(Ps/(snr_val*(a0+50*a1)))
-        std2 = 50*std1
-        print(std1)
-        print(std2)
+        # std1 = math.sqrt(Ps/(snr_val*(a0+50*a1)))
+        # std2 = 50*std1
+        # print(std1)
+        # print(std2)
         
-        n2 = torch.randn(y_out.size())
-        noise = a0*n1*std1 + a1*n2*std2
+        # n2 = torch.randn(y_out.size())
+        # noise = a0*n1*std1 + a1*n2*std2
 
-        y_out = h*y_out + noise
-        y_out = y_out/(math.sqrt(Pk))
-        y_out = y_out.real
+        # y_out = h*y_out + noise
+        # y_out = y_out/(math.sqrt(Pk))
+        # y_out = y_out.real
 
-        client['model'].conv2.weight.data = y_out
+        # client['model'].conv2.weight.data = y_out
 
         # client['model'].get()
 
@@ -410,29 +437,7 @@ def Wrapper():
 
      
 
-        #     good_channel = train(args, client, device, Ps)
-        #     if(good_channel == True):
-        #         client_good_channel.append(client)
-        #     # idx = idx+1
-        #     # print(client)'
-        # print()
-        # print("Clients with good channel are considered for averaging")
-        # for no in range(len(client_good_channel)):
-        #     print(client_good_channel[no]['hook'].id)
-        # print()
-        # print("reached this step")
-        # global_model = averageModels(
-        #     global_model, client_good_channel, snr_value, Ps)
-
-        # # Testing the average model
-        # test(args, global_model, device, global_test_loader, count)
-
-        # #print("Total Power =", power_1)
-        # print()
-
-        # for client in clients:
-        #     client['model'].load_state_dict(global_model.state_dict())
-
+       
     if (args['save_model']):
         torch.save(global_model.state_dict(), "FedProx.pt")
     
