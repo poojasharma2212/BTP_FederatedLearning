@@ -180,6 +180,7 @@ def Wrapper():
             for batch_idx, (data, target) in enumerate(client['mnist_trainset']):
                 data = data.send(client['hook'])
                 target = target.send(client['hook'])
+                
                 client['model'].send(data.location)
 
                 data, target = data.to(device), target.to(device)
@@ -190,9 +191,9 @@ def Wrapper():
                 loss.backward()
                 # print(loss.grad)
                 # client['optimizer'].step()
-
+                
                 client['optimizer'].step(global_model.send(client['hook']))
-                # client['model'].get() 
+                client['model'].get() 
                 global_model.get()
                 # print("==========ye chalega kya========================")
                 if batch_idx % args['log_interval'] == 0:
