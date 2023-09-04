@@ -20,7 +20,7 @@ from functions import mnistIID, mnistnon_IID, FedDataset, getImage
 from utils import averageModels
 
 Ps = 2 # signal power
-
+alpha_list = []
 accu = []
 
 
@@ -438,6 +438,10 @@ def Wrapper():
     return accu
 
 
+accuracy1 = Wrapper()
+print(accuracy1)
+print("alpha_list")
+print(alpha_list)
 # class FedProxOptim(optim.Optimizer):
 #     def __init__(self, params, lr=args.lr, mu=args.mu):
 #         defaults = dict(lr=lr, mu=mu)
