@@ -10,7 +10,7 @@ import numpy as np
 from datetime import datetime
 import torchvision
 # print(torchvision.__version__)s
-from torchvision import transforms, datasets
+from torchvision import trsansforms, datasets
 from torch.utils.data import DataLoader, Dataset
 import logging
 import os
@@ -193,7 +193,7 @@ def Wrapper():
         # cStatus = True     # Client status
 
         #####Zubair's addition of fedprox
-        criterion=nn.CrossEntropyLoss()
+        criterion = nn.CrossEntropyLoss()
 
         for epoch in range(1, args['epochs']+1):
             for batch_idx, (data, target) in enumerate(client['mnist_trainset']):
@@ -203,14 +203,13 @@ def Wrapper():
                 data, target = data.to(device), target.to(device)
                 client['model'].send(data.location)
 
-
                 # print("data size:     ",data.size())
                 
                 client['optimizer'].zero_grad()
                 output = client['model'](data)
 
-###Addition of fedprox
-                proximal_term=0.0
+                ###Addition of fedprox
+                proximal_term = 0.0
                 # for w,w_t in zip(client['model'].parameters(),global_model.parameters()):
                 #     proximal_term +=(w-w_t).norm(2)
                 # client['model'].conv2.weight.get()
